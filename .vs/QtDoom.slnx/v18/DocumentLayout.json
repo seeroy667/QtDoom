@@ -1,12 +1,309 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\QtApplication\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:QtApplication\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Engine.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Engine.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Engine.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Engine.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Controller.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Controller.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Controller.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Controller.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\BSP.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:BSP.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\BSP.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:BSP.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\QtApplication\\mainwindow.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:QtApplication\\mainwindow.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\QtApplication\\CMakeLists.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:QtApplication\\CMakeLists.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\QtApplication\\mainwindow.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:QtApplication\\mainwindow.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Weapon.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Weapon.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Player.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Player.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\QtApplication\\mainwindow.ui||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:QtApplication\\mainwindow.ui||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\QtApplication\\.qtcreator\\CMakeLists.txt.user||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:QtApplication\\.qtcreator\\CMakeLists.txt.user||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Player.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Player.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Weapon.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Weapon.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\README.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:README.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "BSP.h",
+              "DocumentMoniker": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\BSP.h",
+              "RelativeDocumentMoniker": "BSP.h",
+              "ToolTip": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\BSP.h",
+              "RelativeToolTip": "BSP.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-02-02T01:54:46.396Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Controller.cpp",
+              "DocumentMoniker": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Controller.cpp",
+              "RelativeDocumentMoniker": "Controller.cpp",
+              "ToolTip": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Controller.cpp",
+              "RelativeToolTip": "Controller.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-02-02T01:54:26.504Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Controller.h",
+              "DocumentMoniker": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Controller.h",
+              "RelativeDocumentMoniker": "Controller.h",
+              "ToolTip": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Controller.h",
+              "RelativeToolTip": "Controller.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-02-02T01:53:30.197Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Engine.cpp",
+              "DocumentMoniker": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Engine.cpp",
+              "RelativeDocumentMoniker": "Engine.cpp",
+              "ToolTip": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Engine.cpp",
+              "RelativeToolTip": "Engine.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-02-02T03:07:45.503Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Engine.h",
+              "DocumentMoniker": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Engine.h",
+              "RelativeDocumentMoniker": "Engine.h",
+              "ToolTip": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Engine.h",
+              "RelativeToolTip": "Engine.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-02-02T03:07:37.314Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\QtApplication\\main.cpp",
+              "RelativeDocumentMoniker": "QtApplication\\main.cpp",
+              "ToolTip": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\QtApplication\\main.cpp",
+              "RelativeToolTip": "QtApplication\\main.cpp",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAuwCEAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-02-02T03:31:34.242Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "BSP.cpp",
+              "DocumentMoniker": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\BSP.cpp",
+              "RelativeDocumentMoniker": "BSP.cpp",
+              "ToolTip": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\BSP.cpp",
+              "RelativeToolTip": "BSP.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-02-02T01:54:52.359Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "mainwindow.cpp",
+              "DocumentMoniker": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\QtApplication\\mainwindow.cpp",
+              "RelativeDocumentMoniker": "QtApplication\\mainwindow.cpp",
+              "ToolTip": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\QtApplication\\mainwindow.cpp",
+              "RelativeToolTip": "QtApplication\\mainwindow.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-02-02T03:34:21.622Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "CMakeLists.txt",
+              "DocumentMoniker": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\QtApplication\\CMakeLists.txt",
+              "RelativeDocumentMoniker": "QtApplication\\CMakeLists.txt",
+              "ToolTip": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\QtApplication\\CMakeLists.txt",
+              "RelativeToolTip": "QtApplication\\CMakeLists.txt",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2026-02-02T03:34:37.586Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "mainwindow.h",
+              "DocumentMoniker": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\QtApplication\\mainwindow.h",
+              "RelativeDocumentMoniker": "QtApplication\\mainwindow.h",
+              "ToolTip": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\QtApplication\\mainwindow.h",
+              "RelativeToolTip": "QtApplication\\mainwindow.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-02-02T03:34:33.292Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Weapon.h",
+              "DocumentMoniker": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Weapon.h",
+              "RelativeDocumentMoniker": "Weapon.h",
+              "ToolTip": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Weapon.h",
+              "RelativeToolTip": "Weapon.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-02-02T01:54:10.803Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Player.h",
+              "DocumentMoniker": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Player.h",
+              "RelativeDocumentMoniker": "Player.h",
+              "ToolTip": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Player.h",
+              "RelativeToolTip": "Player.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-02-02T01:53:06.327Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "mainwindow.ui",
+              "DocumentMoniker": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\QtApplication\\mainwindow.ui",
+              "RelativeDocumentMoniker": "QtApplication\\mainwindow.ui",
+              "ToolTip": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\QtApplication\\mainwindow.ui",
+              "RelativeToolTip": "QtApplication\\mainwindow.ui",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAMAAAAAAAAAA==",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAOcSURBVEhLpVUxbxxFFP5mZ2bXu3e5O\u002BPgJErl0sad/wcFSEj8BGgoKNImBQ0NFKRASDTQUNJQQ4kUWYoA2xcMmITEsh3Mcru\u002B29udeY9idvZ2zzGR4Emjee/tzPfNe/PmrWBmMDP29/ffStP0YwBgBgDGy0QIYQDc29nZ\u002BTwMw0sbAiFYeIKDg4N3kiS5v76\u002B3hAwA\u002ByMZm7rs1nBjx8fVVVVvb\u002B1tfXpcDg0zaJagrahlILWIbTWzRyGXVsppyulEUWR6PevhXEcf3R4eHgvTdOwjYdlAiIGkYvIz26glTLn8xFqrbCxsaG01nfG4/F7ZVl2MDuGA2mPF4mAEAKAAMAgImRZhn6/HyilPtjd3b2TpmnsVy8RuPy20v2vorXC6up1RNEKer0Bbty4pbQO756cnLzu13QIrgIWAs2phVj4gkAijmMkSQ9xnGAwGCCKVsgYM/F7OwRCiLpy2t6FOHBHkpcGx1mOaVW1vgFBENSHqW2vSCllELi8dsXnexGBEAJf/PgI3z07xffPTt2qmlzKQGittd/tCQIppRLCm\u002B4eZpVFWsxRGAMIIK8qZGUFy4zTaYGjyQWy8nIEUsqwPtGCQAgRtiIDMePrX5/g7oM9fLX3C07yKT774Wd8eXCEn87OsZasoLCMWEuPBbg0iyAIQgASbYIgCGQ7/wzG8bzCmdJ4lE4wqQwmUKiiCM9ncxxP5xiujlB23ohLnxBCemxP0BzBlykzo7KM88LAMoOYcTYv8WQ6h2XGjAhHFwXmRC3wBqrBa5LOzLSoHqdoEC6mMxTG4mmW42lR4ve8gGHCzBj8ls9QGkfgo6/7lPUgnsAys2Wmpl0ICNyMNOgiw8O/Mnz44AB/5lP8necgyzCGMMkyWLLLjZCJqAJAHQJrbUVEi/5DhO21EbYHCebWIoSFnE4gpzn6SmKoAqhihkgIELk\u002B5noYwRhT1lGgadfj8fjdlZX4k9XVtfqi3IVVRBg/T3F70MPcWDAY15MYF5VBVswxikIkWtfgwPHxH6UQ/Mbm5uY37Qh8aEsdlSAh8Nqrr2AURbjZT3Cr34MSAYZhiNvX\u002BuiFDtxliUBETERNzjqtwoHbOkyCtY7E\u002B6x1w\u002BkLn9vn5vZ9YJnAv2B3Fw7IR\u002BT09vB\u002B920Z2MuV3dSXnEtV9we00K8G9rIUwWVpquoFRC/BBpYJ6hL7X4NaLxu\u002BTAFgb2/v7fPz8/udr/9NeDQavbm9vf0tAPwDKAO9ujSBvgAAAAAASUVORK5CYII=",
+              "WhenOpened": "2026-02-02T03:34:27.741Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "CMakeLists.txt.user",
+              "DocumentMoniker": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\QtApplication\\.qtcreator\\CMakeLists.txt.user",
+              "RelativeDocumentMoniker": "QtApplication\\.qtcreator\\CMakeLists.txt.user",
+              "ToolTip": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\QtApplication\\.qtcreator\\CMakeLists.txt.user",
+              "RelativeToolTip": "QtApplication\\.qtcreator\\CMakeLists.txt.user",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003464|",
+              "WhenOpened": "2026-02-02T03:36:15.169Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Player.cpp",
+              "DocumentMoniker": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Player.cpp",
+              "RelativeDocumentMoniker": "Player.cpp",
+              "ToolTip": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Player.cpp",
+              "RelativeToolTip": "Player.cpp",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAA4AAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-02-02T01:54:19.269Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Weapon.cpp",
+              "DocumentMoniker": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Weapon.cpp",
+              "RelativeDocumentMoniker": "Weapon.cpp",
+              "ToolTip": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\Weapon.cpp",
+              "RelativeToolTip": "Weapon.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-02-02T01:54:35.781Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "README.md",
+              "DocumentMoniker": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\README.md",
+              "RelativeDocumentMoniker": "README.md",
+              "ToolTip": "C:\\Users\\donsi\\OneDrive\\Documents\\GitHub\\QtDoom\\README.md",
+              "RelativeToolTip": "README.md",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2026-02-02T02:03:44.552Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }
