@@ -6,6 +6,9 @@ Goal: Header file for the Weapon class.
 Modifications:
 */
 
+#ifndef WEAPON_H
+#define WEAPON_H
+
 class Weapon {
 private:
 	int damage;
@@ -19,3 +22,5 @@ public:
 	float getRange();
 	float getFireRate();
 };
+
+#endif

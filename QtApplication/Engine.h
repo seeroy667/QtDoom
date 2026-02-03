@@ -6,6 +6,9 @@ Description: Header file for the game engine handling all events.
 Modifications:
 */
 
+#ifndef ENGINE_H
+#define ENGINE_H
+
 #include"Controller.h"
 
 class Engine {
@@ -21,3 +24,5 @@ public:
     void render();
 	void shutdown();
 };
+
+#endif

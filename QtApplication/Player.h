@@ -6,6 +6,9 @@ Goal: Header file for the Player class managing player attributes and actions.
 Modifications:
 */
 
+#ifndef PLAYER_H
+#define PLAYER_H
+
 struct Vertices
 {
     int x;
@@ -25,3 +28,5 @@ public:
     void takeDamage(int amount);
     int getHealth();
 };
+
+#endif

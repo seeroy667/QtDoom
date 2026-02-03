@@ -4,12 +4,19 @@ Date: Febuary 1, 2026
 File name: mainwindow.cpp
 Description: Header file which implements the main window for the Qt application.
 Modifications:
+    Date: Febuary 2, 2026
+        Author: Donavan Sirois
+        Description: Added the paintEvent method which paints polygons to the screen. This
+        method is no meant to be permanent and should be deleted eventually.
 */
 
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QDialog>
+#include <QtGui>
+#include <QtCore>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -24,6 +31,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void paintEvent(QPaintEvent *e);
 
 private:
     Ui::MainWindow *ui;

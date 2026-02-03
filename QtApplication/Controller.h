@@ -6,6 +6,9 @@ Description: Header file for the Controller class. This class handles the inputs
 Modifications:
 */
 
+#ifndef CONTROLLER_H
+#define CONTROLLER_H
+
 class Controller {
 private:
 public:
@@ -13,3 +16,5 @@ public:
 	~Controller();
     void processInputs();
 };
+
+#endif
