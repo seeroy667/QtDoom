@@ -17,6 +17,7 @@ Modifications:
 #include <QDialog>
 #include <QtGui>
 #include <QtCore>
+#include "wallrenderer.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -31,9 +32,16 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void paintEvent(QPaintEvent *e);
+
 
 private:
     Ui::MainWindow *ui;
+    QGraphicsScene *m_scene;
+    QGraphicsView *m_view;
+    WallRenderer *m_renderer;
+    Player m_player;
+
+    void setupScene();
+    void renderWorld();
 };
 #endif // MAINWINDOW_H

@@ -18,92 +18,72 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    setupScene();
+
+    m_player.setPosition(0.0f,0.0f);
+    m_player.setAngle(0.0f);
+
+    renderWorld();
 }
 
 MainWindow::~MainWindow()
 {
+    delete m_renderer;
+    delete m_view;
+    delete m_scene;
     delete ui;
 }
 
 
-void MainWindow::paintEvent(QPaintEvent *e) // Should eventually be replaced by a universal rendering class.
+void MainWindow::setupScene()
 {
-    QPainter painter(this);
+    m_scene = new QGraphicsScene(this);
+    m_view = new QGraphicsView(m_scene,this);
 
-    QPolygon poly1;
-    poly1 << QPoint(10, 10);
-    poly1 << QPoint(10, 500);
-    poly1 << QPoint(300, 400);
-    poly1 << QPoint(300, 200);
+    int width = 800;
+    int height = 600;
+    m_scene->setSceneRect(0,0,width,height);
 
-    QPolygon poly2;
-    poly2 << QPoint(300, 400);
-    poly2 << QPoint(300, 200);
-    poly2 << QPoint(500, 200);
-    poly2 << QPoint(500, 400);
+    m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_view->setFrameStyle(0);
 
-    QPolygon poly3;
-    poly3 << QPoint(500, 200);
-    poly3 << QPoint(500, 400);
-    poly3 << QPoint(800, 500);
-    poly3 << QPoint(800, 10);
+    setCentralWidget(m_view);
 
-    QPolygon poly4;
-    poly4 << QPoint(300, 200);
-    poly4 << QPoint(500, 200);
-    poly4 << QPoint(800, 10);
-    poly4 << QPoint(10, 10);
+    m_renderer = new WallRenderer(m_scene, width, height);
+}
+void MainWindow::renderWorld()
+{
+    m_scene->clear();
 
-    QPolygon poly5;
-    poly5 << QPoint(300, 400);
-    poly5 << QPoint(500, 400);
-    poly5 << QPoint(800, 500);
-    poly5 << QPoint(10, 500);
+    std::vector<Wall> walls;
 
-    QPen linepen;
-    linepen.setWidth(1);
-    linepen.setJoinStyle(Qt::MiterJoin);
+    // Mur du milieu
+    Wall wall1;
+    wall1.start = {-5.0f, 10.0f};
+    wall1.end = {5.0f, 10.0f};
+    wall1.floorHeight = 0.0f;
+    wall1.ceilingHeight = 5.0f;
+    walls.push_back(wall1);
 
-    QBrush fillbrush;
-    fillbrush.setStyle(Qt::SolidPattern);
+    // Mur de gauche
+    Wall wall2;
+    wall2.start = {-5.0f, 10.0f};
+    wall2.end = {-5.0f, 5.0f};
+    wall2.floorHeight = 0.0f;
+    wall2.ceilingHeight = 5.0f;
+    walls.push_back(wall2);
 
-    QPainterPath path1;
-    linepen.setColor(Qt::red);
-    painter.setPen(linepen);
-    fillbrush.setColor(Qt::red);
-    path1.addPolygon(poly1);
-    painter.drawPolygon(poly1);
-    painter.fillPath(path1, fillbrush);
+    // Mur de droite
+    Wall wall3;
+    wall3.start = {5.0f, 5.0f};
+    wall3.end = {5.0f, 10.0f};
+    wall3.floorHeight = 0.0f;
+    wall3.ceilingHeight = 5.0f;
+    walls.push_back(wall3);
 
-    QPainterPath path2;
-    linepen.setColor(Qt::green);
-    painter.setPen(linepen);
-    fillbrush.setColor(Qt::green);
-    path2.addPolygon(poly2);
-    painter.drawPolygon(poly2);
-    painter.fillPath(path2, fillbrush);
-
-    QPainterPath path3;
-    linepen.setColor(Qt::red);
-    painter.setPen(linepen);
-    fillbrush.setColor(Qt::red);
-    path3.addPolygon(poly3);
-    painter.drawPolygon(poly3);
-    painter.fillPath(path3, fillbrush);
-
-    QPainterPath path4;
-    linepen.setColor(Qt::yellow);
-    painter.setPen(linepen);
-    fillbrush.setColor(Qt::yellow);
-    path4.addPolygon(poly4);
-    painter.drawPolygon(poly4);
-    painter.fillPath(path4, fillbrush);
-
-    QPainterPath path5;
-    linepen.setColor(Qt::yellow);
-    painter.setPen(linepen);
-    fillbrush.setColor(Qt::yellow);
-    path5.addPolygon(poly5);
-    painter.drawPolygon(poly5);
-    painter.fillPath(path5, fillbrush);
+    for (const Wall& wall : walls) {
+        m_renderer->renderWall(wall, m_player);
+    }
 }

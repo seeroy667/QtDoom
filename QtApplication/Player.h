@@ -20,13 +20,22 @@ private:
     Vertices position;
     int health;
     bool isAlive;
+    float angle;
 public:
     Player();
     ~Player();
     void move(float deltaX, float deltaY);
     void shoot();
     void takeDamage(int amount);
+
+
     int getHealth();
+    float getAngle() const;
+    Vertices getPosition() const;
+
+    void setAngle(float newAngle);
+    void rotate(float deltaAngle);
+    void setPosition(float x, float y);
 };
 
 #endif

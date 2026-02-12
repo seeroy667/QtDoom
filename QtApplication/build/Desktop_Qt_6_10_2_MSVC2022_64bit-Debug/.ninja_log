@@ -1,0 +1,24 @@
+# ninja log v6
+8	611	7926260161045929	QtApplication_autogen/timestamp	a40e34c19006cc26
+8	611	7926260161045929	C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/build/Desktop_Qt_6_10_2_MSVC2022_64bit-Debug/QtApplication_autogen/mocs_compilation.cpp	a40e34c19006cc26
+8	611	7926260161045929	QtApplication_autogen/mocs_compilation.cpp	a40e34c19006cc26
+628	684	7926260162002110	CMakeFiles/QtApplication.dir/Engine.cpp.obj	827df1b1b3618ab8
+8	611	7926260161045929	C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/build/Desktop_Qt_6_10_2_MSVC2022_64bit-Debug/QtApplication_autogen/timestamp	a40e34c19006cc26
+632	684	7926260162043133	CMakeFiles/QtApplication.dir/Player.cpp.obj	6cf3ba0b2a93b421
+642	684	7926260162143354	CMakeFiles/QtApplication.dir/BSP.cpp.obj	8ac9c3c3f89da6f3
+637	685	7926260162103357	CMakeFiles/QtApplication.dir/Controller.cpp.obj	2e297ae9069b1c2
+646	699	7926260162188465	CMakeFiles/QtApplication.dir/Weapon.cpp.obj	7719ec91603237ef
+620	4324	7926260161928242	CMakeFiles/QtApplication.dir/main.cpp.obj	110a28447d60dd76
+616	4328	7926260161888257	CMakeFiles/QtApplication.dir/QtApplication_autogen/mocs_compilation.cpp.obj	169fa12c09a37605
+624	4348	7926260161958245	CMakeFiles/QtApplication.dir/mainwindow.cpp.obj	ad185c5c2b84bed6
+4348	4667	7926260199206049	QtApplication.exe	f5928fd06b3e64db
+38	808	7926261587460225	QtApplication_autogen/timestamp	a40e34c19006cc26
+38	808	7926261587460225	QtApplication_autogen/mocs_compilation.cpp	a40e34c19006cc26
+38	808	7926261587460225	C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/build/Desktop_Qt_6_10_2_MSVC2022_64bit-Debug/QtApplication_autogen/timestamp	a40e34c19006cc26
+38	808	7926261587460225	C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/build/Desktop_Qt_6_10_2_MSVC2022_64bit-Debug/QtApplication_autogen/mocs_compilation.cpp	a40e34c19006cc26
+823	889	7926261588527968	CMakeFiles/QtApplication.dir/Player.cpp.obj	6cf3ba0b2a93b421
+828	2973	7926261588578236	CMakeFiles/QtApplication.dir/WallRenderer.cpp.obj	8e795265262819fa
+814	5209	7926261588432800	CMakeFiles/QtApplication.dir/main.cpp.obj	110a28447d60dd76
+818	5254	7926261588477981	CMakeFiles/QtApplication.dir/mainwindow.cpp.obj	ad185c5c2b84bed6
+809	5274	7926261588392742	CMakeFiles/QtApplication.dir/QtApplication_autogen/mocs_compilation.cpp.obj	169fa12c09a37605
+5275	5491	7926261633040690	QtApplication.exe	e700f2afe9c0d23

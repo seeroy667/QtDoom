@@ -12,6 +12,7 @@ Modifications:
 Player::Player()
 {
     position = {0, 0};
+    angle = 0.0f;
     health = 100;
     isAlive = true;
 }
@@ -46,3 +47,31 @@ int Player::getHealth()
 {
     return health;
 }
+
+float Player::getAngle() const
+{
+    return angle;
+}
+
+Vertices Player::getPosition() const
+{
+    return position;
+}
+
+void Player::setAngle(float a)
+{
+    angle = a;
+}
+
+void Player::rotate(float a)
+{
+    angle += a;
+}
+
+void Player::setPosition(float x, float y)
+{
+    position.x = x;
+    position.y = y;
+}
+
+
