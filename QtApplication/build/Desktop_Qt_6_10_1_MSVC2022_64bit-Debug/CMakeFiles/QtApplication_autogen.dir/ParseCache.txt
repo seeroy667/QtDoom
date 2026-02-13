@@ -363,6 +363,7 @@ C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/mainwindow.h
  mdp:C:/Qt/6.10.1/msvc2022_64/include/QtCore/qyieldcpu.h
  mdp:C:/Qt/6.10.1/msvc2022_64/include/QtGui/QPaintDevice
  mdp:C:/Qt/6.10.1/msvc2022_64/include/QtGui/QPaintDeviceWindow
+ mdp:C:/Qt/6.10.1/msvc2022_64/include/QtGui/QPolygonF
  mdp:C:/Qt/6.10.1/msvc2022_64/include/QtGui/QSurfaceFormat
  mdp:C:/Qt/6.10.1/msvc2022_64/include/QtGui/QTransform
  mdp:C:/Qt/6.10.1/msvc2022_64/include/QtGui/QWindow
@@ -485,27 +486,42 @@ C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/mainwindow.h
  mdp:C:/Qt/6.10.1/msvc2022_64/include/QtGui/qwindowdefs.h
  mdp:C:/Qt/6.10.1/msvc2022_64/include/QtGui/qwindowdefs_win.h
  mdp:C:/Qt/6.10.1/msvc2022_64/include/QtGui/qwindowsmimeconverter.h
+ mdp:C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/QApplication
  mdp:C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/QDialog
+ mdp:C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/QGraphicsPolygonItem
+ mdp:C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/QGraphicsScene
+ mdp:C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/QGraphicsView
  mdp:C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/QMainWindow
+ mdp:C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qabstractscrollarea.h
+ mdp:C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qapplication.h
  mdp:C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qdialog.h
+ mdp:C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qframe.h
+ mdp:C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qgraphicsitem.h
+ mdp:C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qgraphicsscene.h
+ mdp:C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qgraphicsview.h
  mdp:C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qmainwindow.h
+ mdp:C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qscrollarea.h
  mdp:C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qsizepolicy.h
  mdp:C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qtabwidget.h
  mdp:C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qtwidgets-config.h
  mdp:C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qtwidgetsexports.h
  mdp:C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qtwidgetsglobal.h
  mdp:C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qwidget.h
+ mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Player.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/mainwindow.h
+ mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/WallRenderer.h
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/main.cpp
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Weapon.h
+C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Controller.h
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/mainwindow.cpp
  uic:./ui_mainwindow.h
-C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Controller.h
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/BSP.h
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Engine.h
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Player.h
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/BSP.cpp
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Controller.cpp
+C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/WallRenderer.h
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Engine.cpp
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Player.cpp
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Weapon.cpp
+C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/WallRenderer.cpp

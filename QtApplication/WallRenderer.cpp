@@ -1,3 +1,12 @@
+/*
+Author: Mathieu Vincent
+Date: Febuary 12, 2026
+File name: WallRenderer.cpp
+Goal: Code for rendering walls.
+Modifications:
+*/
+
+
 #include "WallRenderer.h"
 #include <QColor>
 #include <algorithm>

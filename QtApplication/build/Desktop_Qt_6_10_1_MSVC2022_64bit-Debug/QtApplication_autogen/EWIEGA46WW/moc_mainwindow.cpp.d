@@ -361,6 +361,7 @@ C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/build/Desktop_Qt_6
   C:/Qt/6.10.1/msvc2022_64/include/QtCore/qyieldcpu.h \
   C:/Qt/6.10.1/msvc2022_64/include/QtGui/QPaintDevice \
   C:/Qt/6.10.1/msvc2022_64/include/QtGui/QPaintDeviceWindow \
+  C:/Qt/6.10.1/msvc2022_64/include/QtGui/QPolygonF \
   C:/Qt/6.10.1/msvc2022_64/include/QtGui/QSurfaceFormat \
   C:/Qt/6.10.1/msvc2022_64/include/QtGui/QTransform \
   C:/Qt/6.10.1/msvc2022_64/include/QtGui/QWindow \
@@ -483,13 +484,26 @@ C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/build/Desktop_Qt_6
   C:/Qt/6.10.1/msvc2022_64/include/QtGui/qwindowdefs.h \
   C:/Qt/6.10.1/msvc2022_64/include/QtGui/qwindowdefs_win.h \
   C:/Qt/6.10.1/msvc2022_64/include/QtGui/qwindowsmimeconverter.h \
+  C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/QApplication \
   C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/QDialog \
+  C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/QGraphicsPolygonItem \
+  C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/QGraphicsScene \
+  C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/QGraphicsView \
   C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/QMainWindow \
+  C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qabstractscrollarea.h \
+  C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qapplication.h \
   C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qdialog.h \
+  C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qframe.h \
+  C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qgraphicsitem.h \
+  C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qgraphicsscene.h \
+  C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qgraphicsview.h \
   C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qmainwindow.h \
+  C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qscrollarea.h \
   C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qsizepolicy.h \
   C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qtabwidget.h \
   C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qtwidgets-config.h \
   C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qtwidgetsexports.h \
   C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qtwidgetsglobal.h \
-  C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qwidget.h
+  C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/qwidget.h \
+  C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Player.h \
+  C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/wallrenderer.h

@@ -1,3 +1,11 @@
+/*
+Author: Mathieu Vincent
+Date: Febuary 12, 2026
+File name: WallRenderer.h
+Goal: Header file for the wall renderer
+Modifications:
+*/
+
 #ifndef WALLRENDERER_H
 #define WALLRENDERER_H
 

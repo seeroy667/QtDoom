@@ -355,6 +355,12 @@
 			null
 		],
 		[
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/WallRenderer.h",
+			"MU",
+			"EWIEGA46WW/moc_WallRenderer.cpp",
+			null
+		],
+		[
 			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Weapon.h",
 			"MU",
 			"EWIEGA46WW/moc_Weapon.cpp",
@@ -439,6 +445,11 @@
 		],
 		[
 			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Player.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/WallRenderer.cpp",
 			"MU",
 			null
 		],
