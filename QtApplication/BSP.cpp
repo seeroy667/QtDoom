@@ -5,3 +5,10 @@ File name: BSP.cpp
 Description: Code for the Binary Space Partitioning tree implementation.
 Modifications:
 */
+
+#include "BSP.h"
+
+BSP::BSP()
+{
+
+}

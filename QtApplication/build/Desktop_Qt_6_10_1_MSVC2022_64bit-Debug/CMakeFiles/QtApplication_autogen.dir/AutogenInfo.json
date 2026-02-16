@@ -349,21 +349,39 @@
 			null
 		],
 		[
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Painter.h",
+			"MU",
+			"EWIEGA46WW/moc_Painter.cpp",
+			null
+		],
+		[
 			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Player.h",
 			"MU",
 			"EWIEGA46WW/moc_Player.cpp",
 			null
 		],
 		[
-			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/WallRenderer.h",
-			"MU",
-			"EWIEGA46WW/moc_WallRenderer.cpp",
-			null
-		],
-		[
 			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Weapon.h",
 			"MU",
 			"EWIEGA46WW/moc_Weapon.cpp",
+			null
+		],
+		[
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/game.h",
+			"MU",
+			"EWIEGA46WW/moc_game.cpp",
+			null
+		],
+		[
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/gamemanager.h",
+			"MU",
+			"EWIEGA46WW/moc_gamemanager.cpp",
+			null
+		],
+		[
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/geoStructs.h",
+			"MU",
+			"EWIEGA46WW/moc_geoStructs.cpp",
 			null
 		],
 		[
@@ -444,17 +462,27 @@
 			null
 		],
 		[
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Painter.cpp",
+			"MU",
+			null
+		],
+		[
 			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Player.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/WallRenderer.cpp",
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Weapon.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Weapon.cpp",
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/game.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/gamemanager.cpp",
 			"MU",
 			null
 		],

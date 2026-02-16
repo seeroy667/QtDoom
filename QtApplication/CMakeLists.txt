@@ -33,7 +33,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(QtApplication
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        WallRenderer.h WallRenderer.cpp
+        Painter.h Painter.cpp
+        game.h game.cpp
+        geoStructs.h
+        gamemanager.h gamemanager.cpp
+
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET QtApplication APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

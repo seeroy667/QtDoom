@@ -7,7 +7,7 @@
 				{
 					"build" : ".",
 					"hasInstallRule" : true,
-					"jsonFile" : "directory-.-Debug-00a998c5ee88c7696492.json",
+					"jsonFile" : "directory-.-Debug-cfed77fe61a8eb68d464.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.16"
@@ -44,7 +44,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "QtApplication::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-QtApplication-Debug-e3c509855ec8bda49b69.json",
+					"jsonFile" : "target-QtApplication-Debug-a4dedc840e054039264f.json",
 					"name" : "QtApplication",
 					"projectIndex" : 0
 				},

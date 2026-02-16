@@ -14,10 +14,7 @@ Modifications:
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QDialog>
-#include <QtGui>
-#include <QtCore>
-#include "wallrenderer.h"
+#include "Engine.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -28,20 +25,11 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-
-
 private:
     Ui::MainWindow *ui;
-    QGraphicsScene *m_scene;
-    QGraphicsView *m_view;
-    WallRenderer *m_renderer;
-    Player m_player;
-
-    void setupScene();
-    void renderWorld();
+    Engine *engine;
 };
 #endif // MAINWINDOW_H

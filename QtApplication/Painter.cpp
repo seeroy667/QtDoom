@@ -1,13 +1,13 @@
 /*
 Author: Mathieu Vincent
 Date: Febuary 12, 2026
-File name: WallRenderer.cpp
+File name: Painter.cpp
 Goal: Code for rendering walls.
 Modifications:
 */
 
 
-#include "WallRenderer.h"
+#include "Painter.h"
 #include <QColor>
 #include <algorithm>
 #include <cmath>
@@ -121,4 +121,40 @@ float WallRenderer::projectHeight(float worldHeight, float distance)
     float screenHeight = (relativeHeight / distance) * m_focalLength;
 
     return m_screenHeight / 2.0f - screenHeight;
+}
+
+// UTILISEE POUR EXEMPLE
+void WallRenderer::render(Player m_player)
+{
+    m_scene->clear();
+
+    std::vector<Wall> walls;
+
+    // Mur du milieu
+    Wall wall1;
+    wall1.start = {-5.0f, 10.0f};
+    wall1.end = {5.0f, 10.0f};
+    wall1.floorHeight = 0.0f;
+    wall1.ceilingHeight = 5.0f;
+    walls.push_back(wall1);
+
+    // Mur de gauche
+    Wall wall2;
+    wall2.start = {-5.0f, 10.0f};
+    wall2.end = {-5.0f, 5.0f};
+    wall2.floorHeight = 0.0f;
+    wall2.ceilingHeight = 5.0f;
+    walls.push_back(wall2);
+
+    // Mur de droite
+    Wall wall3;
+    wall3.start = {5.0f, 5.0f};
+    wall3.end = {5.0f, 10.0f};
+    wall3.floorHeight = 0.0f;
+    wall3.ceilingHeight = 5.0f;
+    walls.push_back(wall3);
+
+    for (const Wall& wall : walls) {
+        renderWall(wall, m_player);
+    }
 }

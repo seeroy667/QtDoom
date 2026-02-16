@@ -1,36 +1,22 @@
 /*
 Author: Mathieu Vincent
 Date: Febuary 12, 2026
-File name: WallRenderer.h
+File name: Painter.h
 Goal: Header file for the wall renderer
 Modifications:
 */
 
-#ifndef WALLRENDERER_H
-#define WALLRENDERER_H
+#ifndef PAINTER_H
+#define PAINTER_H
 
 #include <QApplication>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsPolygonItem>
 #include <QPolygonF>
-#include <cmath>
 
+#include "geoStructs.h"
 #include "Player.h"
-
-struct Point2D
-{
-    float x, y;
-};
-
-struct Wall
-{
-    Point2D start;
-    Point2D end;
-    float floorHeight;
-    float ceilingHeight;
-};
-
 
 class WallRenderer
 {
@@ -38,6 +24,8 @@ public:
     WallRenderer(QGraphicsScene* scene, int screenWidth, int screenHeight);
 
     void renderWall(const Wall& wall, const Player& player);
+
+    void render(Player m_player);
 
 private:
     QGraphicsScene* m_scene;
@@ -55,4 +43,4 @@ private:
     float projectHeight(float worldHeight, float distance);
 };
 
-#endif // WALLRENDERER_H
+#endif // PAINTER_H
