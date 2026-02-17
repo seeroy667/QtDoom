@@ -56,8 +56,13 @@ QtApplication_autogen/timestamp: \
 	C:/Program\ Files/Microsoft\ Visual\ Studio/18/Community/VC/Tools/MSVC/14.50.35717/include/version \
 	C:/Program\ Files/Microsoft\ Visual\ Studio/18/Community/VC/Tools/MSVC/14.50.35717/include/yvals.h \
 	C:/Program\ Files/Microsoft\ Visual\ Studio/18/Community/VC/Tools/MSVC/14.50.35717/include/yvals_core.h \
+	C:/Qt/6.10.1/msvc2022_64/include/QtCore/QDebug \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/QElapsedTimer \
+	C:/Qt/6.10.1/msvc2022_64/include/QtCore/QList \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/QObject \
+	C:/Qt/6.10.1/msvc2022_64/include/QtCore/QRect \
+	C:/Qt/6.10.1/msvc2022_64/include/QtCore/QSize \
+	C:/Qt/6.10.1/msvc2022_64/include/QtCore/QSizeF \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/QTimer \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/q17memory.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/q20functional.h \
@@ -117,6 +122,7 @@ QtApplication_autogen/timestamp: \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qglobalstatic.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qhash.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qhashfunctions.h \
+	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qiodevice.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qiodevicebase.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qiterable.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qiterator.h \
@@ -191,18 +197,23 @@ QtApplication_autogen/timestamp: \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qtversionchecks.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qtypeinfo.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qtypes.h \
+	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qurl.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qutf8stringview.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qvariant.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qvarlengtharray.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qversiontagging.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qxptype_traits.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qyieldcpu.h \
+	C:/Qt/6.10.1/msvc2022_64/include/QtGui/QKeyEvent \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/QPolygonF \
+	C:/Qt/6.10.1/msvc2022_64/include/QtGui/QTransform \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qaction.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qbitmap.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qbrush.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qcolor.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qcursor.h \
+	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qevent.h \
+	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qeventpoint.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qfont.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qfontinfo.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qfontmetrics.h \
@@ -211,6 +222,7 @@ QtApplication_autogen/timestamp: \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qguiapplication_platform.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qicon.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qimage.h \
+	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qinputdevice.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qinputmethod.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qkeysequence.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qpaintdevice.h \
@@ -220,15 +232,20 @@ QtApplication_autogen/timestamp: \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qpen.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qpixelformat.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qpixmap.h \
+	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qpointingdevice.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qpolygon.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qregion.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qrgb.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qrgba64.h \
+	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qscreen.h \
+	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qscreen_platform.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qtextoption.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qtgui-config.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qtguiexports.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qtguiglobal.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qtransform.h \
+	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qvector2d.h \
+	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qvectornd.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qwindowdefs.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtGui/qwindowdefs_win.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtWidgets/QApplication \
@@ -443,31 +460,29 @@ QtApplication_autogen/timestamp: \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-MSVC.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/WindowsPaths.cmake \
-	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/BSP.cpp \
-	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/BSP.h \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/CMakeLists.txt \
-	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Controller.cpp \
-	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Controller.h \
-	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Engine.cpp \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Engine.h \
-	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Painter.cpp \
-	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Painter.h \
-	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Player.cpp \
-	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Player.h \
-	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Weapon.cpp \
-	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Weapon.h \
+	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/actor.cpp \
+	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/actor.h \
+	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/bsp.cpp \
+	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/bsp.h \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/build/Desktop_Qt_6_10_1_MSVC2022_64bit-Debug/.qtc/package-manager/auto-setup.cmake \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/build/Desktop_Qt_6_10_1_MSVC2022_64bit-Debug/.qtc/package-manager/maintenance_tool_provider.cmake \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/build/Desktop_Qt_6_10_1_MSVC2022_64bit-Debug/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/build/Desktop_Qt_6_10_1_MSVC2022_64bit-Debug/CMakeFiles/3.30.5/CMakeRCCompiler.cmake \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/build/Desktop_Qt_6_10_1_MSVC2022_64bit-Debug/CMakeFiles/3.30.5/CMakeSystem.cmake \
-	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/game.cpp \
-	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/game.h \
+	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/controllermanager.cpp \
+	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/controllermanager.h \
+	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/engine.cpp \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/gamemanager.cpp \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/gamemanager.h \
-	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/geoStructs.h \
+	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/geostructs.h \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/main.cpp \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/mainwindow.cpp \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/mainwindow.h \
+	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/rendermanager.cpp \
+	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/rendermanager.h \
+	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/weapon.cpp \
+	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/weapon.h \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/mainwindow.ui \
 	C:/Qt/Tools/CMake_64/bin/cmake.exe

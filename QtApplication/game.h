@@ -9,10 +9,10 @@ Modifications:
 #ifndef GAME_H
 #define GAME_H
 
-class Game
+class GameManager
 {
 public:
-    Game();
+    GameManager();
 };
 
 #endif // GAME_H

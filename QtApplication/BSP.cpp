@@ -6,7 +6,7 @@ Description: Code for the Binary Space Partitioning tree implementation.
 Modifications:
 */
 
-#include "BSP.h"
+#include "bsp.h"
 
 BSP::BSP()
 {

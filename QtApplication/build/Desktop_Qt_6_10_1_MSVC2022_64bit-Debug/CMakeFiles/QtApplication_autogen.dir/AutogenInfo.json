@@ -331,45 +331,27 @@
 	"HEADERS" : 
 	[
 		[
-			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/BSP.h",
-			"MU",
-			"EWIEGA46WW/moc_BSP.cpp",
-			null
-		],
-		[
-			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Controller.h",
-			"MU",
-			"EWIEGA46WW/moc_Controller.cpp",
-			null
-		],
-		[
 			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Engine.h",
 			"MU",
 			"EWIEGA46WW/moc_Engine.cpp",
 			null
 		],
 		[
-			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Painter.h",
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/actor.h",
 			"MU",
-			"EWIEGA46WW/moc_Painter.cpp",
+			"EWIEGA46WW/moc_actor.cpp",
 			null
 		],
 		[
-			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Player.h",
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/bsp.h",
 			"MU",
-			"EWIEGA46WW/moc_Player.cpp",
+			"EWIEGA46WW/moc_bsp.cpp",
 			null
 		],
 		[
-			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Weapon.h",
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/controllermanager.h",
 			"MU",
-			"EWIEGA46WW/moc_Weapon.cpp",
-			null
-		],
-		[
-			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/game.h",
-			"MU",
-			"EWIEGA46WW/moc_game.cpp",
+			"EWIEGA46WW/moc_controllermanager.cpp",
 			null
 		],
 		[
@@ -379,15 +361,27 @@
 			null
 		],
 		[
-			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/geoStructs.h",
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/geostructs.h",
 			"MU",
-			"EWIEGA46WW/moc_geoStructs.cpp",
+			"EWIEGA46WW/moc_geostructs.cpp",
 			null
 		],
 		[
 			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/mainwindow.h",
 			"MU",
 			"EWIEGA46WW/moc_mainwindow.cpp",
+			null
+		],
+		[
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/rendermanager.h",
+			"MU",
+			"EWIEGA46WW/moc_rendermanager.cpp",
+			null
+		],
+		[
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/weapon.h",
+			"MU",
+			"EWIEGA46WW/moc_weapon.cpp",
 			null
 		]
 	],
@@ -447,37 +441,22 @@
 	"SOURCES" : 
 	[
 		[
-			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/BSP.cpp",
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/actor.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Controller.cpp",
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/bsp.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Engine.cpp",
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/controllermanager.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Painter.cpp",
-			"MU",
-			null
-		],
-		[
-			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Player.cpp",
-			"MU",
-			null
-		],
-		[
-			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Weapon.cpp",
-			"MU",
-			null
-		],
-		[
-			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/game.cpp",
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/engine.cpp",
 			"MU",
 			null
 		],
@@ -493,6 +472,16 @@
 		],
 		[
 			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/mainwindow.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/rendermanager.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/weapon.cpp",
 			"MU",
 			null
 		]

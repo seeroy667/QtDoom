@@ -14,21 +14,22 @@ Modifications:
 #include<QElapsedTimer>
 #include<QGraphicsScene>
 #include<QGraphicsView>
+#include<QDebug>
 
-#include"Controller.h"
+#include"controllermanager.h"
 #include"gamemanager.h"
-#include"painter.h"
-#include"Player.h"
+#include"rendermanager.h"
+#include"actor.h"
 
 #define TARGET_FPS 60
 
 class Engine : public QObject{
     Q_OBJECT
 private:
-    Controller *cManager;
+    ControllerManager *cManager;
     GameManager *gManager;
-    WallRenderer *rManager;
-    Player *p; // A SUPPRIMER EVENTUELLEMENT
+    RenderManager *rManager;
+    Actor *p; // A SUPPRIMER EVENTUELLEMENT
     // UI MANAGER
 
     // To operate the frames
@@ -39,6 +40,7 @@ public:
 	~Engine();
     void start();
     void gameLoop();
+    ControllerManager* getcManager() const;
 };
 
 #endif

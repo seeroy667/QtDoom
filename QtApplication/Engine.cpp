@@ -6,15 +6,15 @@ Description: Code file for the game engine handling all events.
 Modifications:
 */
 
-#include"Engine.h"
+#include"engine.h"
 
 Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent)
     : QObject(parent)
 {
-    cManager = new Controller();
+    cManager = new ControllerManager();
     gManager = new GameManager();
-    rManager = new WallRenderer(scene, width, height);
-    p = new Player();
+    rManager = new RenderManager(scene, width, height);
+    p = new Actor();
     p->setPosition(0.0f, 0.0f);
     p->setAngle(0.0f);
 
@@ -34,10 +34,20 @@ void Engine::start()
 
 void Engine::gameLoop()
 {
-    float deltaTime = elapsedTimer.restart() / 1000.0f;
+    //float deltaTime = elapsedTimer.restart() / 1000.0f;
+    //if (deltaTime > 0.1f) deltaTime = 0.1f; Will be usefull when treating deltaTime (gap in between frames)
 
-    if (deltaTime > 0.1f) deltaTime = 0.1f;
+    if(cManager->movingRight()) p->setPosition(p->getPosition().x+0.5f, p->getPosition().y);
+    if(cManager->movingLeft()) p->setPosition(p->getPosition().x-0.5f, p->getPosition().y);
+    if(cManager->movingFront()) p->setPosition(p->getPosition().x, p->getPosition().y+0.5f);
+    if(cManager->movingBack()) p->setPosition(p->getPosition().x, p->getPosition().y-0.5f);
+    if(cManager->rotatingLeft()) p->setAngle(p->getAngle()+0.05f);
+    if(cManager->rotatingRight()) p->setAngle(p->getAngle()-0.05f);
 
-    p->setAngle(p->getAngle()+0.05f);
     rManager->render(*p);
+}
+
+ControllerManager* Engine::getcManager() const
+{
+    return cManager;
 }

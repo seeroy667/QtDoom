@@ -14,7 +14,7 @@ Modifications:
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "Engine.h"
+#include "engine.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -28,6 +28,8 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
 private:
     Ui::MainWindow *ui;
     Engine *engine;

@@ -8,4 +8,4 @@ Modifications:
 
 #include "game.h"
 
-Game::Game() {}
+GameManager::GameManager() {}

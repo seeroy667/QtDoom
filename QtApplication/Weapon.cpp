@@ -6,7 +6,7 @@ Goal: Code file for the weapon class.
 Modifications:
 */
 
-#include "Weapon.h"
+#include "weapon.h"
 
 Weapon::Weapon(int dmg, float rng, float rate)
 {

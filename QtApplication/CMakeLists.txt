@@ -17,25 +17,25 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
-        Engine.cpp
-        Engine.h
-        Player.cpp
-        Player.h
-        Controller.cpp
-        Controller.h
-        BSP.cpp
-        BSP.h
-        Weapon.cpp
-        Weapon.h
+        engine.cpp
+        engine.h
+        actor.cpp
+        actor.h
+        controllermanager.cpp
+        controllermanager.h
+        bsp.cpp
+        bsp.h
+        weapon.cpp
+        weapon.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(QtApplication
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        Painter.h Painter.cpp
-        game.h game.cpp
-        geoStructs.h
+        rendermanager.h rendermanager.cpp
+
+        geostructs.h
         gamemanager.h gamemanager.cpp
 
     )

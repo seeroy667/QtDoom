@@ -36,3 +36,13 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    engine->getcManager()->keyPressedEvent(event);
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent *event)
+{
+    engine->getcManager()->keyReleasedEvent(event);
+}

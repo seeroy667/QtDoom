@@ -1,0 +1,37 @@
+/*
+Author: Donavan Sirois
+Date: Febuary 1, 2026
+File name: Controller.h
+Description: Header file for the Controller class. This class handles the inputs from the player.
+Modifications:
+*/
+
+#ifndef CONTROLLERMANAGER_H
+#define CONTROLLERMANAGER_H
+
+#include<QObject>
+#include<QKeyEvent>
+
+class ControllerManager : public QObject{
+    Q_OBJECT
+public:
+    ControllerManager();
+    ~ControllerManager();
+    void keyPressedEvent(QKeyEvent * event);
+    void keyReleasedEvent(QKeyEvent * event);
+    bool movingFront(){return mFront;}
+    bool movingBack(){return mBack;}
+    bool movingLeft(){return mLeft;}
+    bool movingRight(){return mRight;}
+    bool rotatingLeft(){return rLeft;}
+    bool rotatingRight(){return rRight;}
+private:
+    bool mFront;
+    bool mBack;
+    bool mLeft;
+    bool mRight;
+    bool rRight;
+    bool rLeft;
+};
+
+#endif
