@@ -279,12 +279,11 @@ C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/mainwindow.h
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Painter.cpp
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/main.cpp
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Weapon.h
-C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/mainwindow.cpp
- uic:./ui_mainwindow.h
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/rendermanager.cpp
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Controller.h
+C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/mainwindow.cpp
+ uic:./ui_mainwindow.h
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/BSP.h
-C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/bsp.cpp
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Engine.h
  mmc:Q_OBJECT
  mdp:C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/ucrt/assert.h
@@ -558,7 +557,9 @@ C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Engine.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/gamemanager.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/geostructs.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/rendermanager.h
+C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/bsp.cpp
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Player.h
+C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/BSP.cpp
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/engine.h
  mmc:Q_OBJECT
  mdp:C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/ucrt/assert.h
@@ -815,8 +816,6 @@ C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/engine.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/gamemanager.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/geostructs.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/rendermanager.h
-C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/BSP.cpp
-C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Controller.cpp
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/controllermanager.h
  mmc:Q_OBJECT
  mdp:C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/ucrt/assert.h
@@ -1041,17 +1040,18 @@ C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/controllermanager.
  mdp:C:/Qt/6.10.1/msvc2022_64/include/QtGui/qwindowdefs.h
  mdp:C:/Qt/6.10.1/msvc2022_64/include/QtGui/qwindowdefs_win.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/controllermanager.h
-C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Engine.cpp
+C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Controller.cpp
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/WallRenderer.h
-C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/weapon.h
+C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Engine.cpp
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Player.cpp
-C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/geostructs.h
+C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/weapon.h
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Weapon.cpp
+C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/geostructs.h
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/WallRenderer.cpp
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Painter.h
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/game.h
-C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/weapon.cpp
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/geoStructs.h
+C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/weapon.cpp
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/game.cpp
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/gamemanager.h
 C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/gamemanager.cpp
