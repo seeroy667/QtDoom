@@ -10,6 +10,7 @@ Modifications:
 #define ACTOR_H
 
 #include"geostructs.h"
+#include <cmath>
 
 class Actor {
 private:
@@ -17,6 +18,10 @@ private:
     int health;
     bool isAlive;
     float angle;
+    float EnemyRange = 4.0f;
+    float EnemySpeed = 2.0f;
+    float dx = 0;
+    float dy = 0;
 public:
     Actor();
     ~Actor();
@@ -32,6 +37,11 @@ public:
     void setAngle(float newAngle);
     void rotate(float deltaAngle);
     void setPosition(float x, float y);
+
+    //Enemy
+    float distancePlayerEnemy(const Actor& E, const Actor& P);
+    void moveEnemy(Actor& E, const Actor& P);
+
 };
 
 #endif

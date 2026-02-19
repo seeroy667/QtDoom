@@ -74,4 +74,36 @@ void Actor::setPosition(float x, float y)
     position.y = y;
 }
 
+//Enemy
+
+float Actor::distancePlayerEnemy(Actor E, Actor P)
+{
+    dx= P.getPosition().x-E.getPosition().x;
+    dy = P.getPosition().y-E.getPosition().y;
+
+    return std::sqrt(dx*dx + dy*dy);
+}
+
+void Actor::moveEnemy(Actor Enemy, Actor Player)
+{
+    float distance = distancePlayerEnemy(E,P);
+
+    if(distance < EnemyRange)
+    {
+        dx = Player.getPosition().x - Enemy.getPosition().x;
+        dy = Enemy.getPosition().x - Enemy.getPosition().y;
+
+        Enemy.getAngle() = std::atan2(dy,dx);
+
+        if(distance < 0,01f)
+        {
+            float nx = dx/distance;
+            float ny = dy/distance;
+
+            enemy.move(nx*EnemySpeed,ny*EnemySpeed);
+
+        }
+    }
+
+}
 

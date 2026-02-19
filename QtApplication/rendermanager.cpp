@@ -123,6 +123,55 @@ float RenderManager::projectHeight(float worldHeight, float distance)
     return m_screenHeight / 2.0f - screenHeight;
 }
 
+
+void RenderManager::renderActor(const Actor& actor, const Actor& player, QColor color)
+{
+
+    Point2D camPos = coordPlayer(actor.getPosition(), player);
+
+
+    if (camPos.y < distanceMin)
+        return;
+
+
+    float screenX = (camPos.x / camPos.y) * m_focalLength + m_screenWidth / 2.0f;
+
+
+    float spriteHeight = (1.0f / camPos.y) * m_focalLength;
+    float spriteWidth  = spriteHeight * 0.6f;
+
+
+    float eyeHeight    = 2.5f;
+    float spriteBottom = projectHeight(0.0f, camPos.y);
+    float spriteTop    = projectHeight(5.0f, camPos.y);
+
+
+    QRectF spriteRect(
+        screenX - spriteWidth / 2.0f,
+        spriteTop,
+        spriteWidth,
+        spriteBottom - spriteTop
+        );
+
+
+    if (spriteRect.right() < 0 || spriteRect.left() > m_screenWidth)
+        return;
+
+
+    int brightness = std::max(0, std::min(255,
+                                          (int)(255.0f / (1.0f + camPos.y / 10.0f))));
+    QColor shadedColor(
+        color.red()   * brightness / 255,
+        color.green() * brightness / 255,
+        color.blue()  * brightness / 255
+        );
+
+
+    QGraphicsRectItem* spriteItem = m_scene->addRect(spriteRect);
+    spriteItem->setBrush(shadedColor);
+    spriteItem->setPen(Qt::NoPen);
+}
+
 // UTILISEE POUR EXEMPLE
 void RenderManager::render(Actor m_player)
 {
@@ -157,4 +206,5 @@ void RenderManager::render(Actor m_player)
     for (const Wall& wall : walls) {
         renderWall(wall, m_player);
     }
+    renderActor(m_enemy, m_player, Qcolor(255,0,0));
 }

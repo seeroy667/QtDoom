@@ -41,6 +41,8 @@ private:
     Point2D projectToScreen(const Point2D& cameraPoint);
 
     float projectHeight(float worldHeight, float distance);
+
+    void renderActor(Actor& Actor,Actor& Player, QColor color);
 };
 
 #endif // RENDERMANAGER_H
