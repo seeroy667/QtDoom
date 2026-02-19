@@ -19,7 +19,6 @@ Modifications:
 #include"controllermanager.h"
 #include"gamemanager.h"
 #include"rendermanager.h"
-#include"actor.h"
 
 #define TARGET_FPS 60
 
@@ -29,7 +28,6 @@ private:
     ControllerManager *cManager;
     GameManager *gManager;
     RenderManager *rManager;
-    Actor *p; // A SUPPRIMER EVENTUELLEMENT
     // UI MANAGER
 
     // To operate the frames
