@@ -31,8 +31,8 @@ void Engine::start()
 
 void Engine::gameLoop()
 {
-    //float deltaTime = elapsedTimer.restart() / 1000.0f;
-    //if (deltaTime > 0.1f) deltaTime = 0.1f; Will be usefull when treating deltaTime (gap in between frames)
+    float deltaTime = elapsedTimer.restart() / 1000.0f;
+    if (deltaTime > 0.1f) deltaTime = 0.1f; //Will be usefull when treating deltaTime (gap in between frames)
 
     if(cManager->movingBack()) gManager->getPlayer()->setPosition(gManager->getPlayer()->getPosition().x+(0.5f*cos(gManager->getPlayer()->getAngle() - M_PI/2)), gManager->getPlayer()->getPosition().y+(0.5f*sin(gManager->getPlayer()->getAngle() - M_PI/2)));
     if(cManager->movingLeft()) gManager->getPlayer()->setPosition(gManager->getPlayer()->getPosition().x-(0.5f*cos(gManager->getPlayer()->getAngle())), gManager->getPlayer()->getPosition().y-(0.5f*sin(gManager->getPlayer()->getAngle())));
@@ -41,7 +41,8 @@ void Engine::gameLoop()
     if(cManager->rotatingLeft()) gManager->getPlayer()->setAngle(gManager->getPlayer()->getAngle()+0.05f);
     if(cManager->rotatingRight()) gManager->getPlayer()->setAngle(gManager->getPlayer()->getAngle()-0.05f);
 
-    rManager->render(*gManager->getPlayer());
+    rManager->render(*gManager->getPlayer(),*gManager->getEnemy());
+    gManager->getEnemy()->moveEnemy(*gManager->getPlayer(), deltaTime);
 }
 
 ControllerManager* Engine::getcManager() const

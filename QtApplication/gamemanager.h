@@ -16,8 +16,10 @@ class GameManager
 public:
     GameManager();
     Actor* getPlayer();
+    Actor* getEnemy();
 private:
     Actor *p;
+    Actor *e;
 };
 
 #endif // GAMEMANAGER_H

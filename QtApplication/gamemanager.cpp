@@ -4,9 +4,19 @@ GameManager::GameManager() {
     p = new Actor();
     p->setPosition(0.0f, 0.0f);
     p->setAngle(0.0f);
+
+//temporaire a modifier
+    e = new Actor();
+    e->setPosition(5.0f,5.0f);
+    e->setAngle(0.0f);
 }
 
 Actor* GameManager::getPlayer()
 {
     return p;
+}
+
+Actor* GameManager::getEnemy()
+{
+    return e;
 }

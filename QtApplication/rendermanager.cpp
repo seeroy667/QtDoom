@@ -124,7 +124,7 @@ float RenderManager::projectHeight(float worldHeight, float distance)
 }
 
 
-void RenderManager::renderActor(const Actor& actor, const Actor& player, QColor color)
+void RenderManager::renderActor(const Actor actor, const Actor player, QColor color)
 {
 
     Point2D camPos = coordPlayer(actor.getPosition(), player);
@@ -138,21 +138,22 @@ void RenderManager::renderActor(const Actor& actor, const Actor& player, QColor 
 
 
     float spriteHeight = (1.0f / camPos.y) * m_focalLength;
-    float spriteWidth  = spriteHeight * 0.6f;
+    float spriteWidth  = spriteHeight * 2.0f;
 
 
-    float eyeHeight    = 2.5f;
+
+    float actorHeight = 3.0f;
+    float eyeHeight   = 2.5f;
     float spriteBottom = projectHeight(0.0f, camPos.y);
-    float spriteTop    = projectHeight(5.0f, camPos.y);
-
+    float spriteTop    = projectHeight(actorHeight, camPos.y);
+    float squareSize   = spriteBottom - spriteTop;
 
     QRectF spriteRect(
-        screenX - spriteWidth / 2.0f,
+        screenX - squareSize / 2.0f,
         spriteTop,
-        spriteWidth,
-        spriteBottom - spriteTop
+        squareSize,
+        squareSize
         );
-
 
     if (spriteRect.right() < 0 || spriteRect.left() > m_screenWidth)
         return;
@@ -173,7 +174,7 @@ void RenderManager::renderActor(const Actor& actor, const Actor& player, QColor 
 }
 
 // UTILISEE POUR EXEMPLE
-void RenderManager::render(Actor m_player)
+void RenderManager::render(Actor m_player, Actor m_enemy)
 {
     m_scene->clear();
 
@@ -206,5 +207,5 @@ void RenderManager::render(Actor m_player)
     for (const Wall& wall : walls) {
         renderWall(wall, m_player);
     }
-    renderActor(m_enemy, m_player, Qcolor(255,0,0));
+    renderActor(m_enemy, m_player, QColor(255,0,0));
 }

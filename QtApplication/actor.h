@@ -18,7 +18,7 @@ private:
     int health;
     bool isAlive;
     float angle;
-    float EnemyRange = 4.0f;
+    float EnemyRange = 15.0f;
     float EnemySpeed = 2.0f;
     float dx = 0;
     float dy = 0;
@@ -40,7 +40,7 @@ public:
 
     //Enemy
     float distancePlayerEnemy(const Actor& E, const Actor& P);
-    void moveEnemy(Actor& E, const Actor& P);
+    void moveEnemy(const Actor& P, float deltaTime);
 
 };
 

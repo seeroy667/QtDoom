@@ -14,18 +14,21 @@ Modifications:
 #include <QGraphicsView>
 #include <QGraphicsPolygonItem>
 #include <QPolygonF>
+#include <QColor>
 
 #include "geostructs.h"
-#include "actor.h"
+#include "Actor.h"
 
 class RenderManager
 {
+
 public:
     RenderManager(QGraphicsScene* scene, int screenWidth, int screenHeight);
 
     void renderWall(const Wall& wall, const Actor& player);
 
-    void render(Actor m_player);
+    void render(Actor m_player, Actor m_enemy);
+    void renderActor(const Actor m_actor, const Actor m_player, QColor color);
 
 private:
     QGraphicsScene* m_scene;
@@ -42,7 +45,6 @@ private:
 
     float projectHeight(float worldHeight, float distance);
 
-    void renderActor(Actor& Actor,Actor& Player, QColor color);
 };
 
 #endif // RENDERMANAGER_H

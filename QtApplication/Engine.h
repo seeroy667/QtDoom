@@ -33,6 +33,7 @@ private:
     // To operate the frames
     QTimer timer;
     QElapsedTimer elapsedTimer;
+    float deltaTime = 0.0f;
 public:
     Engine(QGraphicsScene *scene, int width, int height, QObject *parent);
 	~Engine();
