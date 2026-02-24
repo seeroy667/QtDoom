@@ -9,7 +9,11 @@ Modifications:
 #ifndef GAMEMANAGER_H
 #define GAMEMANAGER_H
 
+#include<string>
+
 #include"actor.h"
+#include"geostructs.h"
+#include"bsp.h"
 
 class GameManager
 {
@@ -17,9 +21,14 @@ public:
     GameManager();
     Actor* getPlayer();
     Actor* getEnemy();
+    BSP* getBSP();
+    void loadMap(const std::string& filename);
 private:
     Actor *p;
     Actor *e;
+    std::vector<Actor*> creatures;
+    std::vector<Linedef> walls;
+    BSP* bsp;
 };
 
 #endif // GAMEMANAGER_H

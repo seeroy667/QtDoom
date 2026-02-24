@@ -9,6 +9,8 @@ Modifications:
 #ifndef BSP_H
 #define BSP_H
 
+#include<QDebug>
+
 #include"geostructs.h"
 
 struct Node
@@ -25,6 +27,11 @@ class BSP
 public:
     BSP();
     Node* Builder(std::vector<Linedef> segments);
+    void traverse(const Vertex& playerPosition, std::vector<Linedef>& renderedWalls);
+    void traverseNode(Node* node, const Vertex& playerPos, std::vector<Linedef>& walls);
+    void build(const std::vector<Linedef>& segments);
+private:
+    Node* root;
 };
 
 #endif

@@ -15,6 +15,7 @@ Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent)
     gManager = new GameManager();
     rManager = new RenderManager(scene, width, height);
 
+    gManager->loadMap("WadLvl1.txt");
     // This was missing — without it gameLoop() never gets called
     connect(&timer, &QTimer::timeout, this, &Engine::gameLoop);
 }
@@ -41,7 +42,7 @@ void Engine::gameLoop()
     if(cManager->rotatingLeft()) gManager->getPlayer()->setAngle(gManager->getPlayer()->getAngle()+0.05f);
     if(cManager->rotatingRight()) gManager->getPlayer()->setAngle(gManager->getPlayer()->getAngle()-0.05f);
 
-    rManager->render(*gManager->getPlayer(),*gManager->getEnemy());
+    rManager->render(*gManager->getPlayer(),*gManager->getEnemy(), gManager->getBSP());
     gManager->getEnemy()->moveEnemy(*gManager->getPlayer(), deltaTime);
 }
 

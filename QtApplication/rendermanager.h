@@ -18,6 +18,7 @@ Modifications:
 
 #include "geostructs.h"
 #include "Actor.h"
+#include "bsp.h"
 
 class RenderManager
 {
@@ -27,7 +28,7 @@ public:
 
     void renderWall(const Linedef& wall, const Actor& player);
 
-    void render(Actor m_player, Actor m_enemy);
+    void render(Actor m_player, Actor m_enemy, BSP* bsp);
     void renderActor(const Actor m_actor, const Actor m_player, QColor color);
 
 private:

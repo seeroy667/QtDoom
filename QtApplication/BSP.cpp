@@ -10,7 +10,7 @@ Modifications:
 
 BSP::BSP()
 {
-
+    root = nullptr;
 }
 
 Node* BSP::Builder(std::vector<Linedef> segments)
@@ -65,7 +65,6 @@ Node* BSP::Builder(std::vector<Linedef> segments)
             float dxPar = node->partition.end.x - node->partition.start.x;
             float dyPar = node->partition.end.y - node->partition.start.y;
 
-
             if (dxSeg == 0) // vertical segment case
             {
                 intersection.x = segments[i].start.x;
@@ -107,8 +106,43 @@ Node* BSP::Builder(std::vector<Linedef> segments)
             }
         }
     }
-
     node->front = Builder(frontLines);
     node->back = Builder(backLines);
     return node;
+}
+
+void BSP::traverse(const Vertex& playerPosition, std::vector<Linedef>& renderedWalls)
+{
+    renderedWalls.clear();
+    traverseNode(root, playerPosition, renderedWalls);
+}
+
+void BSP::traverseNode(Node* node, const Vertex& playerPosition, std::vector<Linedef>& walls)
+{
+    if (!node) return;
+
+    float dx = node->partition.end.x - node->partition.start.x;
+    float dy = node->partition.end.y - node->partition.start.y;
+    float px = playerPosition.x - node->partition.start.x;
+    float py = playerPosition.y - node->partition.start.y;
+
+    float cross = dx * py - dy * px;
+    if (cross < 0)
+    {
+        traverseNode(node->back, playerPosition, walls);
+        walls.push_back(node->partition);
+        traverseNode(node->front, playerPosition, walls);
+    }
+    else
+    {
+        traverseNode(node->front, playerPosition, walls);
+        walls.push_back(node->partition);
+        traverseNode(node->back, playerPosition, walls);
+    }
+}
+
+void BSP::build(const std::vector<Linedef>& segments)
+{
+    delete root;
+    root = Builder(segments);
 }

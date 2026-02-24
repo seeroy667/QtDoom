@@ -174,37 +174,13 @@ void RenderManager::renderActor(const Actor actor, const Actor player, QColor co
 }
 
 // UTILISEE POUR EXEMPLE
-void RenderManager::render(Actor m_player, Actor m_enemy)
+void RenderManager::render(Actor m_player, Actor m_enemy, BSP* bsp)
 {
     m_scene->clear();
+    std::vector<Linedef> renderedWalls;
+    bsp->traverse(m_player.getPosition(), renderedWalls);
 
-    std::vector<Linedef> walls;
-
-    // Mur du milieu
-    Linedef wall1;
-    wall1.start = {-5.0f, 10.0f};
-    wall1.end = {5.0f, 10.0f};
-    wall1.floorHeight = 0.0f;
-    wall1.ceilingHeight = 5.0f;
-    walls.push_back(wall1);
-
-    // Mur de gauche
-    Linedef wall2;
-    wall2.start = {-5.0f, 10.0f};
-    wall2.end = {-5.0f, 5.0f};
-    wall2.floorHeight = 0.0f;
-    wall2.ceilingHeight = 5.0f;
-    walls.push_back(wall2);
-
-    // Mur de droite
-    Linedef wall3;
-    wall3.start = {5.0f, 5.0f};
-    wall3.end = {5.0f, 10.0f};
-    wall3.floorHeight = 0.0f;
-    wall3.ceilingHeight = 5.0f;
-    walls.push_back(wall3);
-
-    for (const Linedef& wall : walls) {
+    for (const Linedef& wall : renderedWalls) {
         renderWall(wall, m_player);
     }
     renderActor(m_enemy, m_player, QColor(255,0,0));

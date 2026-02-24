@@ -20,3 +20,21 @@ Actor* GameManager::getEnemy()
 {
     return e;
 }
+
+void GameManager::loadMap(const std::string& filename)
+{
+    // Hardcoded for now, replace with filename when you want to generate the map from the file.
+    walls = {
+        {{-5.0f, 10.0f}, {5.0f, 10.0f}, 0.0f, 5.0f},
+        {{-5.0f, 10.0f}, {-5.0f, 5.0f}, 0.0f, 5.0f},
+        {{5.0f, 5.0f}, {5.0f, 10.0f}, 0.0f, 5.0f}
+    };
+
+    bsp = new BSP();
+    bsp->build(walls);
+}
+
+BSP* GameManager::getBSP()
+{
+    return bsp;
+}
