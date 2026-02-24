@@ -27,6 +27,12 @@ set(PROJECT_SOURCES
         bsp.h
         weapon.cpp
         weapon.h
+        gamepage.cpp
+        gamepage.h
+        levelpage.cpp
+        levelpage.h
+        menupage.cpp
+        menupage.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
