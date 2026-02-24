@@ -2,47 +2,64 @@
 Author: Donavan Sirois
 Date: Febuary 1, 2026
 File name: mainwindow.cpp
-Description: Code which implements the main window for the Qt application.
+Description: Header file which implements the main window for the Qt application.
 Modifications:
     Date: Febuary 2, 2026
         Author: Donavan Sirois
-        Description: Coded the paintEvent method which paints polygons to the screen. This
+        Description: Added the paintEvent method which paints polygons to the screen. This
         method is no meant to be permanent and should be deleted eventually.
+    Date: Febuary 24, 2026
+        Author: Léanne Héroux
+        Description: Added the gamePage the menuPage and the levelPage to the mainWindow
 */
-
 #include "mainwindow.h"
-#include "./ui_mainwindow.h"
+
+#include <QStackedWidget>
+#include <QVBoxLayout>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
+    resize(800, 600); //aggrandi un peu la page par défaut
 
-    QGraphicsScene *scene = new QGraphicsScene(this);
-    QGraphicsView  *view  = new QGraphicsView(scene, this);
+    QWidget *central = new QWidget(this);
+    setCentralWidget(central);
 
-    scene->setSceneRect(0, 0, 800, 600);
-    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view->setFrameStyle(0);
-    setCentralWidget(view);  // This is what makes it visible
+    QVBoxLayout *layout = new QVBoxLayout(central);
 
-    engine = new Engine(scene, 800, 600, this);
-    engine->start();
+    stackedWidget = new QStackedWidget;
+    layout->addWidget(stackedWidget);
+
+    // Créer les pages
+    menuPage = new MenuPage;
+    gamePage = new GamePage;
+    levelPage = new LevelPage;
+
+    // Ajouter les pages au stacked widget
+    stackedWidget->addWidget(menuPage);
+    stackedWidget->addWidget(gamePage);
+    stackedWidget->addWidget(levelPage);
+
+    // Page de départ
+    stackedWidget->setCurrentWidget(menuPage);
+
+    // Connexions des boutons
+    connect(menuPage->playButton(), &QPushButton::clicked, [this]() {
+        stackedWidget->setCurrentWidget(gamePage);
+    });
+
+    connect(gamePage->quitterButton(), &QPushButton::clicked, [this]() {
+        stackedWidget->setCurrentWidget(menuPage);
+    });
+
+    connect(levelPage->quitterButton(), &QPushButton::clicked, [this]() {
+        stackedWidget->setCurrentWidget(menuPage);
+    });
+
+    connect(menuPage->levelButton(), &QPushButton::clicked, [this]() {
+        stackedWidget->setCurrentWidget(levelPage);
+    });
 }
 
 MainWindow::~MainWindow()
-{
-    delete ui;
-}
-
-void MainWindow::keyPressEvent(QKeyEvent *event)
-{
-    engine->getcManager()->keyPressedEvent(event);
-}
-
-void MainWindow::keyReleaseEvent(QKeyEvent *event)
-{
-    engine->getcManager()->keyReleasedEvent(event);
-}
+{}

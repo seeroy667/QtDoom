@@ -27,6 +27,12 @@ set(PROJECT_SOURCES
         bsp.h
         weapon.cpp
         weapon.h
+        gamepage.cpp
+        gamepage.h
+        levelpage.cpp
+        levelpage.h
+        menupage.cpp
+        menupage.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -37,7 +43,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         geostructs.h
         gamemanager.h gamemanager.cpp
-
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET QtApplication APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

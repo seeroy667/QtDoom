@@ -1,0 +1,25 @@
+# ninja log v6
+21	184	7936645736082495	QtApplication_autogen/timestamp	a6bb4751890a2f66
+21	184	7936645736082495	C:/Users/leanneheroux/Documents/GitHub/QtDoom/QtApplication/build/Desktop_Qt_6_11_0_MSVC2022_64bit-Debug/QtApplication_autogen/timestamp	a6bb4751890a2f66
+21	184	7936645736082495	QtApplication_autogen/mocs_compilation.cpp	a6bb4751890a2f66
+21	184	7936645736082495	C:/Users/leanneheroux/Documents/GitHub/QtDoom/QtApplication/build/Desktop_Qt_6_11_0_MSVC2022_64bit-Debug/QtApplication_autogen/mocs_compilation.cpp	a6bb4751890a2f66
+628	872	7936615691883270	CMakeFiles/QtApplication.dir/BSP.cpp.obj	7dcb497ab64b14a5
+632	877	7936615691920851	CMakeFiles/QtApplication.dir/Weapon.cpp.obj	d4ed2502cfc0cbf9
+620	881	7936615691802877	CMakeFiles/QtApplication.dir/actor.cpp.obj	8d8b9fe7450fea30
+639	885	7936615692009417	CMakeFiles/QtApplication.dir/gamemanager.cpp.obj	1634294e023c0215
+624	1963	7936615691843046	CMakeFiles/QtApplication.dir/controllermanager.cpp.obj	618b959e1203deeb
+185	1634	7936645737717979	CMakeFiles/QtApplication.dir/mainwindow.cpp.obj	68c21f871fef29fd
+635	2006	7936615691969277	CMakeFiles/QtApplication.dir/rendermanager.cpp.obj	ec9df6daf7e91d6f
+1601	3847	7936645154734978	CMakeFiles/QtApplication.dir/levelpage.cpp.obj	4807a59de17c6f33
+1604	5320	7936645154775218	CMakeFiles/QtApplication.dir/menupage.cpp.obj	2d81b195fedd7c54
+616	2133	7936615691762545	CMakeFiles/QtApplication.dir/Engine.cpp.obj	ae978cde8b509698
+1588	4136	7936645154599846	CMakeFiles/QtApplication.dir/QtApplication_autogen/mocs_compilation.cpp.obj	325f1e95152b14c5
+1592	4864	7936645154640024	CMakeFiles/QtApplication.dir/main.cpp.obj	82851618be2b1361
+1598	5099	7936645154700234	CMakeFiles/QtApplication.dir/gamepage.cpp.obj	16f1217b19eeb748
+1634	1773	7936645752181843	QtApplication.exe	ed69ce767398192a
+22	627	7936647245590517	build.ninja	2f41206291f255a6
+18	179	7936647246428610	QtApplication_autogen/timestamp	a6bb4751890a2f66
+18	179	7936647246428610	QtApplication_autogen/mocs_compilation.cpp	a6bb4751890a2f66
+18	179	7936647246428610	C:/Users/leanneheroux/Documents/GitHub/QtDoom/QtApplication/build/Desktop_Qt_6_11_0_MSVC2022_64bit-Debug/QtApplication_autogen/timestamp	a6bb4751890a2f66
+18	179	7936647246428610	C:/Users/leanneheroux/Documents/GitHub/QtDoom/QtApplication/build/Desktop_Qt_6_11_0_MSVC2022_64bit-Debug/QtApplication_autogen/mocs_compilation.cpp	a6bb4751890a2f66
+180	310	7936647248045730	QtApplication.exe	320d10960ffb7198
