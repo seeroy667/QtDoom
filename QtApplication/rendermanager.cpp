@@ -24,16 +24,16 @@ RenderManager::RenderManager(QGraphicsScene* scene, int screenWidth, int screenH
 }
 
 
-void RenderManager::renderWall(const Wall& wall, const Actor& player)
+void RenderManager::renderWall(const Linedef& wall, const Actor& player)
 {
-    Point2D p1 = coordPlayer(wall.start, player);
-    Point2D p2 = coordPlayer(wall.end, player);
+    Vertex p1 = coordPlayer(wall.start, player);
+    Vertex p2 = coordPlayer(wall.end, player);
 
     if (!clipWall(p1, p2))
         return;
 
-    Point2D screen1 = projectToScreen(p1);
-    Point2D screen2 = projectToScreen(p2);
+    Vertex screen1 = projectToScreen(p1);
+    Vertex screen2 = projectToScreen(p2);
 
     float height1_floor = projectHeight(wall.floorHeight, p1.y);
     float height1_ceil  = projectHeight(wall.ceilingHeight, p1.y);
@@ -59,9 +59,9 @@ void RenderManager::renderWall(const Wall& wall, const Actor& player)
 
 
 
-Point2D RenderManager::coordPlayer(const Point2D& point, const Actor& player)
+Vertex RenderManager::coordPlayer(const Vertex& point, const Actor& player)
 {
-    Point2D playerPos = player.getPosition();
+    Vertex playerPos = player.getPosition();
     float anglePlayer = player.getAngle();
 
     float dx = point.x - playerPos.x;
@@ -70,7 +70,7 @@ Point2D RenderManager::coordPlayer(const Point2D& point, const Actor& player)
     float cosAngle = std::cos(-anglePlayer);
     float sinAngle = std::sin(-anglePlayer);
 
-    Point2D camera;
+    Vertex camera;
     camera.x = dx * cosAngle - dy * sinAngle;
     camera.y = dx * sinAngle + dy * cosAngle;
 
@@ -79,7 +79,7 @@ Point2D RenderManager::coordPlayer(const Point2D& point, const Actor& player)
 
 
 
-bool RenderManager::clipWall(Point2D& p1, Point2D& p2)
+bool RenderManager::clipWall(Vertex& p1, Vertex& p2)
 {
     if (p1.y < distanceMin && p2.y < distanceMin)
         return false;
@@ -102,9 +102,9 @@ bool RenderManager::clipWall(Point2D& p1, Point2D& p2)
 }
 
 
-Point2D RenderManager::projectToScreen(const Point2D& cameraPoint)
+Vertex RenderManager::projectToScreen(const Vertex& cameraPoint)
 {
-    Point2D screen;
+    Vertex screen;
     screen.x = (cameraPoint.x / cameraPoint.y) * m_focalLength
                + m_screenWidth / 2.0f;
     screen.y = 0;
@@ -127,7 +127,7 @@ float RenderManager::projectHeight(float worldHeight, float distance)
 void RenderManager::renderActor(const Actor actor, const Actor player, QColor color)
 {
 
-    Point2D camPos = coordPlayer(actor.getPosition(), player);
+    Vertex camPos = coordPlayer(actor.getPosition(), player);
 
 
     if (camPos.y < distanceMin)
@@ -178,10 +178,10 @@ void RenderManager::render(Actor m_player, Actor m_enemy)
 {
     m_scene->clear();
 
-    std::vector<Wall> walls;
+    std::vector<Linedef> walls;
 
     // Mur du milieu
-    Wall wall1;
+    Linedef wall1;
     wall1.start = {-5.0f, 10.0f};
     wall1.end = {5.0f, 10.0f};
     wall1.floorHeight = 0.0f;
@@ -189,7 +189,7 @@ void RenderManager::render(Actor m_player, Actor m_enemy)
     walls.push_back(wall1);
 
     // Mur de gauche
-    Wall wall2;
+    Linedef wall2;
     wall2.start = {-5.0f, 10.0f};
     wall2.end = {-5.0f, 5.0f};
     wall2.floorHeight = 0.0f;
@@ -197,14 +197,14 @@ void RenderManager::render(Actor m_player, Actor m_enemy)
     walls.push_back(wall2);
 
     // Mur de droite
-    Wall wall3;
+    Linedef wall3;
     wall3.start = {5.0f, 5.0f};
     wall3.end = {5.0f, 10.0f};
     wall3.floorHeight = 0.0f;
     wall3.ceilingHeight = 5.0f;
     walls.push_back(wall3);
 
-    for (const Wall& wall : walls) {
+    for (const Linedef& wall : walls) {
         renderWall(wall, m_player);
     }
     renderActor(m_enemy, m_player, QColor(255,0,0));

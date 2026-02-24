@@ -11,35 +11,29 @@ Modifications:
 
 #include<vector>
 
-struct Point2D
+struct Vertex // Think of it as a 2D point
 {
     float x, y;
 };
 
-struct Wall
+struct Linedef // Think of it as a segment or a line
 {
-    Point2D start;
-    Point2D end;
+    Vertex start;
+    Vertex end;
+    float floorHeight;
+    float ceilingHeight;
+}; // TO BE CHANGED IF EVER CHANGING TO DOOM FORMAL STRUCTURES
+
+struct Sidedef // Think of it as one side of the segment or the line
+{
+    int sectorRef;
+}; // NOT USED YET, TO BE USED IF EVER CHANGING TO DOOM FORMAL STRUCTURES
+
+struct Sector // Think of it as a polygon
+{
+    std::vector<int> linedefs;
     float floorHeight;
     float ceilingHeight;
 };
 
-struct Segment {
-    Point2D start;
-    Point2D end;
-};
-
-struct Plane {
-    Point2D normal;
-    float dist;
-};
-
-struct BSPNode {
-    Plane splitter;
-    BSPNode* front;
-    BSPNode* back;
-    std::vector<Segment> segments;
-    bool isLeaf;
-};
-
-#endif // GEOSTRUCTS_H
+#endif // NOT USED YET, TO BE USED IF EVER CHANGING TO DOOM FORMAL STRUCTURES

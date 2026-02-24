@@ -14,7 +14,7 @@ Modifications:
 
 class Actor {
 private:
-    Point2D position;
+    Vertex position;
     int health;
     bool isAlive;
     float angle;
@@ -32,7 +32,7 @@ public:
 
     int getHealth();
     float getAngle() const;
-    Point2D getPosition() const;
+    Vertex getPosition() const;
 
     void setAngle(float newAngle);
     void rotate(float deltaAngle);

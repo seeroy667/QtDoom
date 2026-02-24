@@ -53,7 +53,7 @@ float Actor::getAngle() const
     return angle;
 }
 
-Point2D Actor::getPosition() const
+Vertex Actor::getPosition() const
 {
     return position;
 }

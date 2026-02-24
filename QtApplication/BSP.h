@@ -9,10 +9,22 @@ Modifications:
 #ifndef BSP_H
 #define BSP_H
 
+#include"geostructs.h"
+
+struct Node
+{
+    Linedef partition;
+    int frontSector;
+    int backSector;
+    Node* front;
+    Node* back;
+};
+
 class BSP
 {
 public:
     BSP();
+    Node* Builder(std::vector<Linedef> segments);
 };
 
 #endif

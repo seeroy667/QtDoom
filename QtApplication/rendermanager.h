@@ -25,7 +25,7 @@ class RenderManager
 public:
     RenderManager(QGraphicsScene* scene, int screenWidth, int screenHeight);
 
-    void renderWall(const Wall& wall, const Actor& player);
+    void renderWall(const Linedef& wall, const Actor& player);
 
     void render(Actor m_player, Actor m_enemy);
     void renderActor(const Actor m_actor, const Actor m_player, QColor color);
@@ -37,11 +37,11 @@ private:
     float m_focalLength;
     float distanceMin;
 
-    Point2D coordPlayer(const Point2D& point, const Actor& player);
+    Vertex coordPlayer(const Vertex& point, const Actor& player);
 
-    bool clipWall(Point2D& p1, Point2D& p2);
+    bool clipWall(Vertex& p1, Vertex& p2);
 
-    Point2D projectToScreen(const Point2D& cameraPoint);
+    Vertex projectToScreen(const Vertex& cameraPoint);
 
     float projectHeight(float worldHeight, float distance);
 
