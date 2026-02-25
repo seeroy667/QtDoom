@@ -36,7 +36,7 @@ public:
     void keyReleaseEvent(QKeyEvent *event) override;
 
 private:
-    Engine *engine;
+
     // Boutons
     QPushButton *m_quitterButton;
     QPushButton *m_retryButton;
@@ -49,5 +49,12 @@ private:
     // Game Over
     QWidget *m_gameOverWidget;
     QStackedWidget *m_stackedWidget;
+
+    QGraphicsView  *m_view  = nullptr;
+    QGraphicsScene *m_scene = nullptr;
+    Engine         *engine  = nullptr;
+
+protected:
+     void showEvent(QShowEvent *event) override;
 };
 #endif // GAMEPAGE_H
