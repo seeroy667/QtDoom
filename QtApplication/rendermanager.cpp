@@ -142,8 +142,8 @@ void RenderManager::renderActor(const Actor actor, const Actor player, QColor co
 
 
 
-    float actorHeight = 3.0f;
-    float eyeHeight   = 2.5f;
+    float actorHeight = 5.0f;
+    float eyeHeight   = 3.5f;
     float spriteBottom = projectHeight(0.0f, camPos.y);
     float spriteTop    = projectHeight(actorHeight, camPos.y);
     float squareSize   = spriteBottom - spriteTop;
@@ -177,11 +177,15 @@ void RenderManager::renderActor(const Actor actor, const Actor player, QColor co
 void RenderManager::render(Actor m_player, Actor m_enemy, BSP* bsp)
 {
     m_scene->clear();
-    std::vector<Linedef> renderedWalls;
     bsp->traverse(m_player.getPosition(), renderedWalls);
 
     for (const Linedef& wall : renderedWalls) {
         renderWall(wall, m_player);
     }
     renderActor(m_enemy, m_player, QColor(255,0,0));
+}
+
+std::vector<Linedef> RenderManager::getRenderedWalls()
+{
+    return renderedWalls;
 }

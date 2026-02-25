@@ -10,6 +10,8 @@ Modifications:
 #define GAMEMANAGER_H
 
 #include<string>
+#include <QApplication>
+#include <QProcess>
 
 #include"actor.h"
 #include"geostructs.h"
@@ -23,6 +25,8 @@ public:
     Actor* getEnemy();
     BSP* getBSP();
     void loadMap(const std::string& filename);
+    void update(float deltaTime, std::vector<Linedef> renderedWalls);
+    bool inRadius(Actor *p, Actor *e);
 private:
     Actor *p;
     Actor *e;

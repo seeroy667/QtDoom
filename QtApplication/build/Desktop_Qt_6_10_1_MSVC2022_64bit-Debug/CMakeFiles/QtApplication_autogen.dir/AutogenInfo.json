@@ -331,12 +331,6 @@
 	"HEADERS" : 
 	[
 		[
-			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Engine.h",
-			"MU",
-			"EWIEGA46WW/moc_Engine.cpp",
-			null
-		],
-		[
 			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/actor.h",
 			"MU",
 			"EWIEGA46WW/moc_actor.cpp",
@@ -352,6 +346,12 @@
 			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/controllermanager.h",
 			"MU",
 			"EWIEGA46WW/moc_controllermanager.cpp",
+			null
+		],
+		[
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/engine.h",
+			"MU",
+			"EWIEGA46WW/moc_engine.cpp",
 			null
 		],
 		[
@@ -394,6 +394,12 @@
 			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/rendermanager.h",
 			"MU",
 			"EWIEGA46WW/moc_rendermanager.cpp",
+			null
+		],
+		[
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/uimanager.h",
+			"MU",
+			"EWIEGA46WW/moc_uimanager.cpp",
 			null
 		],
 		[
@@ -459,11 +465,6 @@
 	"SOURCES" : 
 	[
 		[
-			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Engine.cpp",
-			"MU",
-			null
-		],
-		[
 			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/actor.cpp",
 			"MU",
 			null
@@ -475,6 +476,11 @@
 		],
 		[
 			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/controllermanager.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/engine.cpp",
 			"MU",
 			null
 		],
@@ -510,6 +516,11 @@
 		],
 		[
 			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/rendermanager.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/uimanager.cpp",
 			"MU",
 			null
 		],

@@ -45,6 +45,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gamemanager.h gamemanager.cpp
         WadLvl1.txt
         WadLvl2.txt
+        uimanager.h uimanager.cpp
 
     )
 # Define target properties for Android with Qt 6 as:

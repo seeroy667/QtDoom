@@ -30,6 +30,7 @@ public:
 
     void render(Actor m_player, Actor m_enemy, BSP* bsp);
     void renderActor(const Actor m_actor, const Actor m_player, QColor color);
+    std::vector<Linedef> getRenderedWalls();
 
 private:
     QGraphicsScene* m_scene;
@@ -37,6 +38,7 @@ private:
     int m_screenHeight;
     float m_focalLength;
     float distanceMin;
+    std::vector<Linedef> renderedWalls;
 
     Vertex coordPlayer(const Vertex& point, const Actor& player);
 

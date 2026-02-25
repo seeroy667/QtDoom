@@ -25,9 +25,17 @@ void GameManager::loadMap(const std::string& filename)
 {
     // Hardcoded for now, replace with filename when you want to generate the map from the file.
     walls = {
-        {{-5.0f, 10.0f}, {5.0f, 10.0f}, 0.0f, 5.0f},
-        {{-5.0f, 10.0f}, {-5.0f, 5.0f}, 0.0f, 5.0f},
-        {{5.0f, 5.0f}, {5.0f, 10.0f}, 0.0f, 5.0f}
+        // Outer square (60x60 centered at origin)
+        {{-30.0f, 30.0f}, {30.0f, 30.0f}, 0.0f, 20.0f},    // North wall (top)
+        {{30.0f, 30.0f}, {30.0f, -30.0f}, 0.0f, 20.0f},    // East wall (right)
+        {{30.0f, -30.0f}, {-30.0f, -30.0f}, 0.0f, 20.0f},  // South wall (bottom)
+        {{-30.0f, -30.0f}, {-30.0f, 30.0f}, 0.0f, 20.0f},  // West wall (left)
+
+        // Inner square obstacle (10x10 centered at origin)
+        {{-5.0f, 5.0f}, {5.0f, 5.0f}, 0.0f, 20.0f},        // Inner north
+        {{5.0f, 5.0f}, {5.0f, -5.0f}, 0.0f, 20.0f},        // Inner east
+        {{5.0f, -5.0f}, {-5.0f, -5.0f}, 0.0f, 20.0f},      // Inner south
+        {{-5.0f, -5.0f}, {-5.0f, 5.0f}, 0.0f, 20.0f}       // Inner west
     };
 
     bsp = new BSP();
@@ -37,4 +45,36 @@ void GameManager::loadMap(const std::string& filename)
 BSP* GameManager::getBSP()
 {
     return bsp;
+}
+
+void GameManager::update(float deltaTime, std::vector<Linedef> renderedWalls)
+{
+    e->moveEnemy(*p, deltaTime);
+
+    // Collision detection
+    for (const Linedef& wall : renderedWalls) {
+        float ok = 0;
+    }
+
+    // Enemy damage detection
+    if (inRadius(p, e))
+    {
+        p->takeDamage(1);
+        if (p->getHealth() < 1)
+        {
+            qApp->quit();
+            QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+        }
+    }
+}
+
+bool GameManager::inRadius(Actor* p, Actor* e)
+{
+    float radius = 0.3f;
+    float dx = p->getPosition().x - e->getPosition().x;
+    float dy = p->getPosition().y - e->getPosition().y;
+
+    float distance = (dx * dx) + (dy * dy);
+    if (distance < (radius * radius)) return true;
+    return false;
 }

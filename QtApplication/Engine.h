@@ -19,6 +19,7 @@ Modifications:
 #include"controllermanager.h"
 #include"gamemanager.h"
 #include"rendermanager.h"
+#include"uimanager.h"
 
 #define TARGET_FPS 60
 
@@ -28,7 +29,7 @@ private:
     ControllerManager *cManager;
     GameManager *gManager;
     RenderManager *rManager;
-    // UI MANAGER
+    UIManager *uiManager;
 
     // To operate the frames
     QTimer timer;

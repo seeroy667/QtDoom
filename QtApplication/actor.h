@@ -10,7 +10,6 @@ Modifications:
 #define ACTOR_H
 
 #include"geostructs.h"
-#include <cmath>
 
 class Actor {
 private:
@@ -26,7 +25,6 @@ public:
     Actor();
     ~Actor();
     void move(float deltaX, float deltaY);
-    void shoot();
     void takeDamage(int amount);
 
 

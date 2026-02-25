@@ -60,6 +60,7 @@ QtApplication_autogen/timestamp: \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/QElapsedTimer \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/QList \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/QObject \
+	C:/Qt/6.10.1/msvc2022_64/include/QtCore/QProcess \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/QRect \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/QSize \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/QSizeF \
@@ -148,6 +149,7 @@ QtApplication_autogen/timestamp: \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qoverload.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qpair.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qpoint.h \
+	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qprocess.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qprocessordetection.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qrect.h \
 	C:/Qt/6.10.1/msvc2022_64/include/QtCore/qrefcount.h \
@@ -478,7 +480,6 @@ QtApplication_autogen/timestamp: \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/WindowsPaths.cmake \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/CMakeLists.txt \
-	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Engine.cpp \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Engine.h \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/actor.cpp \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/actor.h \
@@ -491,6 +492,8 @@ QtApplication_autogen/timestamp: \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/build/Desktop_Qt_6_10_1_MSVC2022_64bit-Debug/CMakeFiles/3.30.5/CMakeSystem.cmake \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/controllermanager.cpp \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/controllermanager.h \
+	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/engine.cpp \
+	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/engine.h \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/gamemanager.cpp \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/gamemanager.h \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/gamepage.cpp \
@@ -505,6 +508,8 @@ QtApplication_autogen/timestamp: \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/menupage.h \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/rendermanager.cpp \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/rendermanager.h \
+	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/uimanager.cpp \
+	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/uimanager.h \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/weapon.cpp \
 	C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/weapon.h \
 	C:/Qt/Tools/CMake_64/bin/cmake.exe

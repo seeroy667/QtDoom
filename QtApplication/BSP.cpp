@@ -121,12 +121,13 @@ void BSP::traverseNode(Node* node, const Vertex& playerPosition, std::vector<Lin
 {
     if (!node) return;
 
-    float dx = node->partition.end.x - node->partition.start.x;
-    float dy = node->partition.end.y - node->partition.start.y;
-    float px = playerPosition.x - node->partition.start.x;
-    float py = playerPosition.y - node->partition.start.y;
+    float dxPartition = node->partition.end.x - node->partition.start.x;
+    float dyPartition = node->partition.end.y - node->partition.start.y;
+    float dxPlayer = playerPosition.x - node->partition.start.x;
+    float dyPlayer = playerPosition.y - node->partition.start.y;
 
-    float cross = dx * py - dy * px;
+    float cross = dxPartition * dyPlayer - dyPartition * dxPlayer;
+
     if (cross < 0)
     {
         traverseNode(node->back, playerPosition, walls);

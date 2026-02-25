@@ -7,7 +7,7 @@ Modifications:
 */
 
 #include "actor.h"
-
+#include <cmath>
 
 Actor::Actor()
 {
@@ -26,11 +26,6 @@ void Actor::move(float deltaX, float deltaY)
 {
     position.x += deltaX;
     position.y += deltaY;
-}
-
-void Actor::shoot()
-{
-    // Shooting logic here
 }
 
 void Actor::takeDamage(int amount)
