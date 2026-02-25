@@ -106,8 +106,9 @@ GamePage::GamePage(QWidget *parent)
     mainLayout->addWidget(barWidget);
 
     //lance le moteur
-    engine = new Engine(scene, view->width(), view->height(), this);
-    engine->start();
+    m_view = view;
+    m_scene = scene;
+    engine = nullptr;
 }
 
 void GamePage::keyPressEvent(QKeyEvent *event)
@@ -118,5 +119,17 @@ void GamePage::keyPressEvent(QKeyEvent *event)
 void GamePage::keyReleaseEvent(QKeyEvent *event)
 {
     engine->getcManager()->keyReleasedEvent(event);
+}
+
+void GamePage::showEvent(QShowEvent *event)
+{
+    QWidget::showEvent(event);
+    if (!engine) {
+        int w = m_view->width();
+        int h = m_view->height();
+        m_scene->setSceneRect(0, 0, w, h);
+        engine = new Engine(m_scene, w, h, this);
+        engine->start();
+    }
 }
 
