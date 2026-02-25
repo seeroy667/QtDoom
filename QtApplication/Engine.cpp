@@ -42,6 +42,11 @@ void Engine::gameLoop()
     if(cManager->movingFront()) gManager->getPlayer()->setPosition(gManager->getPlayer()->getPosition().x+(0.5f*cos(gManager->getPlayer()->getAngle() + M_PI/2)), gManager->getPlayer()->getPosition().y+(0.5f*sin(gManager->getPlayer()->getAngle() + M_PI/2)));
     if(cManager->rotatingLeft()) gManager->getPlayer()->setAngle(gManager->getPlayer()->getAngle()+0.05f);
     if(cManager->rotatingRight()) gManager->getPlayer()->setAngle(gManager->getPlayer()->getAngle()-0.05f);
+    if(cManager->isShooting())
+    {
+        QPoint mousePos = QCursor::pos();
+        gManager->shoot(mousePos);
+    }
 
     rManager->render(*gManager->getPlayer(),*gManager->getEnemy(), gManager->getBSP());
     gManager->update(deltaTime, rManager->getRenderedWalls());

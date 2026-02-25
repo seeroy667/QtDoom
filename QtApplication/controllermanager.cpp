@@ -30,8 +30,9 @@ void ControllerManager::keyPressedEvent(QKeyEvent * event)
     if (event->key() == Qt::Key_S) mBack = true;
     if (event->key() == Qt::Key_A) mLeft = true;
     if (event->key() == Qt::Key_D) mRight = true;
-    if (event->key() == Qt::Key_E) rLeft = true;
-    if (event->key() == Qt::Key_Q) rRight = true;
+    if (event->key() == Qt::Key_Q) rLeft = true;
+    if (event->key() == Qt::Key_E) rRight = true;
+    if (event->key() == Qt::Key_F) shoot = true;
 }
 
 void ControllerManager::keyReleasedEvent(QKeyEvent * event)
@@ -41,7 +42,8 @@ void ControllerManager::keyReleasedEvent(QKeyEvent * event)
     if (event->key() == Qt::Key_S) mBack = false;
     if (event->key() == Qt::Key_A) mLeft = false;
     if (event->key() == Qt::Key_D) mRight = false;
-    if (event->key() == Qt::Key_E) rLeft = false;
-    if (event->key() == Qt::Key_Q) rRight = false;
+    if (event->key() == Qt::Key_Q) rLeft = false;
+    if (event->key() == Qt::Key_E) rRight = false;
+    if (event->key() == Qt::Key_F) shoot = false;
 }
 

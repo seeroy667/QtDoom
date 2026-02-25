@@ -60,6 +60,7 @@ C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/build/Desktop_Qt_6
   C:/Qt/6.10.1/msvc2022_64/include/QtCore/QElapsedTimer \
   C:/Qt/6.10.1/msvc2022_64/include/QtCore/QList \
   C:/Qt/6.10.1/msvc2022_64/include/QtCore/QObject \
+  C:/Qt/6.10.1/msvc2022_64/include/QtCore/QPoint \
   C:/Qt/6.10.1/msvc2022_64/include/QtCore/QProcess \
   C:/Qt/6.10.1/msvc2022_64/include/QtCore/QRect \
   C:/Qt/6.10.1/msvc2022_64/include/QtCore/QSize \

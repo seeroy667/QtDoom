@@ -25,6 +25,7 @@ public:
     bool movingRight(){return mRight;}
     bool rotatingLeft(){return rLeft;}
     bool rotatingRight(){return rRight;}
+    bool isShooting() {return shoot;}
 private:
     bool mFront;
     bool mBack;
@@ -32,6 +33,7 @@ private:
     bool mRight;
     bool rRight;
     bool rLeft;
+    bool shoot;
 };
 
 #endif

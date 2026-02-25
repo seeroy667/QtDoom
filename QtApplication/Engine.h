@@ -15,6 +15,7 @@ Modifications:
 #include<QGraphicsScene>
 #include<QGraphicsView>
 #include<QDebug>
+#include<QPoint>
 
 #include"controllermanager.h"
 #include"gamemanager.h"

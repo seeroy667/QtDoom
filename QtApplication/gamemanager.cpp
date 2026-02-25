@@ -31,13 +31,12 @@ void GameManager::loadMap(const std::string& filename)
         {{30.0f, -30.0f}, {-30.0f, -30.0f}, 0.0f, 20.0f},  // South wall (bottom)
         {{-30.0f, -30.0f}, {-30.0f, 30.0f}, 0.0f, 20.0f},  // West wall (left)
 
-        // Inner square obstacle (10x10 centered at origin)
-        {{-5.0f, 5.0f}, {5.0f, 5.0f}, 0.0f, 20.0f},        // Inner north
-        {{5.0f, 5.0f}, {5.0f, -5.0f}, 0.0f, 20.0f},        // Inner east
-        {{5.0f, -5.0f}, {-5.0f, -5.0f}, 0.0f, 20.0f},      // Inner south
-        {{-5.0f, -5.0f}, {-5.0f, 5.0f}, 0.0f, 20.0f}       // Inner west
+        // Inner square obstacle (10x10 offset to the side)
+        {{10.0f, 15.0f}, {20.0f, 15.0f}, 0.0f, 20.0f},     // Inner north
+        {{20.0f, 15.0f}, {20.0f, 5.0f}, 0.0f, 20.0f},      // Inner east
+        {{20.0f, 5.0f}, {10.0f, 5.0f}, 0.0f, 20.0f},       // Inner south
+        {{10.0f, 5.0f}, {10.0f, 15.0f}, 0.0f, 20.0f}       // Inner west
     };
-
     bsp = new BSP();
     bsp->build(walls);
 }
@@ -62,8 +61,7 @@ void GameManager::update(float deltaTime, std::vector<Linedef> renderedWalls)
         p->takeDamage(1);
         if (p->getHealth() < 1)
         {
-            qApp->quit();
-            QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+            qDebug("Player Dead");
         }
     }
 }
@@ -77,4 +75,16 @@ bool GameManager::inRadius(Actor* p, Actor* e)
     float distance = (dx * dx) + (dy * dy);
     if (distance < (radius * radius)) return true;
     return false;
+}
+
+void GameManager::shoot(QPoint mousePos)
+{
+    for (Actor* e : creatures)
+    {
+        if (mousePos.x() < e->getPosition().x+1000 && mousePos.x() > e->getPosition().x - 1000 && mousePos.y() < e->getPosition().y + 1000 && mousePos.y() > e->getPosition().y - 1000)
+        {
+            e->takeDamage(100);
+            qDebug("Enemy killed");
+        }
+    }
 }

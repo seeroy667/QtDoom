@@ -27,10 +27,10 @@ public:
     void move(float deltaX, float deltaY);
     void takeDamage(int amount);
 
-
-    int getHealth();
-    float getAngle() const;
-    Vertex getPosition() const;
+    // Access to attributes
+    int getHealth() {return health;}
+    float getAngle() const {return angle;}
+    Vertex getPosition() const {return position;}
 
     void setAngle(float newAngle);
     void rotate(float deltaAngle);

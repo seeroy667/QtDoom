@@ -38,21 +38,6 @@ void Actor::takeDamage(int amount)
     }
 }
 
-int Actor::getHealth()
-{
-    return health;
-}
-
-float Actor::getAngle() const
-{
-    return angle;
-}
-
-Vertex Actor::getPosition() const
-{
-    return position;
-}
-
 void Actor::setAngle(float a)
 {
     angle = a;
