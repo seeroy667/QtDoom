@@ -60,7 +60,7 @@ void Engine::gameLoop()
         float endX = viewMousePos.x();
         float endY = viewMousePos.y();
 
-        rManager->renderRay(startX, startY, endX, endY, 60);
+        rManager->renderRay(startX, startY, endX, endY, 5);
         cManager->resetShot();
     }
 
