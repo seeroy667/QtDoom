@@ -36,8 +36,13 @@ private:
     QTimer timer;
     QElapsedTimer elapsedTimer;
     float deltaTime = 0.0f;
+
+    int m_width;
+    int m_height;
+    QWidget* m_widget;
+
 public:
-    Engine(QGraphicsScene *scene, int width, int height, QObject *parent);
+    Engine(QGraphicsScene *scene, QWidget* widget, int width, int height, QObject *parent);
 	~Engine();
     void start();
     void gameLoop();

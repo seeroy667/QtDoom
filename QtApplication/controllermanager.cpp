@@ -32,7 +32,11 @@ void ControllerManager::keyPressedEvent(QKeyEvent * event)
     if (event->key() == Qt::Key_D) mRight = true;
     if (event->key() == Qt::Key_Q) rLeft = true;
     if (event->key() == Qt::Key_E) rRight = true;
-    if (event->key() == Qt::Key_F) shoot = true;
+    if (event->key() == Qt::Key_F)
+    {
+        shoot = true;
+        m_justShot = true;
+    }
 }
 
 void ControllerManager::keyReleasedEvent(QKeyEvent * event)

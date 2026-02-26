@@ -27,7 +27,7 @@ public:
     void loadMap(const std::string& filename);
     void update(float deltaTime, std::vector<Linedef> renderedWalls);
     bool inRadius(Actor *p, Actor *e);
-    void shoot(QPoint mousePos);
+    bool shoot(QPoint mousePos, QSize screenSize);
 private:
     Actor *p;
     Actor *e;

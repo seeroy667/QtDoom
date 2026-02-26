@@ -128,7 +128,8 @@ void GamePage::showEvent(QShowEvent *event)
         int w = m_view->width();
         int h = m_view->height();
         m_scene->setSceneRect(0, 0, w, h);
-        engine = new Engine(m_scene, w, h, this);
+        QGraphicsView* view = new QGraphicsView(m_scene);
+        engine = new Engine(m_scene,view, w, h, this);
         engine->start();
     }
 }

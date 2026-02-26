@@ -173,6 +173,16 @@ void RenderManager::renderActor(const Actor actor, const Actor player, QColor co
     spriteItem->setPen(Qt::NoPen);
 }
 
+void RenderManager::renderRay(float mouseScreenX, float mouseScreenY,
+                              float targetScreenX, float targetScreenY, int frames)
+{
+    m_rayFramesLeft = frames;
+    m_rayStartX = mouseScreenX;
+    m_rayStartY = mouseScreenY;
+    m_rayTargetX = targetScreenX;
+    m_rayTargetY = targetScreenY;
+}
+
 // UTILISEE POUR EXEMPLE
 void RenderManager::render(Actor m_player, Actor m_enemy, BSP* bsp)
 {
@@ -183,6 +193,15 @@ void RenderManager::render(Actor m_player, Actor m_enemy, BSP* bsp)
         renderWall(wall, m_player);
     }
     renderActor(m_enemy, m_player, QColor(255,0,0));
+
+    if (m_rayFramesLeft > 0)
+    {
+        float startX = m_screenWidth / 2.0f;
+        float startY = m_screenHeight / 2.0f;
+        m_scene->addLine(m_rayStartX, m_rayStartY, m_rayTargetX, m_rayTargetY,
+                         QPen(QColor(255, 255, 0), 3));
+        m_rayFramesLeft--;
+    }
 }
 
 std::vector<Linedef> RenderManager::getRenderedWalls()

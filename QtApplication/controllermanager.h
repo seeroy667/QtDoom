@@ -26,6 +26,10 @@ public:
     bool rotatingLeft(){return rLeft;}
     bool rotatingRight(){return rRight;}
     bool isShooting() {return shoot;}
+
+    bool justShot() { return m_justShot; }
+    void resetShot() { m_justShot = false; }
+
 private:
     bool mFront;
     bool mBack;
@@ -34,6 +38,9 @@ private:
     bool rRight;
     bool rLeft;
     bool shoot;
+
+    bool m_justShot = false;
+
 };
 
 #endif

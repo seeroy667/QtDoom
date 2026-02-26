@@ -5,7 +5,7 @@ GameManager::GameManager() {
     p->setPosition(0.0f, 0.0f);
     p->setAngle(0.0f);
 
-//temporaire a modifier
+    //temporaire a modifier
     e = new Actor();
     e->setPosition(5.0f,5.0f);
     e->setAngle(0.0f);
@@ -77,14 +77,54 @@ bool GameManager::inRadius(Actor* p, Actor* e)
     return false;
 }
 
-void GameManager::shoot(QPoint mousePos)
+bool GameManager::shoot(QPoint mousePos, QSize screenSize)
 {
-    for (Actor* e : creatures)
+    float screenW = screenSize.width();
+    float focalLength = screenW / 2.0f;
+
+    qDebug() << "=== SHOOT DEBUG ===";
+    qDebug() << "mousePos:" << mousePos.x() << mousePos.y();
+    qDebug() << "screenSize:" << screenW;
+    qDebug() << "PlayerPos:" << p->getPosition().x << p->getPosition().y;
+    qDebug() << "PlayerAngle:" << p->getAngle();
+    qDebug() << "EnemyPos:" << e->getPosition().x << e->getPosition().y;
+
+    float camDirX = (mousePos.x() - screenW / 2.0f) / focalLength;
+    float camDirY = 1.0f;
+
+    float len = std::sqrt(camDirX * camDirX + camDirY * camDirY);
+    camDirX /= len;
+    camDirY /= len;
+
+    float playerAngle = p->getAngle();
+    float cosA = std::cos(playerAngle);
+    float sinA = std::sin(playerAngle);
+
+    float worldDirX = camDirX * cosA + camDirY * sinA;  // ← corrigé
+    float worldDirY = -camDirX * sinA + camDirY * cosA; // ← corrigé
+
+    qDebug() << "worldDir:" << worldDirX << worldDirY;
+
+    Vertex playerPos = p->getPosition();
+    float maxDistance = 100.0f;
+    float step = 0.05f;
+
+    for (float d = 0; d < maxDistance; d += step)
     {
-        if (mousePos.x() < e->getPosition().x+1000 && mousePos.x() > e->getPosition().x - 1000 && mousePos.y() < e->getPosition().y + 1000 && mousePos.y() > e->getPosition().y - 1000)
+        float rayX = playerPos.x + worldDirX * d;
+        float rayY = playerPos.y + worldDirY * d;
+
+        float dx = rayX - e->getPosition().x;
+        float dy = rayY - e->getPosition().y;
+
+        if ((dx*dx + dy*dy) < (1.5f * 1.5f)) // hitbox 1.5, pas besoin de sqrt
         {
-            e->takeDamage(100);
-            qDebug("Enemy killed");
+            qDebug() << "Touché à distance:" << d;
+            e->takeDamage(10);
+            return true;
         }
     }
+
+    qDebug() << "Manqué";
+    return false;
 }

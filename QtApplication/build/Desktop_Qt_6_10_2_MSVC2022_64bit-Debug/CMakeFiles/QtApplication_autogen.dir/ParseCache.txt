@@ -292,6 +292,7 @@ C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/Engine.h
  mdp:C:/Qt/6.10.2/msvc2022_64/include/QtCore/QElapsedTimer
  mdp:C:/Qt/6.10.2/msvc2022_64/include/QtCore/QList
  mdp:C:/Qt/6.10.2/msvc2022_64/include/QtCore/QObject
+ mdp:C:/Qt/6.10.2/msvc2022_64/include/QtCore/QPoint
  mdp:C:/Qt/6.10.2/msvc2022_64/include/QtCore/QProcess
  mdp:C:/Qt/6.10.2/msvc2022_64/include/QtCore/QRect
  mdp:C:/Qt/6.10.2/msvc2022_64/include/QtCore/QSize
@@ -585,6 +586,7 @@ C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/gamepage.h
  mdp:C:/Qt/6.10.2/msvc2022_64/include/QtCore/QElapsedTimer
  mdp:C:/Qt/6.10.2/msvc2022_64/include/QtCore/QList
  mdp:C:/Qt/6.10.2/msvc2022_64/include/QtCore/QObject
+ mdp:C:/Qt/6.10.2/msvc2022_64/include/QtCore/QPoint
  mdp:C:/Qt/6.10.2/msvc2022_64/include/QtCore/QProcess
  mdp:C:/Qt/6.10.2/msvc2022_64/include/QtCore/QRect
  mdp:C:/Qt/6.10.2/msvc2022_64/include/QtCore/QSize
@@ -1109,6 +1111,7 @@ C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/mainwindow.h
  mdp:C:/Qt/6.10.2/msvc2022_64/include/QtCore/QElapsedTimer
  mdp:C:/Qt/6.10.2/msvc2022_64/include/QtCore/QList
  mdp:C:/Qt/6.10.2/msvc2022_64/include/QtCore/QObject
+ mdp:C:/Qt/6.10.2/msvc2022_64/include/QtCore/QPoint
  mdp:C:/Qt/6.10.2/msvc2022_64/include/QtCore/QProcess
  mdp:C:/Qt/6.10.2/msvc2022_64/include/QtCore/QRect
  mdp:C:/Qt/6.10.2/msvc2022_64/include/QtCore/QSize

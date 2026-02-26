@@ -15,6 +15,7 @@ Modifications:
 #include <QGraphicsPolygonItem>
 #include <QPolygonF>
 #include <QColor>
+#include <QTimer>
 
 #include "geostructs.h"
 #include "Actor.h"
@@ -31,6 +32,9 @@ public:
     void render(Actor m_player, Actor m_enemy, BSP* bsp);
     void renderActor(const Actor m_actor, const Actor m_player, QColor color);
     std::vector<Linedef> getRenderedWalls();
+    void renderRay(float mouseScreenX, float mouseScreenY, float targetScreenX, float targetScreenY, int frames);
+    float projectHeight(float worldHeight, float distance);
+    Vertex coordPlayer(const Vertex& point, const Actor& player);
 
 private:
     QGraphicsScene* m_scene;
@@ -39,14 +43,19 @@ private:
     float m_focalLength;
     float distanceMin;
     std::vector<Linedef> renderedWalls;
+    int m_rayFramesLeft = 0;
+    float m_rayTargetX = 0;
+    float m_rayTargetY = 0;
+    float m_rayStartX = 0;
+    float m_rayStartY = 0;
 
-    Vertex coordPlayer(const Vertex& point, const Actor& player);
 
     bool clipWall(Vertex& p1, Vertex& p2);
 
     Vertex projectToScreen(const Vertex& cameraPoint);
 
-    float projectHeight(float worldHeight, float distance);
+
+
 
 };
 
