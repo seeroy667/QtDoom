@@ -124,9 +124,9 @@ float RenderManager::projectHeight(float worldHeight, float distance)
 }
 
 
-void RenderManager::renderActor(const Actor actor, const Actor player, QColor color)
+void RenderManager::renderActor(Actor actor, const Actor player, QColor color)
 {
-
+    if (actor.getHealth() == 0) return;
     Vertex camPos = coordPlayer(actor.getPosition(), player);
 
 
@@ -207,4 +207,11 @@ void RenderManager::render(Actor m_player, Actor m_enemy, BSP* bsp)
 std::vector<Linedef> RenderManager::getRenderedWalls()
 {
     return renderedWalls;
+}
+
+QGraphicsView* RenderManager::getView() const
+{
+    if (m_scene && !m_scene->views().isEmpty())
+        return m_scene->views().first();
+    return nullptr;
 }

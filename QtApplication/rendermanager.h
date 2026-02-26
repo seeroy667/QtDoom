@@ -35,6 +35,7 @@ public:
     void renderRay(float mouseScreenX, float mouseScreenY, float targetScreenX, float targetScreenY, int frames);
     float projectHeight(float worldHeight, float distance);
     Vertex coordPlayer(const Vertex& point, const Actor& player);
+    QGraphicsView* getView() const;
 
 private:
     QGraphicsScene* m_scene;

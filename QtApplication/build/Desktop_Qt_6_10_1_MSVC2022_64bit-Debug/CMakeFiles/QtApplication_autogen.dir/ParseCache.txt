@@ -797,7 +797,7 @@ C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/mainwindow.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/actor.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/bsp.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/controllermanager.h
- mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/engine.h
+ mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Engine.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/gamemanager.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/gamepage.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/geostructs.h
@@ -1338,7 +1338,7 @@ C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/gamepage.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/actor.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/bsp.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/controllermanager.h
- mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/engine.h
+ mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Engine.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/gamemanager.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/gamepage.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/geostructs.h
@@ -1853,7 +1853,7 @@ C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/engine.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/actor.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/bsp.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/controllermanager.h
- mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/engine.h
+ mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/Engine.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/gamemanager.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/geostructs.h
  mdp:C:/Users/donsi/OneDrive/Documents/GitHub/QtDoom/QtApplication/levelpage.h

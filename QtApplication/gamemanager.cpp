@@ -58,6 +58,7 @@ void GameManager::update(float deltaTime, std::vector<Linedef> renderedWalls)
     // Enemy damage detection
     if (inRadius(p, e))
     {
+        if (e->getHealth() == 0) return;
         p->takeDamage(1);
         if (p->getHealth() < 1)
         {
@@ -100,8 +101,8 @@ bool GameManager::shoot(QPoint mousePos, QSize screenSize)
     float cosA = std::cos(playerAngle);
     float sinA = std::sin(playerAngle);
 
-    float worldDirX = camDirX * cosA + camDirY * sinA;  // ← corrigé
-    float worldDirY = -camDirX * sinA + camDirY * cosA; // ← corrigé
+    float worldDirX = camDirX * cosA + camDirY * sinA;
+    float worldDirY = -camDirX * sinA + camDirY * cosA;
 
     qDebug() << "worldDir:" << worldDirX << worldDirY;
 
@@ -120,7 +121,7 @@ bool GameManager::shoot(QPoint mousePos, QSize screenSize)
         if ((dx*dx + dy*dy) < (1.5f * 1.5f)) // hitbox 1.5, pas besoin de sqrt
         {
             qDebug() << "Touché à distance:" << d;
-            e->takeDamage(10);
+            e->takeDamage(100);
             return true;
         }
     }
