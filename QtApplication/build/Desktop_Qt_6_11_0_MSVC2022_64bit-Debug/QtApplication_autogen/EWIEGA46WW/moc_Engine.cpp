@@ -7,6 +7,7 @@
 *****************************************************************************/
 
 #include "../../../../Engine.h"
+#include <QtGui/qtextcursor.h>
 #include <QtCore/qmetatype.h>
 
 #include <QtCore/qtmochelpers.h>
@@ -39,7 +40,7 @@ template <> constexpr inline auto Engine::qt_create_metaobjectdata<qt_meta_tag_Z
     namespace QMC = QtMocConstants;
     QtMocHelpers::StringRefStorage qt_stringData {
         "Engine",
-        "0$EqZT99N8/9ixpMxi8vPcUmnDLSs"
+        "0$cRtx4JSsym5++fFVoa2pJFhUe6A"
     };
 
     QtMocHelpers::UintData qt_methods {

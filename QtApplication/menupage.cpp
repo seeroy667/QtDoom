@@ -21,7 +21,8 @@ MenuPage::MenuPage(QWidget *parent)
 
     m_playButton = new QPushButton("Play");
     m_playButton->setMinimumSize(150, 40);
-    m_playButton->setStyleSheet("border-width: 4px; border-style: solid; border-color: green; color:black;");
+    m_playButton->setStyleSheet("QPushButton{border-width: 4px; border-style: solid; border-color: green; border-radius: 15px; color:black;} QPushButton:hover{background-color:blue");
+
 
     m_levelButton = new QPushButton("Niveaux");
     m_levelButton->setMinimumSize(80, 25);

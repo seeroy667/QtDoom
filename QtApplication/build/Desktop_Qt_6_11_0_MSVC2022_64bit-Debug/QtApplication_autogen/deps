@@ -60,6 +60,8 @@ QtApplication_autogen/timestamp: \
 	C:/Qt/6.11.0/msvc2022_64/include/QtCore/QElapsedTimer \
 	C:/Qt/6.11.0/msvc2022_64/include/QtCore/QList \
 	C:/Qt/6.11.0/msvc2022_64/include/QtCore/QObject \
+	C:/Qt/6.11.0/msvc2022_64/include/QtCore/QPoint \
+	C:/Qt/6.11.0/msvc2022_64/include/QtCore/QProcess \
 	C:/Qt/6.11.0/msvc2022_64/include/QtCore/QRect \
 	C:/Qt/6.11.0/msvc2022_64/include/QtCore/QSize \
 	C:/Qt/6.11.0/msvc2022_64/include/QtCore/QSizeF \
@@ -150,6 +152,7 @@ QtApplication_autogen/timestamp: \
 	C:/Qt/6.11.0/msvc2022_64/include/QtCore/qoverload.h \
 	C:/Qt/6.11.0/msvc2022_64/include/QtCore/qpair.h \
 	C:/Qt/6.11.0/msvc2022_64/include/QtCore/qpoint.h \
+	C:/Qt/6.11.0/msvc2022_64/include/QtCore/qprocess.h \
 	C:/Qt/6.11.0/msvc2022_64/include/QtCore/qprocessordetection.h \
 	C:/Qt/6.11.0/msvc2022_64/include/QtCore/qrect.h \
 	C:/Qt/6.11.0/msvc2022_64/include/QtCore/qrefcount.h \
@@ -568,4 +571,6 @@ QtApplication_autogen/timestamp: \
 	C:/Users/leanneheroux/Documents/GitHub/QtDoom/QtApplication/menupage.h \
 	C:/Users/leanneheroux/Documents/GitHub/QtDoom/QtApplication/rendermanager.cpp \
 	C:/Users/leanneheroux/Documents/GitHub/QtDoom/QtApplication/rendermanager.h \
+	C:/Users/leanneheroux/Documents/GitHub/QtDoom/QtApplication/uimanager.cpp \
+	C:/Users/leanneheroux/Documents/GitHub/QtDoom/QtApplication/uimanager.h \
 	C:/Qt/Tools/CMake_64/bin/cmake.exe

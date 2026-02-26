@@ -461,6 +461,12 @@
 			"MU",
 			"EWIEGA46WW/moc_rendermanager.cpp",
 			null
+		],
+		[
+			"C:/Users/leanneheroux/Documents/GitHub/QtDoom/QtApplication/uimanager.h",
+			"MU",
+			"EWIEGA46WW/moc_uimanager.cpp",
+			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
@@ -575,6 +581,11 @@
 		],
 		[
 			"C:/Users/leanneheroux/Documents/GitHub/QtDoom/QtApplication/rendermanager.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/leanneheroux/Documents/GitHub/QtDoom/QtApplication/uimanager.cpp",
 			"MU",
 			null
 		]

@@ -45,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Connexions des boutons
     connect(menuPage->playButton(), &QPushButton::clicked, [this]() {
-        stackedWidget->setCurrentWidget(gamePage);
+        stackedWidget->setCurrentWidget(gamePage); //emit signal for start
     });
 
     connect(gamePage->quitterButton(), &QPushButton::clicked, [this]() {

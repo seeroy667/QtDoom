@@ -78,12 +78,16 @@ GamePage::GamePage(QWidget *parent)
     QHBoxLayout *barLayout = new QHBoxLayout(barWidget);
 
     //barre de vie du joueur
+    QLabel *labelVie = new QLabel("vie:");
     m_barVie = new QProgressBar;
-    m_barVie->setFixedWidth(100);
-    m_barVie->setValue(100); //a modifier
+    m_barVie->setFixedHeight(30);
+    m_barVie->setFixedWidth(200);
+    m_barVie->setTextVisible(false);
+    m_barVie->setStyleSheet("QProgressBar{background-color:lightgrey; border: 2px solid black; border-radius: 5px;} QProgressBar::chunk{background:green;}");
+    m_barVie->setValue(80); //a modifier
 
     //nb de balles tirées
-    QLabel *labelAmo = new QLabel("amo:");
+    QLabel *labelAmo = new QLabel("balles:");
     m_writeAmo = new QLineEdit;
     m_writeAmo->setFixedWidth(40);
     m_writeAmo->setReadOnly(true);
@@ -96,12 +100,11 @@ GamePage::GamePage(QWidget *parent)
 
     //layout de la barre d'état
     barLayout->addStretch();
+    barLayout->addWidget(labelVie);
     barLayout->addWidget(m_barVie);
-    barLayout->addSpacing(20);
+    barLayout->addSpacing(100);
     barLayout->addWidget(labelAmo);
     barLayout->addWidget(m_writeAmo);
-    barLayout->addSpacing(40);
-    barLayout->addWidget(m_shootButton);
     barLayout->addStretch();
     mainLayout->addWidget(barWidget);
 
