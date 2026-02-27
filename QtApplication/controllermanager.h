@@ -17,8 +17,6 @@ class ControllerManager : public QObject{
 public:
     ControllerManager();
     ~ControllerManager();
-    void keyPressedEvent(QKeyEvent * event);
-    void keyReleasedEvent(QKeyEvent * event);
     bool movingFront(){return mFront;}
     bool movingBack(){return mBack;}
     bool movingLeft(){return mLeft;}
@@ -38,9 +36,11 @@ private:
     bool rRight;
     bool rLeft;
     bool shoot;
-
     bool m_justShot = false;
 
+public slots:
+    void keyPressedEvent(QKeyEvent * event);
+    void keyReleasedEvent(QKeyEvent * event);
 };
 
 #endif

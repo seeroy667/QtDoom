@@ -7,20 +7,23 @@ Modifications:
 */
 #ifndef GAMEPAGE_H
 #define GAMEPAGE_H
-#include "engine.h"
 #include <QWidget>
-#include <QPushButton>
 #include <QPushButton>
 #include <QLineEdit>
 #include <QProgressBar>
 #include <QStackedWidget>
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLabel>
 
 class GamePage : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit GamePage(QWidget *parent = nullptr);
+    GamePage(QGraphicsView *view, QWidget *parent = nullptr);
 
     // Widgets importants accessibles
     QPushButton* quitterButton() const { return m_quitterButton; }
@@ -50,11 +53,11 @@ private:
     QWidget *m_gameOverWidget;
     QStackedWidget *m_stackedWidget;
 
-    QGraphicsView  *m_view  = nullptr;
-    QGraphicsScene *m_scene = nullptr;
-    Engine         *engine  = nullptr;
-
 protected:
-     void showEvent(QShowEvent *event) override;
+    void showEvent(QShowEvent *event) override;
+
+signals:
+    void keyPressSig(QKeyEvent *event);
+    void keyReleaseSig(QKeyEvent *event);
 };
 #endif // GAMEPAGE_H

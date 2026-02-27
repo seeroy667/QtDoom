@@ -21,44 +21,14 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     resize(800, 600); //aggrandi un peu la page par défaut
-
-    QWidget *central = new QWidget(this);
-    setCentralWidget(central);
-
-    QVBoxLayout *layout = new QVBoxLayout(central);
-
-    stackedWidget = new QStackedWidget;
-    layout->addWidget(stackedWidget);
-
-    // Créer les pages
-    menuPage = new MenuPage;
-    gamePage = new GamePage;
-    levelPage = new LevelPage;
-
-    // Ajouter les pages au stacked widget
-    stackedWidget->addWidget(menuPage);
-    stackedWidget->addWidget(gamePage);
-    stackedWidget->addWidget(levelPage);
-
-    // Page de départ
-    stackedWidget->setCurrentWidget(menuPage);
-
-    // Connexions des boutons
-    connect(menuPage->playButton(), &QPushButton::clicked, [this]() {
-        stackedWidget->setCurrentWidget(gamePage); //emit signal for start
-    });
-
-    connect(gamePage->quitterButton(), &QPushButton::clicked, [this]() {
-        stackedWidget->setCurrentWidget(menuPage);
-    });
-
-    connect(levelPage->quitterButton(), &QPushButton::clicked, [this]() {
-        stackedWidget->setCurrentWidget(menuPage);
-    });
-
-    connect(menuPage->levelButton(), &QPushButton::clicked, [this]() {
-        stackedWidget->setCurrentWidget(levelPage);
-    });
+    QGraphicsScene *scene = new QGraphicsScene(this);
+    QGraphicsView  *view  = new QGraphicsView(scene);
+    scene->setSceneRect(0, 0, view->width(), view->height());
+    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view->setFrameStyle(0);
+    engine = new Engine(scene, view->width(), view->height(), this, view);
+    setCentralWidget(engine->getuiManager());
 }
 
 MainWindow::~MainWindow()

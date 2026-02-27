@@ -15,12 +15,11 @@ Modifications:
 
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
+#include "Engine.h"
 #include <QMainWindow>
 #include <QStackedWidget>
-#include "menupage.h"
-#include "gamepage.h"
-#include "levelpage.h"
+#include <QGraphicsView>
+#include <QGraphicsScene>
 
 class MainWindow : public QMainWindow
 {
@@ -31,10 +30,7 @@ public:
     ~MainWindow();
 
 private:
-    QStackedWidget *stackedWidget;
-    MenuPage *menuPage;
-    GamePage *gamePage;
-    LevelPage *levelPage;
+    Engine *engine  = nullptr;
 };
 
 #endif // MAINWINDOW_H
