@@ -1,17 +1,28 @@
 #ifndef UIMANAGER_H
 #define UIMANAGER_H
 
-#include"menupage.h"
-#include"levelpage.h"
+#include <QMainWindow>
+#include <QStackedWidget>
+#include "menupage.h"
+#include "gamepage.h"
+#include "levelpage.h"
 
-class UIManager
+class UIManager : public QWidget
 {
+    Q_OBJECT
+
 public:
-    UIManager();
+    UIManager(QGraphicsView *view, QWidget *parent = nullptr);
+    GamePage* getGamePage();
+
 private:
-    MenuPage* mainMenu;
-    //GamePage* gameUI;
-    LevelPage* levelSelector;
+    QStackedWidget *stackedWidget;
+    MenuPage *menuPage;
+    GamePage *gamePage;
+    LevelPage *levelPage;
+
+signals:
+    void startGame();
 };
 
 #endif // UIMANAGER_H

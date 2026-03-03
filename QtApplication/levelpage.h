@@ -17,7 +17,7 @@ class LevelPage : public QWidget
     Q_OBJECT
 
 public:
-    explicit LevelPage(QWidget *parent = nullptr);
+    LevelPage(QWidget *parent = nullptr);
 
     QPushButton* quitterButton() const { return m_quitterButton; }
     QPushButton* niveau1Button() const { return m_niveau1Button; }

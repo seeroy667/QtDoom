@@ -42,11 +42,14 @@ private:
     QWidget* m_widget;
 
 public:
-    Engine(QGraphicsScene *scene, QWidget* widget, int width, int height, QObject *parent);
+    Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QGraphicsView *view);
 	~Engine();
-    void start();
     void gameLoop();
     ControllerManager* getcManager() const;
+    UIManager* getuiManager() const;
+
+public slots:
+    void start();
 };
 
 #endif

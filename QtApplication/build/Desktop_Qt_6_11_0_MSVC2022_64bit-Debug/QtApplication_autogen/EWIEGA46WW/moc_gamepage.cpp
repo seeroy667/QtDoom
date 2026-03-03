@@ -40,10 +40,23 @@ template <> constexpr inline auto GamePage::qt_create_metaobjectdata<qt_meta_tag
     namespace QMC = QtMocConstants;
     QtMocHelpers::StringRefStorage qt_stringData {
         "GamePage",
-        "0$bNxZt22syh37saHOS47F25iLjRQ"
+        "0$YcDTdLtfpthG6vSAFW31biCzhk4",
+        "keyPressSig",
+        "",
+        "QKeyEvent*",
+        "event",
+        "keyReleaseSig"
     };
 
     QtMocHelpers::UintData qt_methods {
+        // Signal 'keyPressSig'
+        QtMocHelpers::SignalData<void(QKeyEvent *)>(2, 3, QMC::AccessPublic, QMetaType::Void, {{
+            { 0x80000000 | 4, 5 },
+        }}),
+        // Signal 'keyReleaseSig'
+        QtMocHelpers::SignalData<void(QKeyEvent *)>(6, 3, QMC::AccessPublic, QMetaType::Void, {{
+            { 0x80000000 | 4, 5 },
+        }}),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -66,10 +79,19 @@ Q_CONSTINIT const QMetaObject GamePage::staticMetaObject = { {
 void GamePage::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     auto *_t = static_cast<GamePage *>(_o);
-    (void)_t;
-    (void)_c;
-    (void)_id;
-    (void)_a;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        switch (_id) {
+        case 0: _t->keyPressSig((*reinterpret_cast<std::add_pointer_t<QKeyEvent*>>(_a[1]))); break;
+        case 1: _t->keyReleaseSig((*reinterpret_cast<std::add_pointer_t<QKeyEvent*>>(_a[1]))); break;
+        default: ;
+        }
+    }
+    if (_c == QMetaObject::IndexOfMethod) {
+        if (QtMocHelpers::indexOfMethod<void (GamePage::*)(QKeyEvent * )>(_a, &GamePage::keyPressSig, 0))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (GamePage::*)(QKeyEvent * )>(_a, &GamePage::keyReleaseSig, 1))
+            return;
+    }
 }
 
 const QMetaObject *GamePage::metaObject() const
@@ -88,6 +110,30 @@ void *GamePage::qt_metacast(const char *_clname)
 int GamePage::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QWidget::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 2)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 2;
+    }
+    if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 2)
+            *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
+        _id -= 2;
+    }
     return _id;
+}
+
+// SIGNAL 0
+void GamePage::keyPressSig(QKeyEvent * _t1)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 0, nullptr, _t1);
+}
+
+// SIGNAL 1
+void GamePage::keyReleaseSig(QKeyEvent * _t1)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 1, nullptr, _t1);
 }
 QT_WARNING_POP

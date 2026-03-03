@@ -6,17 +6,8 @@ Description: Code for the page where the game is played
 Modifications:
 */
 #include "gamepage.h"
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QPushButton>
-#include <QLabel>
-#include <QLineEdit>
-#include <QProgressBar>
-#include <QStackedWidget>
-#include <QGraphicsScene>
-#include <QGraphicsView>
 
-GamePage::GamePage(QWidget *parent)
+GamePage::GamePage(QGraphicsView *view, QWidget *parent)
     : QWidget(parent)
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
@@ -32,12 +23,6 @@ GamePage::GamePage(QWidget *parent)
     QVBoxLayout *centralLayout = new QVBoxLayout(centralWidget);
 
     //ajouter le jeu à l'application
-    QGraphicsScene *scene = new QGraphicsScene(this);
-    QGraphicsView  *view  = new QGraphicsView(scene, centralWidget);
-    scene->setSceneRect(0, 0, view->width(), view->height());
-    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view->setFrameStyle(0);
     centralLayout->addWidget(view);
 
     //pour la page gameover: manque juste à le centrer
@@ -107,33 +92,19 @@ GamePage::GamePage(QWidget *parent)
     barLayout->addWidget(m_writeAmo);
     barLayout->addStretch();
     mainLayout->addWidget(barWidget);
-
-    //lance le moteur
-    m_view = view;
-    m_scene = scene;
-    engine = nullptr;
 }
 
 void GamePage::keyPressEvent(QKeyEvent *event)
 {
-    engine->getcManager()->keyPressedEvent(event);
+    emit keyPressSig(event);
 }
 
 void GamePage::keyReleaseEvent(QKeyEvent *event)
 {
-    engine->getcManager()->keyReleasedEvent(event);
+    emit keyReleaseSig(event);
 }
 
 void GamePage::showEvent(QShowEvent *event)
 {
-    QWidget::showEvent(event);
-    if (!engine) {
-        int w = m_view->width();
-        int h = m_view->height();
-        m_scene->setSceneRect(0, 0, w, h);
-        QGraphicsView* view = new QGraphicsView(m_scene);
-        engine = new Engine(m_scene,view, w, h, this);
-        engine->start();
-    }
 }
 

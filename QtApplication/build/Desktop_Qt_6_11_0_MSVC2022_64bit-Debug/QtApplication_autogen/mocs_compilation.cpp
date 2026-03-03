@@ -5,3 +5,4 @@
 #include "EWIEGA46WW/moc_levelpage.cpp"
 #include "EWIEGA46WW/moc_mainwindow.cpp"
 #include "EWIEGA46WW/moc_menupage.cpp"
+#include "EWIEGA46WW/moc_uimanager.cpp"

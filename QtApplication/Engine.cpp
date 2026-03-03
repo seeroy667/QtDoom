@@ -8,19 +8,23 @@ Modifications:
 
 #include"engine.h"
 
-Engine::Engine(QGraphicsScene *scene, QWidget* widget, int width, int height, QObject *parent)
+Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QGraphicsView *view)
     : QObject(parent)
 {
+    uiManager = new UIManager(view);
+
     cManager = new ControllerManager();
     gManager = new GameManager();
     rManager = new RenderManager(scene, width, height);
-    uiManager = new UIManager();
 
     m_width = width;
     m_height = height;
-    m_widget = widget;
 
     gManager->loadMap("WadLvl1.txt");
+
+    connect(uiManager, SIGNAL(startGame()), this, SLOT(start()));
+    connect(uiManager->getGamePage(), SIGNAL(keyPressSig(QKeyEvent*)), cManager, SLOT(keyPressedEvent(QKeyEvent*)));
+    connect(uiManager->getGamePage(), SIGNAL(keyReleaseSig(QKeyEvent*)), cManager, SLOT(keyReleasedEvent(QKeyEvent*)));
     // This was missing — without it gameLoop() never gets called
     connect(&timer, &QTimer::timeout, this, &Engine::gameLoop);
 }
@@ -48,15 +52,15 @@ void Engine::gameLoop()
     if(cManager->rotatingRight()) gManager->getPlayer()->setAngle(gManager->getPlayer()->getAngle()-0.05f);
     if(cManager->justShot())
     {
-        QGraphicsView* view = rManager->getView();
+        QGraphicsView* m_view = rManager->getView();
 
         QPoint globalMousePos = QCursor::pos();
-        QPoint viewMousePos = view->mapFromGlobal(globalMousePos);
+        QPoint viewMousePos = m_view->mapFromGlobal(globalMousePos);
 
-        bool hit = gManager->shoot(viewMousePos, view->size());
+        bool hit = gManager->shoot(viewMousePos, m_view->size());
 
-        float startX = view->width() / 2.0f;
-        float startY = view->height();
+        float startX = m_view->width() / 2.0f;
+        float startY = m_view->height();
         float endX = viewMousePos.x();
         float endY = viewMousePos.y();
 
@@ -72,4 +76,9 @@ void Engine::gameLoop()
 ControllerManager* Engine::getcManager() const
 {
     return cManager;
+}
+
+UIManager* Engine::getuiManager() const
+{
+    return uiManager;
 }

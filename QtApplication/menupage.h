@@ -15,7 +15,7 @@ class MenuPage : public QWidget
 {
     Q_OBJECT
 public:
-    explicit MenuPage(QWidget *parent = nullptr);
+    MenuPage(QWidget *parent = nullptr);
 
     QPushButton* playButton() const { return m_playButton; }
     QPushButton* levelButton() const { return m_levelButton; }
