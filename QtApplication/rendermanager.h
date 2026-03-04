@@ -36,6 +36,8 @@ public:
     float projectHeight(float worldHeight, float distance);
     Vertex coordPlayer(const Vertex& point, const Actor& player);
     QGraphicsView* getView() const;
+    void renderGun();
+    void updateScreenSize(int width, int height);
 
 private:
     QGraphicsScene* m_scene;

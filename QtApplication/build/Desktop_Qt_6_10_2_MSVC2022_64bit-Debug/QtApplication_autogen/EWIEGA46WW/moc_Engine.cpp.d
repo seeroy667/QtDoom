@@ -244,7 +244,9 @@ C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/build/Desktop_Qt_6_10_2_MSV
   C:/Qt/6.10.2/msvc2022_64/include/QtGui/qrgba64.h \
   C:/Qt/6.10.2/msvc2022_64/include/QtGui/qscreen.h \
   C:/Qt/6.10.2/msvc2022_64/include/QtGui/qscreen_platform.h \
+  C:/Qt/6.10.2/msvc2022_64/include/QtGui/qtextcursor.h \
   C:/Qt/6.10.2/msvc2022_64/include/QtGui/qtextdocument.h \
+  C:/Qt/6.10.2/msvc2022_64/include/QtGui/qtextformat.h \
   C:/Qt/6.10.2/msvc2022_64/include/QtGui/qtextoption.h \
   C:/Qt/6.10.2/msvc2022_64/include/QtGui/qtgui-config.h \
   C:/Qt/6.10.2/msvc2022_64/include/QtGui/qtguiexports.h \
@@ -258,20 +260,35 @@ C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/build/Desktop_Qt_6_10_2_MSV
   C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/QGraphicsPolygonItem \
   C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/QGraphicsScene \
   C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/QGraphicsView \
+  C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/QHBoxLayout \
   C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/QLabel \
+  C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/QLineEdit \
+  C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/QMainWindow \
+  C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/QProgressBar \
   C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/QPushButton \
+  C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/QStackedWidget \
+  C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/QVBoxLayout \
   C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/QWidget \
   C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qabstractbutton.h \
   C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qabstractscrollarea.h \
   C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qapplication.h \
+  C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qboxlayout.h \
   C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qframe.h \
   C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qgraphicsitem.h \
   C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qgraphicsscene.h \
   C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qgraphicsview.h \
+  C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qgridlayout.h \
   C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qlabel.h \
+  C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qlayout.h \
+  C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qlayoutitem.h \
+  C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qlineedit.h \
+  C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qmainwindow.h \
+  C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qprogressbar.h \
   C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qpushbutton.h \
   C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qscrollarea.h \
   C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qsizepolicy.h \
+  C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qstackedwidget.h \
+  C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qtabwidget.h \
   C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qtwidgets-config.h \
   C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qtwidgetsexports.h \
   C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -281,6 +298,7 @@ C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/build/Desktop_Qt_6_10_2_MSV
   C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/bsp.h \
   C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/controllermanager.h \
   C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/gamemanager.h \
+  C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/gamepage.h \
   C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/geostructs.h \
   C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/levelpage.h \
   C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/menupage.h \

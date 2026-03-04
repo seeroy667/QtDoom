@@ -41,6 +41,9 @@ private:
     int m_height;
     QWidget* m_widget;
 
+    QGraphicsScene* m_scene;
+    QGraphicsView*  m_view;
+
 public:
     Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QGraphicsView *view);
 	~Engine();

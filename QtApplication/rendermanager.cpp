@@ -183,6 +183,20 @@ void RenderManager::renderRay(float mouseScreenX, float mouseScreenY,
     m_rayTargetY = targetScreenY;
 }
 
+void RenderManager::renderGun()
+{
+    int gunWidth = 200;
+    int gunHeight = 100;
+
+    float gunX = (m_screenWidth / 2.0f) - (gunWidth / 2.0f);
+    float gunY = (m_screenHeight - gunHeight);
+
+    QRectF gunRect(gunX,gunY,gunWidth,gunHeight);
+    QGraphicsRectItem *gunItem = m_scene->addRect(gunRect);
+
+    gunItem->setBrush(QColor(80,80,80));
+}
+
 // UTILISEE POUR EXEMPLE
 void RenderManager::render(Actor m_player, Actor m_enemy, BSP* bsp)
 {
@@ -202,7 +216,17 @@ void RenderManager::render(Actor m_player, Actor m_enemy, BSP* bsp)
                          QPen(QColor(255, 255, 0), 3));
         m_rayFramesLeft--;
     }
+
+    renderGun();
 }
+
+void RenderManager::updateScreenSize(int width, int height)
+{
+    m_screenWidth = width;
+    m_screenHeight = height;
+    m_focalLength = width/2.0f;
+}
+
 
 std::vector<Linedef> RenderManager::getRenderedWalls()
 {

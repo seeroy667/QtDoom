@@ -20,6 +20,9 @@ Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QG
     m_width = width;
     m_height = height;
 
+    m_scene = scene;
+    m_view = view;
+
     gManager->loadMap("WadLvl1.txt");
 
     connect(uiManager, SIGNAL(startGame()), this, SLOT(start()));
@@ -41,6 +44,17 @@ void Engine::start()
 
 void Engine::gameLoop()
 {
+    int currentWidth = m_view->width();
+    int currentHeight = m_view->height();
+
+    if(currentWidth!=m_width || currentHeight!=m_height)
+    {
+        m_width=currentWidth;
+        m_height=currentHeight;
+        m_scene->setSceneRect(0, 0, currentWidth, currentHeight);
+        rManager->updateScreenSize(currentWidth, currentHeight);
+    }
+
     float deltaTime = elapsedTimer.restart() / 1000.0f;
     if (deltaTime > 0.1f) deltaTime = 0.1f;
 

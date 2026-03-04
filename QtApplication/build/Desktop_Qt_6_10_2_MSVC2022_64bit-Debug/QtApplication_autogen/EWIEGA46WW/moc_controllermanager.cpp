@@ -38,10 +38,23 @@ template <> constexpr inline auto ControllerManager::qt_create_metaobjectdata<qt
 {
     namespace QMC = QtMocConstants;
     QtMocHelpers::StringRefStorage qt_stringData {
-        "ControllerManager"
+        "ControllerManager",
+        "keyPressedEvent",
+        "",
+        "QKeyEvent*",
+        "event",
+        "keyReleasedEvent"
     };
 
     QtMocHelpers::UintData qt_methods {
+        // Slot 'keyPressedEvent'
+        QtMocHelpers::SlotData<void(QKeyEvent *)>(1, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { 0x80000000 | 3, 4 },
+        }}),
+        // Slot 'keyReleasedEvent'
+        QtMocHelpers::SlotData<void(QKeyEvent *)>(5, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { 0x80000000 | 3, 4 },
+        }}),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -63,10 +76,13 @@ Q_CONSTINIT const QMetaObject ControllerManager::staticMetaObject = { {
 void ControllerManager::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     auto *_t = static_cast<ControllerManager *>(_o);
-    (void)_t;
-    (void)_c;
-    (void)_id;
-    (void)_a;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        switch (_id) {
+        case 0: _t->keyPressedEvent((*reinterpret_cast<std::add_pointer_t<QKeyEvent*>>(_a[1]))); break;
+        case 1: _t->keyReleasedEvent((*reinterpret_cast<std::add_pointer_t<QKeyEvent*>>(_a[1]))); break;
+        default: ;
+        }
+    }
 }
 
 const QMetaObject *ControllerManager::metaObject() const
@@ -85,6 +101,18 @@ void *ControllerManager::qt_metacast(const char *_clname)
 int ControllerManager::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QObject::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 2)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 2;
+    }
+    if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 2)
+            *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
+        _id -= 2;
+    }
     return _id;
 }
 QT_WARNING_POP
