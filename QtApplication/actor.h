@@ -11,6 +11,7 @@ Modifications:
 
 #include"geostructs.h"
 #include "Weapon.h"
+#include <qobject.h>
 
 class Actor {
 private:
@@ -48,7 +49,6 @@ public:
     void setWeapon(Weapon* w);
     Weapon* getWeapon() const;
     bool hasWeapon() const;
-
 };
 
 #endif

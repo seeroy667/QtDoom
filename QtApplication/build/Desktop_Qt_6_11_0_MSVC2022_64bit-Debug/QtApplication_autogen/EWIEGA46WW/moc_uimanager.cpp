@@ -40,14 +40,48 @@ template <> constexpr inline auto UIManager::qt_create_metaobjectdata<qt_meta_ta
     namespace QMC = QtMocConstants;
     QtMocHelpers::StringRefStorage qt_stringData {
         "UIManager",
-        "0$Su6bpHBL8iealyFEgHpQRPp0xWU",
+        "0$cVBdV5OqIIZrTyavzyVaN5TBQDs",
         "startGame",
-        ""
+        "",
+        "keyReleaseSig",
+        "QKeyEvent*",
+        "event",
+        "keyPressSig",
+        "potIsTurning",
+        "potStops",
+        "shootPressed",
+        "shootReleased",
+        "keyPressEvent",
+        "keyReleaseEvent"
     };
 
     QtMocHelpers::UintData qt_methods {
         // Signal 'startGame'
         QtMocHelpers::SignalData<void()>(2, 3, QMC::AccessPublic, QMetaType::Void),
+        // Signal 'keyReleaseSig'
+        QtMocHelpers::SignalData<void(QKeyEvent *)>(4, 3, QMC::AccessPublic, QMetaType::Void, {{
+            { 0x80000000 | 5, 6 },
+        }}),
+        // Signal 'keyPressSig'
+        QtMocHelpers::SignalData<void(QKeyEvent *)>(7, 3, QMC::AccessPublic, QMetaType::Void, {{
+            { 0x80000000 | 5, 6 },
+        }}),
+        // Slot 'potIsTurning'
+        QtMocHelpers::SlotData<void()>(8, 3, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'potStops'
+        QtMocHelpers::SlotData<void()>(9, 3, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'shootPressed'
+        QtMocHelpers::SlotData<void()>(10, 3, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'shootReleased'
+        QtMocHelpers::SlotData<void()>(11, 3, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'keyPressEvent'
+        QtMocHelpers::SlotData<void(QKeyEvent *)>(12, 3, QMC::AccessPublic, QMetaType::Void, {{
+            { 0x80000000 | 5, 6 },
+        }}),
+        // Slot 'keyReleaseEvent'
+        QtMocHelpers::SlotData<void(QKeyEvent *)>(13, 3, QMC::AccessPublic, QMetaType::Void, {{
+            { 0x80000000 | 5, 6 },
+        }}),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -73,11 +107,23 @@ void UIManager::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
         case 0: _t->startGame(); break;
+        case 1: _t->keyReleaseSig((*reinterpret_cast<std::add_pointer_t<QKeyEvent*>>(_a[1]))); break;
+        case 2: _t->keyPressSig((*reinterpret_cast<std::add_pointer_t<QKeyEvent*>>(_a[1]))); break;
+        case 3: _t->potIsTurning(); break;
+        case 4: _t->potStops(); break;
+        case 5: _t->shootPressed(); break;
+        case 6: _t->shootReleased(); break;
+        case 7: _t->keyPressEvent((*reinterpret_cast<std::add_pointer_t<QKeyEvent*>>(_a[1]))); break;
+        case 8: _t->keyReleaseEvent((*reinterpret_cast<std::add_pointer_t<QKeyEvent*>>(_a[1]))); break;
         default: ;
         }
     }
     if (_c == QMetaObject::IndexOfMethod) {
         if (QtMocHelpers::indexOfMethod<void (UIManager::*)()>(_a, &UIManager::startGame, 0))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (UIManager::*)(QKeyEvent * )>(_a, &UIManager::keyReleaseSig, 1))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (UIManager::*)(QKeyEvent * )>(_a, &UIManager::keyPressSig, 2))
             return;
     }
 }
@@ -101,14 +147,14 @@ int UIManager::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 1)
+        if (_id < 9)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 1;
+        _id -= 9;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 1)
+        if (_id < 9)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 1;
+        _id -= 9;
     }
     return _id;
 }
@@ -117,5 +163,17 @@ int UIManager::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 void UIManager::startGame()
 {
     QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
+}
+
+// SIGNAL 1
+void UIManager::keyReleaseSig(QKeyEvent * _t1)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 1, nullptr, _t1);
+}
+
+// SIGNAL 2
+void UIManager::keyPressSig(QKeyEvent * _t1)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 2, nullptr, _t1);
 }
 QT_WARNING_POP

@@ -26,8 +26,13 @@ Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QG
     gManager->loadMap("WadLvl1.txt");
 
     connect(uiManager, SIGNAL(startGame()), this, SLOT(start()));
-    connect(uiManager->getGamePage(), SIGNAL(keyPressSig(QKeyEvent*)), cManager, SLOT(keyPressedEvent(QKeyEvent*)));
-    connect(uiManager->getGamePage(), SIGNAL(keyReleaseSig(QKeyEvent*)), cManager, SLOT(keyReleasedEvent(QKeyEvent*)));
+    connect(uiManager, SIGNAL(keyPressSig(QKeyEvent*)), cManager, SLOT(keyPressedEvent(QKeyEvent*)));
+    connect(uiManager, SIGNAL(keyReleaseSig(QKeyEvent*)), cManager, SLOT(keyReleasedEvent(QKeyEvent*)));
+    //dans ui
+    connect(cManager, SIGNAL(potTurnedSig()), uiManager, SLOT(potIsTurning()));
+    connect(cManager, SIGNAL(potStopedSig()), uiManager, SLOT(potStops()));
+    connect(cManager, SIGNAL(shootPressedSig()), uiManager, SLOT(shootPressed()));
+    connect(cManager, SIGNAL(shootReleasedSig()), uiManager, SLOT(shootReleased()));
     // This was missing — without it gameLoop() never gets called
     connect(&timer, &QTimer::timeout, this, &Engine::gameLoop);
 }

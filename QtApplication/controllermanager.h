@@ -37,10 +37,22 @@ private:
     bool rLeft;
     bool shoot;
     bool m_justShot = false;
+    bool mReturn;
+    bool potTurns;
 
 public slots:
     void keyPressedEvent(QKeyEvent * event);
     void keyReleasedEvent(QKeyEvent * event);
+    void potTurnedEvent();
+    void potStopedEvent();
+    void shootPressedEvent();
+    void shootReleasedEvent();
+
+signals:
+    void potTurnedSig();
+    void potStopedSig();
+    void shootPressedSig();
+    void shootReleasedSig();
 };
 
 #endif

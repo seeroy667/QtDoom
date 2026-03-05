@@ -39,10 +39,29 @@ template <> constexpr inline auto MenuPage::qt_create_metaobjectdata<qt_meta_tag
     namespace QMC = QtMocConstants;
     QtMocHelpers::StringRefStorage qt_stringData {
         "MenuPage",
-        "0$WygeCeZqGz9xtovhB9r5AUIuR/0"
+        "0$CsurmvmEPweSk388Jz2HWJaxfDo",
+        "menu_levelClickedSig",
+        "",
+        "menu_playClickedSig",
+        "changeButtons",
+        "setupNextSelect",
+        "updateHighlight",
+        "activateSelectedButton"
     };
 
     QtMocHelpers::UintData qt_methods {
+        // Signal 'menu_levelClickedSig'
+        QtMocHelpers::SignalData<void()>(2, 3, QMC::AccessPublic, QMetaType::Void),
+        // Signal 'menu_playClickedSig'
+        QtMocHelpers::SignalData<void()>(4, 3, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'changeButtons'
+        QtMocHelpers::SlotData<void()>(5, 3, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'setupNextSelect'
+        QtMocHelpers::SlotData<void()>(6, 3, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'updateHighlight'
+        QtMocHelpers::SlotData<void()>(7, 3, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'activateSelectedButton'
+        QtMocHelpers::SlotData<void()>(8, 3, QMC::AccessPublic, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -65,10 +84,23 @@ Q_CONSTINIT const QMetaObject MenuPage::staticMetaObject = { {
 void MenuPage::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     auto *_t = static_cast<MenuPage *>(_o);
-    (void)_t;
-    (void)_c;
-    (void)_id;
-    (void)_a;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        switch (_id) {
+        case 0: _t->menu_levelClickedSig(); break;
+        case 1: _t->menu_playClickedSig(); break;
+        case 2: _t->changeButtons(); break;
+        case 3: _t->setupNextSelect(); break;
+        case 4: _t->updateHighlight(); break;
+        case 5: _t->activateSelectedButton(); break;
+        default: ;
+        }
+    }
+    if (_c == QMetaObject::IndexOfMethod) {
+        if (QtMocHelpers::indexOfMethod<void (MenuPage::*)()>(_a, &MenuPage::menu_levelClickedSig, 0))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (MenuPage::*)()>(_a, &MenuPage::menu_playClickedSig, 1))
+            return;
+    }
 }
 
 const QMetaObject *MenuPage::metaObject() const
@@ -87,6 +119,30 @@ void *MenuPage::qt_metacast(const char *_clname)
 int MenuPage::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QWidget::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 6)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 6;
+    }
+    if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 6)
+            *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
+        _id -= 6;
+    }
     return _id;
+}
+
+// SIGNAL 0
+void MenuPage::menu_levelClickedSig()
+{
+    QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
+}
+
+// SIGNAL 1
+void MenuPage::menu_playClickedSig()
+{
+    QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
 }
 QT_WARNING_POP

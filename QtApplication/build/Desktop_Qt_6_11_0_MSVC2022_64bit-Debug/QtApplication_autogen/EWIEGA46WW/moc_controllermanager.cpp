@@ -39,23 +39,47 @@ template <> constexpr inline auto ControllerManager::qt_create_metaobjectdata<qt
     namespace QMC = QtMocConstants;
     QtMocHelpers::StringRefStorage qt_stringData {
         "ControllerManager",
-        "0$Pu6T0wLZMqXvLkhsGYX3qhKEhMc",
-        "keyPressedEvent",
+        "0$M9rRYbarOq3+G9IaHW9EnHJodsI",
+        "potTurnedSig",
         "",
+        "potStopedSig",
+        "shootPressedSig",
+        "shootReleasedSig",
+        "keyPressedEvent",
         "QKeyEvent*",
         "event",
-        "keyReleasedEvent"
+        "keyReleasedEvent",
+        "potTurnedEvent",
+        "potStopedEvent",
+        "shootPressedEvent",
+        "shootReleasedEvent"
     };
 
     QtMocHelpers::UintData qt_methods {
+        // Signal 'potTurnedSig'
+        QtMocHelpers::SignalData<void()>(2, 3, QMC::AccessPublic, QMetaType::Void),
+        // Signal 'potStopedSig'
+        QtMocHelpers::SignalData<void()>(4, 3, QMC::AccessPublic, QMetaType::Void),
+        // Signal 'shootPressedSig'
+        QtMocHelpers::SignalData<void()>(5, 3, QMC::AccessPublic, QMetaType::Void),
+        // Signal 'shootReleasedSig'
+        QtMocHelpers::SignalData<void()>(6, 3, QMC::AccessPublic, QMetaType::Void),
         // Slot 'keyPressedEvent'
-        QtMocHelpers::SlotData<void(QKeyEvent *)>(2, 3, QMC::AccessPublic, QMetaType::Void, {{
-            { 0x80000000 | 4, 5 },
+        QtMocHelpers::SlotData<void(QKeyEvent *)>(7, 3, QMC::AccessPublic, QMetaType::Void, {{
+            { 0x80000000 | 8, 9 },
         }}),
         // Slot 'keyReleasedEvent'
-        QtMocHelpers::SlotData<void(QKeyEvent *)>(6, 3, QMC::AccessPublic, QMetaType::Void, {{
-            { 0x80000000 | 4, 5 },
+        QtMocHelpers::SlotData<void(QKeyEvent *)>(10, 3, QMC::AccessPublic, QMetaType::Void, {{
+            { 0x80000000 | 8, 9 },
         }}),
+        // Slot 'potTurnedEvent'
+        QtMocHelpers::SlotData<void()>(11, 3, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'potStopedEvent'
+        QtMocHelpers::SlotData<void()>(12, 3, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'shootPressedEvent'
+        QtMocHelpers::SlotData<void()>(13, 3, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'shootReleasedEvent'
+        QtMocHelpers::SlotData<void()>(14, 3, QMC::AccessPublic, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -80,10 +104,28 @@ void ControllerManager::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
     auto *_t = static_cast<ControllerManager *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->keyPressedEvent((*reinterpret_cast<std::add_pointer_t<QKeyEvent*>>(_a[1]))); break;
-        case 1: _t->keyReleasedEvent((*reinterpret_cast<std::add_pointer_t<QKeyEvent*>>(_a[1]))); break;
+        case 0: _t->potTurnedSig(); break;
+        case 1: _t->potStopedSig(); break;
+        case 2: _t->shootPressedSig(); break;
+        case 3: _t->shootReleasedSig(); break;
+        case 4: _t->keyPressedEvent((*reinterpret_cast<std::add_pointer_t<QKeyEvent*>>(_a[1]))); break;
+        case 5: _t->keyReleasedEvent((*reinterpret_cast<std::add_pointer_t<QKeyEvent*>>(_a[1]))); break;
+        case 6: _t->potTurnedEvent(); break;
+        case 7: _t->potStopedEvent(); break;
+        case 8: _t->shootPressedEvent(); break;
+        case 9: _t->shootReleasedEvent(); break;
         default: ;
         }
+    }
+    if (_c == QMetaObject::IndexOfMethod) {
+        if (QtMocHelpers::indexOfMethod<void (ControllerManager::*)()>(_a, &ControllerManager::potTurnedSig, 0))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (ControllerManager::*)()>(_a, &ControllerManager::potStopedSig, 1))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (ControllerManager::*)()>(_a, &ControllerManager::shootPressedSig, 2))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (ControllerManager::*)()>(_a, &ControllerManager::shootReleasedSig, 3))
+            return;
     }
 }
 
@@ -106,15 +148,39 @@ int ControllerManager::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 10)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 10;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 2)
+        if (_id < 10)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 2;
+        _id -= 10;
     }
     return _id;
+}
+
+// SIGNAL 0
+void ControllerManager::potTurnedSig()
+{
+    QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
+}
+
+// SIGNAL 1
+void ControllerManager::potStopedSig()
+{
+    QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
+}
+
+// SIGNAL 2
+void ControllerManager::shootPressedSig()
+{
+    QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
+}
+
+// SIGNAL 3
+void ControllerManager::shootReleasedSig()
+{
+    QMetaObject::activate(this, &staticMetaObject, 3, nullptr);
 }
 QT_WARNING_POP

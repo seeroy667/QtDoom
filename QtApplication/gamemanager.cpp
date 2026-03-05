@@ -65,7 +65,7 @@ void GameManager::update(float deltaTime, std::vector<Linedef> renderedWalls)
         p->takeDamage(1);
         if (p->getHealth() < 1)
         {
-            qDebug("Player Dead");
+            //qDebug("Player Dead");
         }
     }
 }

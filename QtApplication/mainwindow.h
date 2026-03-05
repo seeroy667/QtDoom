@@ -31,6 +31,7 @@ public:
 
 private:
     Engine *engine  = nullptr;
+
 };
 
 #endif // MAINWINDOW_H
