@@ -13,15 +13,21 @@ Weapon::Weapon(int dmg, float rng, float rate)
 	damage = dmg;
 	range = rng;
 	fireRate = rate;
+      m_shootTimer.start();
 }
 
 Weapon::~Weapon()
 {
 }
 
+bool Weapon::canShoot()
+{
+    float cd = (1.0f / fireRate) * 1000.0f;
+     return m_shootTimer.elapsed() >= cd;
+}
 void Weapon::shoot()
 {
-	// Shooting logic here
+    m_shootTimer.restart();
 }
 
 int Weapon::getDamage()

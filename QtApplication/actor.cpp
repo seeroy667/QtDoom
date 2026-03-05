@@ -13,7 +13,7 @@ Actor::Actor()
 {
     position = {0, 0};
     angle = 0.0f;
-    health = 100;
+    health = 1;
     isAlive = true;
 }
 
@@ -81,5 +81,24 @@ void Actor::moveEnemy(const Actor& Player, float deltaTime)
         position.x += nx * EnemySpeed * deltaTime;
         position.y += ny * EnemySpeed * deltaTime;
     }
+}
+
+void Actor::setWeapon(Weapon *w)
+{
+    m_weapon = w;
+}
+
+Weapon* Actor::getWeapon() const
+{
+    return m_weapon;
+}
+
+bool Actor::hasWeapon() const
+{
+    if(m_weapon!=nullptr)
+    {
+        return true;
+    }
+    return false;
 }
 

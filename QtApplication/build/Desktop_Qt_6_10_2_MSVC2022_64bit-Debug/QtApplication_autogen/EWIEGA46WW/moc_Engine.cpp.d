@@ -294,6 +294,7 @@ C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/build/Desktop_Qt_6_10_2_MSV
   C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qtwidgetsglobal.h \
   C:/Qt/6.10.2/msvc2022_64/include/QtWidgets/qwidget.h \
   C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/Actor.h \
+  C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/Weapon.h \
   C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/actor.h \
   C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/bsp.h \
   C:/Users/Admin/Documents/GitHub/QtDoom/QtApplication/controllermanager.h \

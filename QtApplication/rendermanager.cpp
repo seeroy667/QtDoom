@@ -126,7 +126,8 @@ float RenderManager::projectHeight(float worldHeight, float distance)
 
 void RenderManager::renderActor(Actor actor, const Actor player, QColor color)
 {
-    if (actor.getHealth() == 0) return;
+    if (actor.getHealth() <= 0) return;
+
     Vertex camPos = coordPlayer(actor.getPosition(), player);
 
 

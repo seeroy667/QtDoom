@@ -64,24 +64,27 @@ void Engine::gameLoop()
     if(cManager->movingFront()) gManager->getPlayer()->setPosition(gManager->getPlayer()->getPosition().x+(0.5f*cos(gManager->getPlayer()->getAngle() + M_PI/2)), gManager->getPlayer()->getPosition().y+(0.5f*sin(gManager->getPlayer()->getAngle() + M_PI/2)));
     if(cManager->rotatingLeft()) gManager->getPlayer()->setAngle(gManager->getPlayer()->getAngle()+0.05f);
     if(cManager->rotatingRight()) gManager->getPlayer()->setAngle(gManager->getPlayer()->getAngle()-0.05f);
-    if(cManager->justShot())
+    if (cManager->justShot())
     {
-        QGraphicsView* m_view = rManager->getView();
+        Weapon* weapon = gManager->getPlayer()->getWeapon();
 
-        QPoint globalMousePos = QCursor::pos();
-        QPoint viewMousePos = m_view->mapFromGlobal(globalMousePos);
+        if (weapon && weapon->canShoot())
+        {
+            QGraphicsView* m_view = rManager->getView();
+            QPoint globalMousePos = QCursor::pos();
+            QPoint viewMousePos   = m_view->mapFromGlobal(globalMousePos);
 
-        bool hit = gManager->shoot(viewMousePos, m_view->size());
+            bool hit = gManager->shoot(viewMousePos, m_view->size());
 
-        float startX = m_view->width() / 2.0f;
-        float startY = m_view->height();
-        float endX = viewMousePos.x();
-        float endY = viewMousePos.y();
-
-        rManager->renderRay(startX, startY, endX, endY, 5);
+            float startX = m_view->width()  / 2.0f;
+            float startY = m_view->height();
+            float endX   = viewMousePos.x();
+            float endY   = viewMousePos.y();
+            rManager->renderRay(startX, startY, endX, endY, 5);
+        }
         cManager->resetShot();
-    }
 
+    }
     rManager->render(*gManager->getPlayer(),*gManager->getEnemy(), gManager->getBSP());
     gManager->update(deltaTime, rManager->getRenderedWalls());
 

@@ -39,6 +39,9 @@ void GameManager::loadMap(const std::string& filename)
     };
     bsp = new BSP();
     bsp->build(walls);
+
+    m_playerWeapon = new Weapon(1,1000.0f,2.0f);
+    p->setWeapon(m_playerWeapon);
 }
 
 BSP* GameManager::getBSP()
@@ -80,35 +83,40 @@ bool GameManager::inRadius(Actor* p, Actor* e)
 
 bool GameManager::shoot(QPoint mousePos, QSize screenSize)
 {
-    float screenW = screenSize.width();
+
+    Weapon* weapon = p->getWeapon();
+    if (!weapon) return false;
+
+
+    if (!weapon->canShoot())
+    {
+        qDebug() << "Cooldown pas écoulé";
+        return false;
+    }
+
+    weapon->shoot();
+    float screenW    = screenSize.width();
     float focalLength = screenW / 2.0f;
 
-    qDebug() << "=== SHOOT DEBUG ===";
-    qDebug() << "mousePos:" << mousePos.x() << mousePos.y();
-    qDebug() << "screenSize:" << screenW;
-    qDebug() << "PlayerPos:" << p->getPosition().x << p->getPosition().y;
-    qDebug() << "PlayerAngle:" << p->getAngle();
-    qDebug() << "EnemyPos:" << e->getPosition().x << e->getPosition().y;
 
     float camDirX = (mousePos.x() - screenW / 2.0f) / focalLength;
     float camDirY = 1.0f;
-
-    float len = std::sqrt(camDirX * camDirX + camDirY * camDirY);
+    float len     = std::sqrt(camDirX * camDirX + camDirY * camDirY);
     camDirX /= len;
     camDirY /= len;
 
+    // Convertit la direction caméra en direction monde
     float playerAngle = p->getAngle();
-    float cosA = std::cos(playerAngle);
-    float sinA = std::sin(playerAngle);
+    float cosA        = std::cos(playerAngle);
+    float sinA        = std::sin(playerAngle);
+    float worldDirX   =  camDirX * cosA + camDirY * sinA;
+    float worldDirY   = -camDirX * sinA + camDirY * cosA;
 
-    float worldDirX = camDirX * cosA + camDirY * sinA;
-    float worldDirY = -camDirX * sinA + camDirY * cosA;
+    Vertex playerPos  = p->getPosition();
 
-    qDebug() << "worldDir:" << worldDirX << worldDirY;
 
-    Vertex playerPos = p->getPosition();
-    float maxDistance = 100.0f;
-    float step = 0.05f;
+    float maxDistance = weapon->getRange();
+    float step        = 0.05f;
 
     for (float d = 0; d < maxDistance; d += step)
     {
@@ -118,13 +126,15 @@ bool GameManager::shoot(QPoint mousePos, QSize screenSize)
         float dx = rayX - e->getPosition().x;
         float dy = rayY - e->getPosition().y;
 
-        if ((dx*dx + dy*dy) < (1.5f * 1.5f)) // hitbox 1.5, pas besoin de sqrt
+        if ((dx*dx + dy*dy) < (1.5f * 1.5f))
         {
             qDebug() << "Touché à distance:" << d;
-            e->takeDamage(100);
+            e->takeDamage(weapon->getDamage());
+            weapon->shoot();
             return true;
         }
     }
+
 
     qDebug() << "Manqué";
     return false;
