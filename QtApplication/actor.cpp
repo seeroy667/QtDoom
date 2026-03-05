@@ -19,7 +19,6 @@ Actor::Actor()
 
 Actor::~Actor()
 {
-
 }
 
 void Actor::move(float deltaX, float deltaY)

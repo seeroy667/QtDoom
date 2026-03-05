@@ -297,6 +297,7 @@ C:/Users/leanneheroux/Documents/GitHub/QtDoom/QtApplication/build/Desktop_Qt_6_1
   C:/Qt/6.11.0/msvc2022_64/include/QtWidgets/qwidget.h \
   C:/Users/leanneheroux/Documents/GitHub/QtDoom/QtApplication/Actor.h \
   C:/Users/leanneheroux/Documents/GitHub/QtDoom/QtApplication/Engine.h \
+  C:/Users/leanneheroux/Documents/GitHub/QtDoom/QtApplication/Weapon.h \
   C:/Users/leanneheroux/Documents/GitHub/QtDoom/QtApplication/actor.h \
   C:/Users/leanneheroux/Documents/GitHub/QtDoom/QtApplication/bsp.h \
   C:/Users/leanneheroux/Documents/GitHub/QtDoom/QtApplication/controllermanager.h \
