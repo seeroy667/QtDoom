@@ -68,6 +68,7 @@ void Engine::gameLoop()
     {
         Weapon* weapon = gManager->getPlayer()->getWeapon();
 
+        rManager->setHit(false);
         if (weapon && weapon->canShoot())
         {
             QGraphicsView* m_view = rManager->getView();
@@ -75,15 +76,25 @@ void Engine::gameLoop()
             QPoint viewMousePos   = m_view->mapFromGlobal(globalMousePos);
 
             bool hit = gManager->shoot(viewMousePos, m_view->size());
-
-            float startX = m_view->width()  / 2.0f;
-            float startY = m_view->height();
+            rManager->setHit(hit);
             float endX   = viewMousePos.x();
             float endY   = viewMousePos.y();
-            rManager->renderRay(startX, startY, endX, endY, 5);
+
+            rManager->renderRay(endX, endY, 5);
         }
         cManager->resetShot();
 
+    }
+
+    if(cManager->isReloading())
+    {
+        Weapon* weapon = gManager->getPlayer()->getWeapon();
+
+        if(weapon!=nullptr)
+        {
+            weapon->reload();
+        }
+        cManager->resetReload();
     }
     rManager->render(*gManager->getPlayer(),*gManager->getEnemy(), gManager->getBSP());
     gManager->update(deltaTime, rManager->getRenderedWalls());
