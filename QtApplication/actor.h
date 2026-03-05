@@ -11,7 +11,6 @@ Modifications:
 
 #include"geostructs.h"
 #include "Weapon.h"
-#include <qobject.h>
 
 class Actor {
 private:
