@@ -10,6 +10,7 @@ Modifications:
 #define ACTOR_H
 
 #include"geostructs.h"
+#include "Weapon.h"
 
 class Actor {
 private:
@@ -21,6 +22,9 @@ private:
     float EnemySpeed = 2.0f;
     float dx = 0;
     float dy = 0;
+
+    Weapon* m_weapon = nullptr;
+
 public:
     Actor();
     ~Actor();
@@ -39,6 +43,11 @@ public:
     //Enemy
     float distancePlayerEnemy(const Actor& E, const Actor& P);
     void moveEnemy(const Actor& P, float deltaTime);
+
+    //Weapon
+    void setWeapon(Weapon* w);
+    Weapon* getWeapon() const;
+    bool hasWeapon() const;
 
 };
 

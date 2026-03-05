@@ -8,12 +8,15 @@ Modifications:
 
 #ifndef WEAPON_H
 #define WEAPON_H
+#include <QElapsedTimer>
 
 class Weapon {
 private:
 	int damage;
 	float range;
 	float fireRate;
+    QElapsedTimer m_shootTimer;
+
 public:
 	Weapon(int dmg, float rng, float rate);
 	~Weapon();
@@ -21,6 +24,8 @@ public:
 	int getDamage();
 	float getRange();
 	float getFireRate();
+    bool canShoot();
+    void Shoot();
 };
 
 #endif

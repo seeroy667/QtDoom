@@ -16,6 +16,7 @@ Modifications:
 #include"actor.h"
 #include"geostructs.h"
 #include"bsp.h"
+#include "Weapon.h"
 
 class GameManager
 {
@@ -34,6 +35,7 @@ private:
     std::vector<Actor*> creatures;
     std::vector<Linedef> walls;
     BSP* bsp;
+    Weapon* m_playerWeapon = nullptr;
 };
 
 #endif // GAMEMANAGER_H
