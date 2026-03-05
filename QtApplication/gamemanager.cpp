@@ -40,7 +40,7 @@ void GameManager::loadMap(const std::string& filename)
     bsp = new BSP();
     bsp->build(walls);
 
-    m_playerWeapon = new Weapon(1,1000.0f,2.0f);
+    m_playerWeapon = new Weapon(1, 1000.0f, 2.0f, 10, 2.5f);
     p->setWeapon(m_playerWeapon);
 }
 
@@ -109,8 +109,8 @@ bool GameManager::shoot(QPoint mousePos, QSize screenSize)
     float playerAngle = p->getAngle();
     float cosA        = std::cos(playerAngle);
     float sinA        = std::sin(playerAngle);
-    float worldDirX   =  camDirX * cosA + camDirY * sinA;
-    float worldDirY   = -camDirX * sinA + camDirY * cosA;
+    float worldDirX = camDirX * cosA - camDirY * sinA;
+    float worldDirY = camDirX * sinA + camDirY * cosA;
 
     Vertex playerPos  = p->getPosition();
 
@@ -130,7 +130,6 @@ bool GameManager::shoot(QPoint mousePos, QSize screenSize)
         {
             qDebug() << "Touché à distance:" << d;
             e->takeDamage(weapon->getDamage());
-            weapon->shoot();
             return true;
         }
     }

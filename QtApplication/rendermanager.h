@@ -32,12 +32,14 @@ public:
     void render(Actor m_player, Actor m_enemy, BSP* bsp);
     void renderActor(const Actor m_actor, const Actor m_player, QColor color);
     std::vector<Linedef> getRenderedWalls();
-    void renderRay(float mouseScreenX, float mouseScreenY, float targetScreenX, float targetScreenY, int frames);
+    void renderRay(float targetScreenX, float targetScreenY, int frames);
     float projectHeight(float worldHeight, float distance);
     Vertex coordPlayer(const Vertex& point, const Actor& player);
     QGraphicsView* getView() const;
     void renderGun();
     void updateScreenSize(int width, int height);
+
+    void setHit(bool h) {hit = h;}
 
 private:
     QGraphicsScene* m_scene;
@@ -51,6 +53,8 @@ private:
     float m_rayTargetY = 0;
     float m_rayStartX = 0;
     float m_rayStartY = 0;
+    bool hit = false;
+
 
 
     bool clipWall(Vertex& p1, Vertex& p2);

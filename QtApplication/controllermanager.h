@@ -28,6 +28,9 @@ public:
     bool justShot() { return m_justShot; }
     void resetShot() { m_justShot = false; }
 
+    bool isReloading() {return m_justReload; }
+    void resetReload() {m_justReload = false;}
+
 private:
     bool mFront;
     bool mBack;
@@ -37,6 +40,7 @@ private:
     bool rLeft;
     bool shoot;
     bool m_justShot = false;
+    bool m_justReload = false;
 
 public slots:
     void keyPressedEvent(QKeyEvent * event);

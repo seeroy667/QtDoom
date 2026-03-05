@@ -37,6 +37,10 @@ void ControllerManager::keyPressedEvent(QKeyEvent * event)
         shoot = true;
         m_justShot = true;
     }
+    if(event->key() == Qt::Key_R)
+    {
+        m_justReload = true;
+    }
 }
 
 void ControllerManager::keyReleasedEvent(QKeyEvent * event)

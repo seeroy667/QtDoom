@@ -174,14 +174,12 @@ void RenderManager::renderActor(Actor actor, const Actor player, QColor color)
     spriteItem->setPen(Qt::NoPen);
 }
 
-void RenderManager::renderRay(float mouseScreenX, float mouseScreenY,
-                              float targetScreenX, float targetScreenY, int frames)
+void RenderManager::renderRay(float targetScreenX, float targetScreenY, int frames)
 {
     m_rayFramesLeft = frames;
-    m_rayStartX = mouseScreenX;
-    m_rayStartY = mouseScreenY;
     m_rayTargetX = targetScreenX;
     m_rayTargetY = targetScreenY;
+
 }
 
 void RenderManager::renderGun()
@@ -209,15 +207,17 @@ void RenderManager::render(Actor m_player, Actor m_enemy, BSP* bsp)
     }
     renderActor(m_enemy, m_player, QColor(255,0,0));
 
+    float gunX = (m_screenWidth / 2.0f) - (200 / 2.0f);
+    float gunY = (m_screenHeight - 100);
     if (m_rayFramesLeft > 0)
     {
-        float startX = m_screenWidth / 2.0f;
-        float startY = m_screenHeight / 2.0f;
-        m_scene->addLine(m_rayStartX, m_rayStartY, m_rayTargetX, m_rayTargetY,
-                         QPen(QColor(255, 255, 0), 3));
+        if(hit)
+        {
+            m_scene->addEllipse(m_rayTargetX, m_rayTargetY, 25, 25, QPen(QColor(255, 255, 0), 3),QBrush(QColor(255, 255, 0, 255)));
+        }
+        m_scene->addEllipse(gunX+90,gunY-20,25, 25, QPen(QColor(255, 255, 0), 3),QBrush(QColor(255, 255, 0, 255)));
         m_rayFramesLeft--;
     }
-
     renderGun();
 }
 
