@@ -34,6 +34,7 @@ public:
     int getHealth() {return health;}
     float getAngle() const {return angle;}
     Vertex getPosition() const {return position;}
+    void setPosition(Vertex newPos);
 
     void setAngle(float newAngle);
     void rotate(float deltaAngle);

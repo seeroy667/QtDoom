@@ -19,7 +19,8 @@ Modifications:
 #include"geostructs.h"
 #include"bsp.h"
 #include "Weapon.h"
-#include"mapreader.h"
+#include "mapreader.h"
+#include "collisionmanager.h"
 
 class GameManager: public QObject
 {
@@ -49,6 +50,7 @@ private:
     BSP* bsp = nullptr;
     Weapon* m_playerWeapon = nullptr;
     MapReader* map;
+    CollisionManager* cManager;
 
     // Map data
     std::vector<Vertex> verteces;

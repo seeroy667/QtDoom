@@ -225,8 +225,8 @@ void Engine::gameLoop()
         }
         cManager->resetReload();
     }
-    gManager->update(deltaTime, {});
-    rManager->render(*gManager->getPlayer(),*gManager->getEnemy(), gManager->getBSP(), gManager->getVerteces());
+    rManager->render(*gManager->getPlayer(),*gManager->getEnemy(), gManager->getBSP(), gManager->getVerteces(), gManager->getSectors());
+    gManager->update(deltaTime, rManager->getRenderedWalls());
 
     if(cManager->isPowerUp())
     {

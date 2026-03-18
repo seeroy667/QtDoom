@@ -115,3 +115,8 @@ void Actor::resetPlayerHealth()
 {
     health = 15;
 }
+void Actor::setPosition(Vertex newPos)
+{
+    position = newPos;
+}
+
