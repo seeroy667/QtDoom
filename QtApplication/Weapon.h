@@ -44,6 +44,7 @@ public:
     int   getCurrentAmmo();
     int   getMaxAmmo();
     bool  canShoot();
+    bool  cooldownReady();
     void  reload();
     bool  isReloading();
     bool  isEmpty();
@@ -53,6 +54,7 @@ public:
     bool  isPoweredUp();
     void updateBalles();
     void resetGameAmmo();
+    void setCurrentAmmo(int value);
 
 signals:
     void sigUpdateBalles(int value);
