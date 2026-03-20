@@ -67,20 +67,17 @@ Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& verteces)
 
             if (dxSeg == 0) // vertical segment case
             {
-                qDebug() << "Hello 1";
                 intersection.x = verteces[segments[i].start].x;
                 intersection.y = verteces[node->partition.start].y +
                                  (intersection.x - verteces[node->partition.start].x) * (dyPar / dxPar);
             }
             else if (dxPar == 0) // vertical partition case
             {
-                qDebug() << "Hello 2";
                 intersection.x = verteces[node->partition.start].x;
                 intersection.y = verteces[segments[i].start].y + (intersection.x - verteces[segments[i].start].x) * dySeg / dxSeg;
             }
             else
             {
-                qDebug() << "Hello 3";
                 float slopeSeg = dySeg/dxSeg;
                 float slopePar = dyPar/dxPar;
 
@@ -107,9 +104,6 @@ Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& verteces)
                 vertexIndex = verteces.size() - 1;
             }
 
-            qDebug() << "VertexIndex (intersection): " << vertexIndex << " : " << verteces[vertexIndex].x << verteces[vertexIndex].y;
-            qDebug() << "Segment start: " << segments[i].start << " : " << verteces[segments[i].start].x << verteces[segments[i].start].y;
-            qDebug() << "Segment end: " << segments[i].end << " : " << verteces[segments[i].end].x << verteces[segments[i].end].y;
             // Now, we just devide the segment with the two points and we push.
             Linedef segA = {segments[i].start, vertexIndex, segments[i].sideFront, segments[i].sideBack, segments[i].twoSided};
             Linedef segB = {vertexIndex, segments[i].end, segments[i].sideFront, segments[i].sideBack, segments[i].twoSided};
@@ -165,7 +159,6 @@ void BSP::traverseNode(Node* node, const Vertex& playerPosition, std::vector<Lin
 
 void BSP::build(const std::vector<Linedef>& segments, std::vector<Vertex>& verteces)
 {
-    qDebug() << segments.size();
     delete root;
     root = Builder(segments, verteces);
 }
@@ -198,8 +191,6 @@ void BSP::broadWall(Node* node, const Vertex& playerPosition, std::vector<Linede
     float distance = cross / wallLength;
 
     broadedWalls.push_back(node->partition);
-
-    qDebug() << "Visiting partition:" << node->partition.start << "->" << node->partition.end;
 
     if (distance > radius)
     {
