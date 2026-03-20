@@ -51,7 +51,47 @@ void GameManager::loadMap(const std::string& filename)
 
     m_playerWeapon = new Weapon(1, 1000.0f, 50.0f, 10, 2.5f);
     p->setWeapon(m_playerWeapon);
+    qDebug() << linedefs.size();
     bsp->build(linedefs, verteces);
+
+    qDebug() << "\n=== COLLECTING ALL WALLS FROM BSP TREE ===";
+    std::vector<Linedef> allBSPWalls;
+    collectAllWalls(bsp->getRoot(), allBSPWalls);
+
+    qDebug() << "Total walls in BSP tree:" << allBSPWalls.size();
+    qDebug() << "\n=== ALL WALLS IN BSP TREE ===";
+    for (int i = 0; i < allBSPWalls.size(); i++)
+    {
+        const Linedef& wall = allBSPWalls[i];
+
+        if (wall.start >= verteces.size() || wall.end >= verteces.size())
+        {
+            qDebug() << "[" << i << "] INVALID!" << wall.start << "->" << wall.end
+                     << "(vertices size:" << verteces.size() << ")";
+            continue;
+        }
+
+        const Vertex& v1 = verteces[wall.start];
+        const Vertex& v2 = verteces[wall.end];
+
+        float dx = v2.x - v1.x;
+        float dy = v2.y - v1.y;
+        float length = std::sqrt(dx*dx + dy*dy);
+
+        if (length < 0.01f)
+        {
+            qDebug() << "[" << i << "] DEGENERATE!" << wall.start << "->" << wall.end
+                     << "| both at (" << v1.x << "," << v1.y << ")";
+        }
+        else
+        {
+            qDebug() << "[" << i << "] Wall" << wall.start << "->" << wall.end
+                     << "| (" << v1.x << "," << v1.y << ") to (" << v2.x << "," << v2.y << ")"
+                     << "| length:" << length;
+        }
+    }
+
+    qDebug() << "======================================\n";
 
     cManager = new CollisionManager();
 
@@ -77,11 +117,61 @@ void GameManager::update(float deltaTime, std::vector<Linedef> renderedWalls)
 {
     e->moveEnemy(*p, deltaTime);
 
+    qDebug() << "\n========== FRAME DEBUG ==========";
+    qDebug() << "Player position:" << p->getPosition().x << p->getPosition().y;
+
+    // Debug: Print ALL linedefs in the map
+    qDebug() << "\n=== ALL LINEDEFS IN MAP ===";
+    for (int i = 0; i < linedefs.size(); i++)
+    {
+        const Linedef& ld = linedefs[i];
+        const Vertex& v1 = verteces[ld.start];
+        const Vertex& v2 = verteces[ld.end];
+        qDebug() << "  linedef" << i << ":" << ld.start << "->" << ld.end
+                 << "| v1:(" << v1.x << "," << v1.y << ")"
+                 << "| v2:(" << v2.x << "," << v2.y << ")";
+    }
+
     std::vector<Linedef> broadedWalls;
 
     // Collision detection
     bsp->actorToWallBroading(p->getPosition(), broadedWalls, verteces);
-    cManager->narrowingToCollide(linedefs, verteces, p);
+
+    // Debug: Print broaded walls
+    qDebug() << "\n=== BROADED WALLS (from BSP) ===";
+    qDebug() << "Count:" << broadedWalls.size();
+    for (int i = 0; i < broadedWalls.size(); i++)
+    {
+        const Linedef& wall = broadedWalls[i];
+
+        // Check if indices are valid
+        if (wall.start >= verteces.size() || wall.end >= verteces.size())
+        {
+            qDebug() << "  [" << i << "] INVALID INDICES!" << wall.start << "->" << wall.end
+                     << "(vertices size:" << verteces.size() << ")";
+            continue;
+        }
+
+        const Vertex& v1 = verteces[wall.start];
+        const Vertex& v2 = verteces[wall.end];
+
+        // Calculate distance to wall
+        float dxWall = v2.x - v1.x;
+        float dyWall = v2.y - v1.y;
+        float dxPlayer = p->getPosition().x - v1.x;
+        float dyPlayer = p->getPosition().y - v1.y;
+
+        float cross = dxWall * dyPlayer - dyWall * dxPlayer;
+        float wallLength = std::sqrt(dxWall * dxWall + dyWall * dyWall);
+        float distanceToLine = (wallLength > 0.001f) ? std::abs(cross / wallLength) : 999.0f;
+
+        qDebug() << "  [" << i << "] Wall" << wall.start << "->" << wall.end
+                 << "| v1:(" << v1.x << "," << v1.y << ")"
+                 << "| v2:(" << v2.x << "," << v2.y << ")"
+                 << "| distance:" << distanceToLine;
+    }
+
+    cManager->narrowingToCollide(broadedWalls, verteces, p);
 
     for (Actor* creature : creatures)
     {
@@ -201,3 +291,18 @@ Weapon* GameManager::getWeapon()
 {
     return m_playerWeapon;
 }
+
+
+
+
+
+
+void GameManager::collectAllWalls(Node* node, std::vector<Linedef>& walls)
+{
+    if (!node) return;
+
+    walls.push_back(node->partition);
+    collectAllWalls(node->front, walls);
+    collectAllWalls(node->back, walls);
+}
+

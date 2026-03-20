@@ -47,11 +47,11 @@ Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& verteces)
         float crossProductEnd = (deltaXSegmentEnd * deltaYPartition) - (deltaYSegmentEnd * deltaXPartition);
         float crossProductStart = (deltaXSegmentStart * deltaYPartition) - (deltaYSegmentStart * deltaXPartition);
 
-        if (crossProductEnd > 0 && crossProductStart > 0)
+        if (crossProductEnd >= 0 && crossProductStart >= 0)
         { // is in front (arbitrarilly), i.e. all point of the line are in front of the partition line
             frontLines.push_back(segments[i]);
         }
-        else if (crossProductEnd < 0 && crossProductStart < 0)
+        else if (crossProductEnd <= 0 && crossProductStart <= 0)
         { // is at the back (arbitrarilly), i.e. all the points of the line are at the back of the partition line
             backLines.push_back(segments[i]);
         }
@@ -67,17 +67,20 @@ Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& verteces)
 
             if (dxSeg == 0) // vertical segment case
             {
+                qDebug() << "Hello 1";
                 intersection.x = verteces[segments[i].start].x;
-                if (dxPar != 0) intersection.y = verteces[node->partition.start].y + (intersection.x - verteces[node->partition.start].x) * (dyPar / dxPar); // vertical partition case
-                else intersection.y = verteces[segments[i].start].y;
+                intersection.y = verteces[node->partition.start].y +
+                                 (intersection.x - verteces[node->partition.start].x) * (dyPar / dxPar);
             }
             else if (dxPar == 0) // vertical partition case
             {
+                qDebug() << "Hello 2";
                 intersection.x = verteces[node->partition.start].x;
                 intersection.y = verteces[segments[i].start].y + (intersection.x - verteces[segments[i].start].x) * dySeg / dxSeg;
             }
             else
             {
+                qDebug() << "Hello 3";
                 float slopeSeg = dySeg/dxSeg;
                 float slopePar = dyPar/dxPar;
 
@@ -89,7 +92,7 @@ Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& verteces)
                 intersection.x = (bSeg - bPar) / (slopePar - slopeSeg);
                 intersection.y = (slopeSeg*intersection.x) + bSeg;
             }
-            /*
+
             auto found = std::find_if(verteces.begin(), verteces.end(),
                                       [&](const Vertex& v) {
                                           return fabs(v.x - intersection.x) < 0.001f &&
@@ -97,18 +100,16 @@ Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& verteces)
                                       });
 
             int vertexIndex = 0;
-            qDebug() << std::distance(verteces.begin(), found);;
             if (found != verteces.end()) {
                 vertexIndex = std::distance(verteces.begin(), found);
             } else {
                 verteces.push_back(intersection);
                 vertexIndex = verteces.size() - 1;
             }
-            */
 
-            verteces.push_back(intersection);
-            int vertexIndex = verteces.size() - 1;
-
+            qDebug() << "VertexIndex (intersection): " << vertexIndex << " : " << verteces[vertexIndex].x << verteces[vertexIndex].y;
+            qDebug() << "Segment start: " << segments[i].start << " : " << verteces[segments[i].start].x << verteces[segments[i].start].y;
+            qDebug() << "Segment end: " << segments[i].end << " : " << verteces[segments[i].end].x << verteces[segments[i].end].y;
             // Now, we just devide the segment with the two points and we push.
             Linedef segA = {segments[i].start, vertexIndex, segments[i].sideFront, segments[i].sideBack, segments[i].twoSided};
             Linedef segB = {vertexIndex, segments[i].end, segments[i].sideFront, segments[i].sideBack, segments[i].twoSided};
@@ -164,6 +165,7 @@ void BSP::traverseNode(Node* node, const Vertex& playerPosition, std::vector<Lin
 
 void BSP::build(const std::vector<Linedef>& segments, std::vector<Vertex>& verteces)
 {
+    qDebug() << segments.size();
     delete root;
     root = Builder(segments, verteces);
 }
@@ -185,7 +187,7 @@ void BSP::broadWall(Node* node, const Vertex& playerPosition, std::vector<Linede
     float dxPlayer = playerPosition.x - verteces[node->partition.start].x;
     float dyPlayer = playerPosition.y - verteces[node->partition.start].y;
 
-    float cross = dxPartition * dyPlayer - dyPartition * dxPlayer;
+    float cross = dxPlayer * dyPartition - dyPlayer * dxPartition;
 
     // Here, we decide to not only broad the wall, but to do some volume culling.
     // We check if the player is at a reasonable distance of the wall. If he is, we add it to the valid walls.
@@ -196,6 +198,8 @@ void BSP::broadWall(Node* node, const Vertex& playerPosition, std::vector<Linede
     float distance = cross / wallLength;
 
     broadedWalls.push_back(node->partition);
+
+    qDebug() << "Visiting partition:" << node->partition.start << "->" << node->partition.end;
 
     if (distance > radius)
     {

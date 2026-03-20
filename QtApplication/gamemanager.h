@@ -43,6 +43,8 @@ public:
     Weapon* getWeapon();
     void restartGame();
 
+    void collectAllWalls(Node* node, std::vector<Linedef>& walls);
+
 private:
     Actor *p;
     Actor *e;

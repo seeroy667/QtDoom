@@ -24,7 +24,7 @@ Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QG
     m_scene = scene;
     m_view = view;
 
-    QString mapPath = QCoreApplication::applicationDirPath() + "/../../WadLvl1.txt";
+    QString mapPath = QCoreApplication::applicationDirPath() + "/../../WadLvl2.txt";
     gManager->loadMap(mapPath.toStdString());
 
     connect(uiManager, SIGNAL(startGame()), this, SLOT(start()));

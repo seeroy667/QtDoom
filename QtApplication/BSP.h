@@ -31,6 +31,8 @@ public:
 
     void broadWall(Node* node, const Vertex& playerPosition, std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& verteces);
     void actorToWallBroading(const Vertex& actorPosition, std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& verteces);
+
+    Node* getRoot() const { return root; };
 private:
     Node* root;
 };
