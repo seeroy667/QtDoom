@@ -36,6 +36,8 @@ set(PROJECT_SOURCES
         levelpage.h
         menupage.cpp
         menupage.h
+        collisionmanager.cpp
+        collisionmanager.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
