@@ -65,16 +65,24 @@ void GameManager::update(float deltaTime, std::vector<Linedef> renderedWalls)
 {
     e->moveEnemy(*p, deltaTime);
 
+
     std::vector<Linedef> broadedWalls;
 
     // Collision detection
     bsp->actorToWallBroading(p->getPosition(), broadedWalls, verteces);
-
     cManager->narrowingToCollide(broadedWalls, verteces, p);
+
+    // TEST CODE TO BE REPLACED WHEN HANDLING ENEMY SPAWN
+    broadedWalls.clear();
+    bsp->actorToWallBroading(e->getPosition(), broadedWalls, verteces);
+    cManager->narrowingToCollide(broadedWalls, verteces, e);
+    // END OF TEST CODE
 
     for (Actor* creature : creatures)
     {
-        cManager->narrowingToCollide(linedefs, verteces, creature);
+        broadedWalls.clear();
+        bsp->actorToWallBroading(creature->getPosition(), broadedWalls, verteces);
+        cManager->narrowingToCollide(broadedWalls, verteces, creature);
     }
 
     // Enemy damage detection

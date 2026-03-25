@@ -47,11 +47,11 @@ Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& verteces)
         float crossProductEnd = (deltaXSegmentEnd * deltaYPartition) - (deltaYSegmentEnd * deltaXPartition);
         float crossProductStart = (deltaXSegmentStart * deltaYPartition) - (deltaYSegmentStart * deltaXPartition);
 
-        if (crossProductEnd >= 0 && crossProductStart >= 0)
+        if (crossProductEnd <= 0 && crossProductStart <= 0)
         { // is in front (arbitrarilly), i.e. all point of the line are in front of the partition line
             frontLines.push_back(segments[i]);
         }
-        else if (crossProductEnd <= 0 && crossProductStart <= 0)
+        else if (crossProductEnd >= 0 && crossProductStart >= 0)
         { // is at the back (arbitrarilly), i.e. all the points of the line are at the back of the partition line
             backLines.push_back(segments[i]);
         }
@@ -108,7 +108,7 @@ Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& verteces)
             Linedef segA = {segments[i].start, vertexIndex, segments[i].sideFront, segments[i].sideBack, segments[i].twoSided};
             Linedef segB = {vertexIndex, segments[i].end, segments[i].sideFront, segments[i].sideBack, segments[i].twoSided};
 
-            if (crossProductStart > 0)
+            if (crossProductStart < 0)
             {
                 frontLines.push_back(segA);
                 backLines.push_back(segB);
@@ -143,7 +143,7 @@ void BSP::traverseNode(Node* node, const Vertex& playerPosition, std::vector<Lin
 
     float cross = dxPartition * dyPlayer - dyPartition * dxPlayer;
 
-    if (cross < 0)
+    if (cross > 0)
     {
         traverseNode(node->back, playerPosition, walls, verteces);
         walls.push_back(node->partition);
@@ -192,11 +192,11 @@ void BSP::broadWall(Node* node, const Vertex& playerPosition, std::vector<Linede
 
     broadedWalls.push_back(node->partition);
 
-    if (distance > radius)
+    if (distance < -radius)
     {
         broadWall(node->front, playerPosition, broadedWalls, verteces);
     }
-    else if (distance < -radius)
+    else if (distance > radius)
     {
         broadWall(node->back, playerPosition, broadedWalls, verteces);
     }
