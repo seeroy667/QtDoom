@@ -33,8 +33,30 @@ public:
     void actorToWallBroading(const Vertex& actorPosition, std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& verteces);
 
     Node* getRoot() const { return root; };
+
+    std::vector<Vertex> collectValidSpawnPoints(const std::vector<Vertex>& verteces,
+                                                float minDistToWall);
+
 private:
     Node* root;
+    bool isPointInsideMap(const Vertex& point,
+                          const std::vector<Vertex>& verteces);
+
+    void collectAllWalls(Node* node, std::vector<Linedef>& walls);
+
+    void collectSpawnCandidates(Node* node,
+                                const std::vector<Vertex>& verteces,
+                                float minDistToWall,
+                                std::vector<Vertex>& candidates);
+
+    float distancePointToSegment(const Vertex& point,
+                                 const Vertex& segStart,
+                                 const Vertex& segEnd);
+
+    bool isFarEnoughFromAllWalls(const Vertex& candidate,
+                                 Node* node,
+                                 const std::vector<Vertex>& verteces,
+                                 float minDist);
 };
 
 #endif

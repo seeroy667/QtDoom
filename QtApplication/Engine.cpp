@@ -225,7 +225,8 @@ void Engine::gameLoop()
         }
         cManager->resetReload();
     }
-    rManager->render(*gManager->getPlayer(),*gManager->getEnemy(), gManager->getBSP(), gManager->getVerteces(), gManager->getSectors());
+    rManager->render(*gManager->getPlayer(), gManager->getCreatures(),
+                     gManager->getBSP(), gManager->getVerteces(), gManager->getSectors());
     gManager->update(deltaTime, rManager->getRenderedWalls());
 
     if(cManager->isPowerUp())
@@ -237,6 +238,7 @@ void Engine::gameLoop()
         }
         cManager->resetPowerUp();
     }
+    gManager->getPlayer()->getWeapon()->updatePowerUp();
     // Synchroniser les balles avec la valeur recue de l'Arduino
     if (weapon && cManager->getMunition() >= 0)
         weapon->setCurrentAmmo(cManager->getMunition());

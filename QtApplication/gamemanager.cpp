@@ -51,9 +51,11 @@ void GameManager::loadMap(const std::string& filename)
 
     m_playerWeapon = new Weapon(1, 1000.0f, 50.0f, 10, 2.5f);
     p->setWeapon(m_playerWeapon);
-    bsp->build(linedefs, verteces);
 
+    bsp->build(linedefs, verteces);
     cManager = new CollisionManager();
+
+     m_spawnPoints = bsp->collectValidSpawnPoints(verteces, 5.0f);
 }
 
 BSP* GameManager::getBSP()
@@ -61,53 +63,104 @@ BSP* GameManager::getBSP()
     return bsp;
 }
 
+void GameManager::spawnWave(int count)
+{
+    if(m_spawnPoints.empty())
+    {
+        qDebug() << "Aucun spawn point sur la map";
+        return;
+    }
+
+    std::vector<Vertex> shuffled = m_spawnPoints;
+    for(int i = (int)shuffled.size() - 1; i > 0; i--)
+    {
+        int j = rand() % (i+1);
+        std::swap(shuffled[i], shuffled[j]);
+    }
+
+    int spawned = 0;
+    for(const Vertex& pos : shuffled)
+    {
+        if(spawned >= count) break;
+
+        float dx = pos.x - p->getPosition().x;
+        float dy = pos.y - p->getPosition().y;
+        if(std::sqrt(dx*dx + dy*dy) < 5.0f) continue;
+
+        Actor* enemy = new Actor();
+        enemy->setPosition(pos.x,pos.y);
+        enemy->setAngle(0.0f);
+        creatures.push_back(enemy);
+        spawned++;
+    }
+
+}
+
+bool GameManager::isWaveClear() const
+{
+    for(Actor* e : creatures)
+        if(e->getHealth() > 0) return false;
+    return true;
+}
+
 void GameManager::update(float deltaTime, std::vector<Linedef> renderedWalls)
 {
-    e->moveEnemy(*p, deltaTime);
-
-    std::vector<Linedef> broadedWalls;
-
-    // Collision detection
-    bsp->actorToWallBroading(p->getPosition(), broadedWalls, verteces);
-
-    cManager->narrowingToCollide(broadedWalls, verteces, p);
-
-    for (Actor* creature : creatures)
+    // --- Vagues ---
+    if (!m_waveActive)
     {
-        cManager->narrowingToCollide(linedefs, verteces, creature);
-    }
-
-    // Enemy damage detection
-    if (inRadius(p, e))
-    {
-
-        if (e->getHealth() == 0) return;
-
-        if(!m_inContact)
+        m_currentWave++;
+        if (m_currentWave <= (int)m_waveSizes.size())
         {
-            m_inContact = true;
-            m_enemyAttackTimer.restart();
-            p->takeDamage(1);
-            updateVie();
-        }
-        else if(m_enemyAttackTimer.elapsed() >= m_attackCooldown)
-        {
-            m_inContact = false;
-            p->takeDamage(1);
-            updateVie();
-            m_enemyAttackTimer.restart();
-        }
-
-        if (p->getHealth() < 1)
-        {
-            //qDebug("Player Dead");
-            emit playerDead();
+            for (Actor* a : creatures) delete a;
+            creatures.clear();
+            spawnWave(m_waveSizes[m_currentWave - 1]);
+            m_waveActive = true;
         }
     }
-    else
+    else if (isWaveClear())
     {
-        e->setMovement(true);
-        m_inContact = false;
+        m_waveActive = false;
+    }
+
+    // --- Collision joueur ---
+   // std::vector<Linedef> broadedWalls;
+    //bsp->actorToWallBroading(p->getPosition(), broadedWalls, verteces);
+    //cManager->narrowingToCollide(broadedWalls, verteces, p);
+
+    // --- Mise à jour creatures (PAS e) ---
+    for (Actor* enemy : creatures)
+    {
+        if (enemy->getHealth() <= 0) continue;
+
+        enemy->setMovement(true);
+        enemy->moveEnemy(*p, deltaTime);
+
+        // Collision ennemi avec les murs
+        std::vector<Linedef> enemyWalls;
+        bsp->actorToWallBroading(enemy->getPosition(), enemyWalls, verteces);
+        cManager->narrowingToCollide(enemyWalls, verteces, enemy);
+
+        // Dégâts au joueur
+        if (inRadius(p, enemy))
+        {
+            if (!m_inContact)
+            {
+                m_inContact = true;
+                m_enemyAttackTimer.restart();
+                p->takeDamage(1);
+                updateVie();
+            }
+            else if (m_enemyAttackTimer.elapsed() >= m_attackCooldown)
+            {
+                m_inContact = false;
+                p->takeDamage(1);
+                updateVie();
+                m_enemyAttackTimer.restart();
+            }
+
+            if (p->getHealth() < 1)
+                emit playerDead();
+        }
     }
 }
 
@@ -192,10 +245,6 @@ Weapon* GameManager::getWeapon()
 }
 
 
-
-
-
-
 void GameManager::collectAllWalls(Node* node, std::vector<Linedef>& walls)
 {
     if (!node) return;
@@ -204,4 +253,6 @@ void GameManager::collectAllWalls(Node* node, std::vector<Linedef>& walls)
     collectAllWalls(node->front, walls);
     collectAllWalls(node->back, walls);
 }
+
+
 

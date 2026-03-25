@@ -216,3 +216,144 @@ float crossProduct(Linedef l1, Linedef l2)
 {
     return 0.1f;
 }
+
+float BSP::distancePointToSegment(const Vertex& point,const Vertex& segStart,const Vertex& segEnd)
+{
+    float dx = segEnd.x - segStart.x;
+    float dy = segEnd.y - segStart.y;
+    float lengthSq = dx*dx + dy*dy;
+
+    if(lengthSq < 0.00001f)
+    {
+        float ex = point.x - segStart.x;
+        float ey = point.y - segStart.y;
+        return std::sqrt(ex*ex + ey*ey);
+    }
+    float t = ((point.x - segStart.x)*dx + (point.y - segStart.y)*dy) / lengthSq;
+
+    float closestX = segStart.x + t * dx;
+    float closestY = segStart.y + t * dy;
+
+    float ex = point.x - closestX;
+    float ey = point.y - closestY;
+    return std::sqrt(ex*ex + ey*ey);
+}
+
+bool BSP::isFarEnoughFromAllWalls(const Vertex& candidate,
+                                  Node* node,
+                                  const std::vector<Vertex>& verteces,
+                                  float minDist)
+{
+    if (!node) return true;
+
+    const Vertex& wStart = verteces[node->partition.start];
+    const Vertex& wEnd   = verteces[node->partition.end];
+
+    float dist = distancePointToSegment(candidate, wStart, wEnd);
+    if (dist < minDist)
+        return false;
+
+
+    float dx    = wEnd.x - wStart.x;
+    float dy    = wEnd.y - wStart.y;
+    float cross = (candidate.x - wStart.x) * dy - (candidate.y - wStart.y) * dx;
+
+    if (cross >= 0)
+        return isFarEnoughFromAllWalls(candidate, node->front, verteces, minDist);
+    else
+        return isFarEnoughFromAllWalls(candidate, node->back, verteces, minDist);
+}
+
+
+bool BSP::isPointInsideMap(const Vertex& point,
+                           const std::vector<Vertex>& verteces)
+{
+    std::vector<Linedef> allWalls;
+    collectAllWalls(root, allWalls);
+
+    int intersections = 0;
+
+    for (const Linedef& wall : allWalls)
+    {
+        const Vertex& v1 = verteces[wall.start];
+        const Vertex& v2 = verteces[wall.end];
+
+        // Rayon vers +X depuis le point
+        // Le mur doit traverser la hauteur Y du point
+        if ((v1.y <= point.y && v2.y > point.y) ||
+            (v2.y <= point.y && v1.y > point.y))
+        {
+            // X d'intersection du mur avec le rayon horizontal
+            float t = (point.y - v1.y) / (v2.y - v1.y);
+            float intersectX = v1.x + t * (v2.x - v1.x);
+
+            if (intersectX > point.x)
+                intersections++;
+        }
+    }
+
+    // Impair = intérieur, pair = extérieur
+    return (intersections % 2) == 1;
+}
+
+void BSP::collectAllWalls(Node* node, std::vector<Linedef>& walls)
+{
+    if (!node) return;
+    walls.push_back(node->partition);
+    collectAllWalls(node->front, walls);
+    collectAllWalls(node->back, walls);
+}
+void BSP::collectSpawnCandidates(Node* node,
+                                 const std::vector<Vertex>& verteces,
+                                 float minDistToWall,
+                                 std::vector<Vertex>& candidates)
+{
+    if (!node) return;
+
+    const Vertex& wStart = verteces[node->partition.start];
+    const Vertex& wEnd   = verteces[node->partition.end];
+
+    Vertex wallMid = {
+        (wStart.x + wEnd.x) / 2.0f,
+        (wStart.y + wEnd.y) / 2.0f
+    };
+
+    float dx  = wEnd.x - wStart.x;
+    float dy  = wEnd.y - wStart.y;
+    float len = std::sqrt(dx*dx + dy*dy);
+
+    if (len > 0.0001f)
+    {
+        float nx = -dy / len;
+        float ny =  dx / len;
+        float offset = minDistToWall * 2.0f;
+
+        Vertex frontCandidate = { wallMid.x + nx * offset,
+                                 wallMid.y + ny * offset };
+        Vertex backCandidate  = { wallMid.x - nx * offset,
+                                wallMid.y - ny * offset };
+
+        if (isPointInsideMap(frontCandidate, verteces) &&
+            isFarEnoughFromAllWalls(frontCandidate, root, verteces, minDistToWall))
+        {
+            candidates.push_back(frontCandidate);
+        }
+
+        if (isPointInsideMap(backCandidate, verteces) &&
+            isFarEnoughFromAllWalls(backCandidate, root, verteces, minDistToWall))
+        {
+            candidates.push_back(backCandidate);
+        }
+    }
+
+    collectSpawnCandidates(node->front, verteces, minDistToWall, candidates);
+    collectSpawnCandidates(node->back,  verteces, minDistToWall, candidates);
+}
+std::vector<Vertex> BSP::collectValidSpawnPoints(const std::vector<Vertex>& verteces,
+                                                 float minDistToWall)
+{
+    std::vector<Vertex> candidates;
+    collectSpawnCandidates(root, verteces, minDistToWall, candidates);
+    qDebug() << "BSP:" << candidates.size() << "spawn points valides";
+    return candidates;
+}

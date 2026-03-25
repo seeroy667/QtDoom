@@ -130,6 +130,7 @@ void Weapon::updatePowerUp()
     }
 }
 
+
 bool Weapon::isPoweredUp() { return m_isPoweredUp; }
 
 bool    Weapon::isEmpty()        { return m_currentAmmo <= 0; }

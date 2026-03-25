@@ -213,7 +213,11 @@ void RenderManager::renderGun()
     gunItem->setBrush(QColor(80,80,80));
 }
 
-void RenderManager::render(Actor m_player, Actor m_enemy, BSP* bsp, const std::vector<Vertex>& verteces, const std::vector<Sector>& sectors)
+void RenderManager::render(Actor m_player,
+                           const std::vector<Actor*>& enemies,
+                           BSP* bsp,
+                           const std::vector<Vertex>& verteces,
+                           const std::vector<Sector>& sectors)
 {
     m_scene->clear();
     bsp->traverse(m_player.getPosition(), renderedWalls, verteces);
@@ -221,7 +225,9 @@ void RenderManager::render(Actor m_player, Actor m_enemy, BSP* bsp, const std::v
     for (const Linedef& wall : renderedWalls) {
         renderWall(wall, verteces, m_player, sectors);
     }
-    //renderActor(m_enemy, m_player, QColor(255,0,0));
+
+    for (Actor* enemy : enemies)
+        renderActor(*enemy, m_player, QColor(255, 0, 0));
 
     float gunX = (m_screenWidth / 2.0f) - (200 / 2.0f);
     float gunY = (m_screenHeight - 100);

@@ -45,6 +45,12 @@ public:
 
     void collectAllWalls(Node* node, std::vector<Linedef>& walls);
 
+
+    void spawnWave(int count);
+    bool isWaveClear() const;
+    int getCurrentWave() const {return m_currentWave;}
+    std::vector<Actor*>& getCreatures(){return creatures;}
+
 private:
     Actor *p;
     Actor *e;
@@ -62,6 +68,11 @@ private:
     QElapsedTimer m_enemyAttackTimer;
     float m_attackCooldown = 1000.0f;
     bool m_inContact = false;
+
+    std::vector<Vertex> m_spawnPoints;
+    std::vector<int> m_waveSizes = {10,20,30};
+    int m_currentWave = 0;
+    bool m_waveActive = false;
 
 signals:
     void sigUpdateVie(int value);
