@@ -105,8 +105,6 @@ bool GameManager::isWaveClear() const
 
 void GameManager::update(float deltaTime, std::vector<Linedef> renderedWalls)
 {
-void GameManager::update(float deltaTime, std::vector<Linedef> renderedWalls)
-{
     // --- Vagues ---
     if (!m_waveActive)
     {
@@ -166,47 +164,7 @@ void GameManager::update(float deltaTime, std::vector<Linedef> renderedWalls)
     }
 }
 
-    // --- Collision joueur ---
-   // std::vector<Linedef> broadedWalls;
-    //bsp->actorToWallBroading(p->getPosition(), broadedWalls, verteces);
-    //cManager->narrowingToCollide(broadedWalls, verteces, p);
 
-    // --- Mise à jour creatures (PAS e) ---
-    for (Actor* enemy : creatures)
-    {
-        if (enemy->getHealth() <= 0) continue;
-
-        enemy->setMovement(true);
-        enemy->moveEnemy(*p, deltaTime);
-
-        // Collision ennemi avec les murs
-        std::vector<Linedef> enemyWalls;
-        bsp->actorToWallBroading(enemy->getPosition(), enemyWalls, verteces);
-        cManager->narrowingToCollide(enemyWalls, verteces, enemy);
-
-        // Dégâts au joueur
-        if (inRadius(p, enemy))
-        {
-            if (!m_inContact)
-            {
-                m_inContact = true;
-                m_enemyAttackTimer.restart();
-                p->takeDamage(1);
-                updateVie();
-            }
-            else if (m_enemyAttackTimer.elapsed() >= m_attackCooldown)
-            {
-                m_inContact = false;
-                p->takeDamage(1);
-                updateVie();
-                m_enemyAttackTimer.restart();
-            }
-
-            if (p->getHealth() < 1)
-                emit playerDead();
-        }
-    }
-}
 
 bool GameManager::inRadius(Actor* p, Actor* e)
 {

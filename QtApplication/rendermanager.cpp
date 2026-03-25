@@ -238,7 +238,7 @@ void RenderManager::render(Actor m_player,
 
 
     for (Actor* enemy : enemies)
-        renderActor(*enemy, m_player, QColor(255, 0, 0))
+       renderActor(enemy, m_player, QColor(255, 0, 0));
 
     float gunX = (m_screenWidth / 2.0f) - (200 / 2.0f);
     float gunY = (m_screenHeight - 100);
