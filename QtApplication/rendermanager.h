@@ -29,8 +29,10 @@ public:
 
     void renderWall(const Linedef& wall, const std::vector<Vertex>& verteces, const Actor& player, const std::vector<Sector>& sectors);
 
+
     void render(Actor m_player, const std::vector<Actor*>& enemies, BSP* bsp, const std::vector<Vertex>& verteces, const std::vector<Sector>& sectors);
-    void renderActor(const Actor m_actor, const Actor m_player, QColor color);
+    void renderActor(Actor* m_actor, const Actor m_player, QColor color);
+
     std::vector<Linedef> getRenderedWalls();
     void renderRay(float targetScreenX, float targetScreenY, int frames);
     float projectHeight(float worldHeight, float distance);

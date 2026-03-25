@@ -225,8 +225,10 @@ void Engine::gameLoop()
         }
         cManager->resetReload();
     }
+
     rManager->render(*gManager->getPlayer(), gManager->getCreatures(),
                      gManager->getBSP(), gManager->getVerteces(), gManager->getSectors());
+
     gManager->update(deltaTime, rManager->getRenderedWalls());
 
     if(cManager->isPowerUp())
@@ -254,7 +256,6 @@ void Engine::gameLoop()
         uiManager->updateBalles(ammo);
     }
 }
-
 
 ControllerManager* Engine::getcManager() const
 {

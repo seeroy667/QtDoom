@@ -4,6 +4,10 @@ Date: Febuary 12, 2026
 File name: Painter.cpp
 Goal: Code for rendering walls.
 Modifications:
+    Date: March 24, 2026
+        Author: Donavan Sirois
+        Description: Added FOV culling and overdraw manager. For a map of 152 walls, 87 were rendered after clipping.
+        After these integrations, for the same map, we render walls.
 */
 
 
@@ -34,14 +38,17 @@ void RenderManager::renderWall(const Linedef& wall, const std::vector<Vertex>& v
     if (!clipWall(p1, p2))
         return;
 
+    // Need to handle FOV culling before rendering the walls.
+    // Need to handle overdraw to only render a small amount of walls.
+
     Vertex screen1 = projectToScreen(p1);
     Vertex screen2 = projectToScreen(p2);
 
-    float height1_floor = projectHeight(sectors[wall.sideFront].floorHeight, p1.y); // wall.floorHeight, p1.y);
-    float height1_ceil  = projectHeight(sectors[wall.sideFront].ceilingHeight, p1.y); // wall.ceilingHeight, p1.y);
+    float height1_floor = projectHeight(sectors[wall.sideFront].floorHeight, p1.y);
+    float height1_ceil  = projectHeight(sectors[wall.sideFront].ceilingHeight, p1.y);
 
-    float height2_floor = projectHeight(sectors[wall.sideFront].floorHeight, p2.y); // wall.floorHeight, p2.y);
-    float height2_ceil  = projectHeight(sectors[wall.sideFront].ceilingHeight, p2.y); // wall.ceilingHeight, p2.y);
+    float height2_floor = projectHeight(sectors[wall.sideFront].floorHeight, p2.y);
+    float height2_ceil  = projectHeight(sectors[wall.sideFront].ceilingHeight, p2.y);
 
     QPolygonF polygon;
     polygon << QPointF(screen1.x, height1_ceil)
@@ -141,11 +148,11 @@ float RenderManager::projectHeight(float worldHeight, float distance)
 }
 
 
-void RenderManager::renderActor(Actor actor, const Actor player, QColor color)
+void RenderManager::renderActor(Actor* actor, const Actor player, QColor color)
 {
-    if (actor.getHealth() <= 0) return;
+    if (actor->getHealth() <= 0) return;
 
-    Vertex camPos = coordPlayer(actor.getPosition(), player);
+    Vertex camPos = coordPlayer(actor->getPosition(), player);
 
 
     if (camPos.y < distanceMin)
@@ -213,6 +220,7 @@ void RenderManager::renderGun()
     gunItem->setBrush(QColor(80,80,80));
 }
 
+
 void RenderManager::render(Actor m_player,
                            const std::vector<Actor*>& enemies,
                            BSP* bsp,
@@ -222,12 +230,15 @@ void RenderManager::render(Actor m_player,
     m_scene->clear();
     bsp->traverse(m_player.getPosition(), renderedWalls, verteces);
 
+    qDebug() << renderedWalls.size();
+
     for (const Linedef& wall : renderedWalls) {
         renderWall(wall, verteces, m_player, sectors);
     }
 
+
     for (Actor* enemy : enemies)
-        renderActor(*enemy, m_player, QColor(255, 0, 0));
+        renderActor(*enemy, m_player, QColor(255, 0, 0))
 
     float gunX = (m_screenWidth / 2.0f) - (200 / 2.0f);
     float gunY = (m_screenHeight - 100);
