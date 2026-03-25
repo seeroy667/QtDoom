@@ -199,11 +199,6 @@ Weapon* GameManager::getWeapon()
     return m_playerWeapon;
 }
 
-
-
-
-
-
 void GameManager::collectAllWalls(Node* node, std::vector<Linedef>& walls)
 {
     if (!node) return;
@@ -213,3 +208,10 @@ void GameManager::collectAllWalls(Node* node, std::vector<Linedef>& walls)
     collectAllWalls(node->back, walls);
 }
 
+Actor* GameManager::getRenderedEnemy()
+{
+    if (bsp->enemyRendering(p->getPosition(), e->getPosition(), verteces))
+        return e;
+
+    return nullptr;
+}

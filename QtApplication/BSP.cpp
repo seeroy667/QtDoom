@@ -85,7 +85,7 @@ Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& verteces)
                 float bPar = verteces[node->partition.end].y - (slopePar*verteces[node->partition.end].x);
 
                 // Now, we find the intersection point.
-                //This could be done from the biginning, but for readability, we created new variables.
+                // This could be done from the biginning, but for readability, we created new variables.
                 intersection.x = (bSeg - bPar) / (slopePar - slopeSeg);
                 intersection.y = (slopeSeg*intersection.x) + bSeg;
             }
@@ -205,6 +205,46 @@ void BSP::broadWall(Node* node, const Vertex& playerPosition, std::vector<Linede
         broadWall(node->front, playerPosition, broadedWalls, verteces);
         broadWall(node->back, playerPosition, broadedWalls, verteces);
     }
+}
+
+bool BSP::enemyRendering(const Vertex& playerPosition, const Vertex& enemyPosition, const std::vector<Vertex>& verteces)
+{
+    return enemyRenderingCheck(root, playerPosition, enemyPosition, verteces);
+}
+
+bool BSP::enemyRenderingCheck(Node* node, const Vertex& playerPosition, const Vertex& enemyPosition, const std::vector<Vertex>& verteces)
+{
+    if (!node) return true;
+
+    float rx = enemyPosition.x - playerPosition.x;
+    float ry = enemyPosition.y - playerPosition.y;
+
+    float sx = verteces[node->partition.end].x - verteces[node->partition.start].x;
+    float sy = verteces[node->partition.end].y - verteces[node->partition.start].y;
+
+    float cross = rx * sy - ry * sx;
+
+    if (std::abs(cross) > 0)
+    {
+        float dx = verteces[node->partition.start].x - playerPosition.x;
+        float dy = verteces[node->partition.start].y - playerPosition.y;
+
+        float t = (dx * sy - dy * sx) / cross;
+        float s = (dx * ry - dy * rx) / cross;
+
+        if (t >= 0.0f && t <= 1.0f && s >= 0.0f && s <= 1.0f) return false;
+    }
+
+    float dxPartition = verteces[node->partition.end].x - verteces[node->partition.start].x;
+    float dyPartition = verteces[node->partition.end].y - verteces[node->partition.start].y;
+    float dxPlayer = playerPosition.x - verteces[node->partition.start].x;
+    float dyPlayer = playerPosition.y - verteces[node->partition.start].y;
+    cross = dxPlayer * dyPartition - dyPlayer * dxPartition;
+
+    if (!enemyRenderingCheck(node->front, playerPosition, enemyPosition, verteces))
+        return false;
+
+    return enemyRenderingCheck(node->back, playerPosition, enemyPosition, verteces);
 }
 
 float crossProduct(Vertex v, Linedef l)

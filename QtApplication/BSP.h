@@ -12,6 +12,7 @@ Modifications:
 #include<QDebug>
 
 #include"geostructs.h"
+#include"actor.h"
 
 struct Node
 {
@@ -24,13 +25,20 @@ class BSP
 {
 public:
     BSP();
+
+    // Builders and traversal front to back
     Node* Builder(std::vector<Linedef> segments, std::vector<Vertex>& verteces);
     void traverse(const Vertex& playerPosition, std::vector<Linedef>& renderedWalls, const std::vector<Vertex>& verteces);
     void traverseNode(Node* node, const Vertex& playerPos, std::vector<Linedef>& walls, const std::vector<Vertex>& verteces);
     void build(const std::vector<Linedef>& segments, std::vector<Vertex>& verteces);
 
+    // For collision on all actors
     void broadWall(Node* node, const Vertex& playerPosition, std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& verteces);
     void actorToWallBroading(const Vertex& actorPosition, std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& verteces);
+
+    // For enemy rendering
+    bool enemyRendering(const Vertex& playerPosition, const Vertex& enemyPosition, const std::vector<Vertex>& verteces);
+    bool enemyRenderingCheck(Node* node, const Vertex& playerPosition, const Vertex& enemyPosition, const std::vector<Vertex>& verteces);
 
     Node* getRoot() const { return root; };
 private:

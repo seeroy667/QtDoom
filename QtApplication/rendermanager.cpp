@@ -148,11 +148,11 @@ float RenderManager::projectHeight(float worldHeight, float distance)
 }
 
 
-void RenderManager::renderActor(Actor actor, const Actor player, QColor color)
+void RenderManager::renderActor(Actor* actor, const Actor player, QColor color)
 {
-    if (actor.getHealth() <= 0) return;
+    if (actor->getHealth() <= 0) return;
 
-    Vertex camPos = coordPlayer(actor.getPosition(), player);
+    Vertex camPos = coordPlayer(actor->getPosition(), player);
 
 
     if (camPos.y < distanceMin)
@@ -220,7 +220,7 @@ void RenderManager::renderGun()
     gunItem->setBrush(QColor(80,80,80));
 }
 
-void RenderManager::render(Actor m_player, Actor m_enemy, BSP* bsp, const std::vector<Vertex>& verteces, const std::vector<Sector>& sectors)
+void RenderManager::render(Actor m_player, Actor* m_enemy, BSP* bsp, const std::vector<Vertex>& verteces, const std::vector<Sector>& sectors)
 {
     m_scene->clear();
     bsp->traverse(m_player.getPosition(), renderedWalls, verteces);
@@ -230,7 +230,10 @@ void RenderManager::render(Actor m_player, Actor m_enemy, BSP* bsp, const std::v
     for (const Linedef& wall : renderedWalls) {
         renderWall(wall, verteces, m_player, sectors);
     }
-    renderActor(m_enemy, m_player, QColor(255,0,0));
+    if (m_enemy != nullptr)
+    {
+        renderActor(m_enemy, m_player, QColor(255,0,0));
+    }
 
     float gunX = (m_screenWidth / 2.0f) - (200 / 2.0f);
     float gunY = (m_screenHeight - 100);
