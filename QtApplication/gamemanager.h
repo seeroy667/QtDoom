@@ -43,7 +43,7 @@ public:
     Weapon* getWeapon();
     void restartGame();
 
-    Actor* getRenderedEnemy();
+    std::vector<Actor*> getRenderedEnemy();
 
     void collectAllWalls(Node* node, std::vector<Linedef>& walls);
 

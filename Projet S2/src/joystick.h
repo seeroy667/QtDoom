@@ -16,11 +16,9 @@ Code pour le joystick
 
 #define JOYSTICK_X A0
 #define JOYSTICK_Y A1
-#define JOYSTICK_SW 45
+
 
 void joystick_setup();
-
-bool isButtonPressed();
 
 int readJoystick_x();
 

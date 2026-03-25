@@ -8,13 +8,9 @@ void joystick_setup()
 {
     pinMode(JOYSTICK_X, INPUT);
     pinMode(JOYSTICK_Y, INPUT);
-    pinMode(JOYSTICK_SW, INPUT);
 }
 
-bool isButtonPressed()
-{
-    return (digitalRead(JOYSTICK_SW));
-}
+
 
 int readJoystick_x()
 {

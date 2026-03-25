@@ -298,7 +298,7 @@ bool BSP::isFarEnoughFromAllWalls(const Vertex& candidate,
     float dy    = wEnd.y - wStart.y;
     float cross = (candidate.x - wStart.x) * dy - (candidate.y - wStart.y) * dx;
 
-    if (cross >= 0)
+    if (cross <= 0)
         return isFarEnoughFromAllWalls(candidate, node->front, verteces, minDist);
     else
         return isFarEnoughFromAllWalls(candidate, node->back, verteces, minDist);

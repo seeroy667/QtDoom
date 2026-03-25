@@ -230,13 +230,11 @@ void RenderManager::render(Actor m_player,
     m_scene->clear();
     bsp->traverse(m_player.getPosition(), renderedWalls, verteces);
 
-    qDebug() << renderedWalls.size();
-
     for (const Linedef& wall : renderedWalls) {
         renderWall(wall, verteces, m_player, sectors);
     }
 
-
+    qDebug() << enemies.size();
     for (Actor* enemy : enemies)
        renderActor(enemy, m_player, QColor(255, 0, 0));
 

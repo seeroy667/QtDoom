@@ -257,11 +257,15 @@ void GameManager::collectAllWalls(Node* node, std::vector<Linedef>& walls)
 }
 
 
-Actor* GameManager::getRenderedEnemy()
+std::vector<Actor*> GameManager::getRenderedEnemy()
 {
-    if (bsp->enemyRendering(p->getPosition(), e->getPosition(), verteces))
-        return e;
+    std::vector<Actor*> enemies;
+    for (Actor* enemy : creatures)
+    {
+        if (bsp->enemyRendering(p->getPosition(), enemy->getPosition(), verteces))
+            enemies.push_back(enemy);
+    }
 
-    return nullptr;
+    return enemies;
 }
 
