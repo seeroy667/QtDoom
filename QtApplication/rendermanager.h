@@ -58,6 +58,7 @@ private:
     float m_rayStartY = 0;
     bool hit = false;
     QPixmap m_wallTexture;
+    QPixmap m_enemyTexture;
     bool m_isPowerUpActive = false;
 
 

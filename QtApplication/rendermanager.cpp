@@ -27,6 +27,7 @@ RenderManager::RenderManager(QGraphicsScene* scene, int screenWidth, int screenH
     m_screenHeight = screenHeight;
 
     m_wallTexture = QPixmap(":/ressources/temp.jpg");
+    m_enemyTexture = QPixmap(":/ressources/enemy.jpg");
 }
 
 
@@ -184,18 +185,33 @@ void RenderManager::renderActor(Actor* actor, const Actor player, QColor color)
         return;
 
 
-    int brightness = std::max(0, std::min(255,
-                                          (int)(255.0f / (1.0f + camPos.y / 10.0f))));
-    QColor shadedColor(
-        color.red()   * brightness / 255,
-        color.green() * brightness / 255,
-        color.blue()  * brightness / 255
-        );
-
-
     QGraphicsRectItem* spriteItem = m_scene->addRect(spriteRect);
-    spriteItem->setBrush(shadedColor);
     spriteItem->setPen(Qt::NoPen);
+    if (!m_enemyTexture.isNull())
+    {
+        float scaleX = squareSize / m_enemyTexture.width();
+        float scaleY = squareSize / m_enemyTexture.height();
+
+        QTransform transform;
+        transform.translate(spriteRect.left(), spriteRect.top());
+        transform.scale(scaleX, scaleY);
+
+        QBrush textureBrush(m_enemyTexture);
+        textureBrush.setTransform(transform);
+
+        spriteItem->setBrush(textureBrush);
+    }
+    else
+    {
+        int brightness = std::max(0, std::min(255,
+                                              (int)(255.0f / (1.0f + camPos.y / 10.0f))));
+        QColor shadedColor(
+            color.red()   * brightness / 255,
+            color.green() * brightness / 255,
+            color.blue()  * brightness / 255
+            );
+        spriteItem->setBrush(shadedColor);
+    }
 }
 
 void RenderManager::renderRay(float targetScreenX, float targetScreenY, int frames)

@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>ressources/temp.jpg</file>
+        <file>ressources/enemy.jpg</file>
     </qresource>
 </RCC>
