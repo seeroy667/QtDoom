@@ -51,7 +51,7 @@ private:
     float m_smoothX = -1.0f;
     float m_smoothY = -1.0f;
 
-    static constexpr float CURSOR_LERP_SPEED = 6.0f;
+    static constexpr float CURSOR_LERP_SPEED = 8.0f;
 
 
     static constexpr int   BORDER_ZONE       = 40;

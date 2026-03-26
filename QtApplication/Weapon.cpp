@@ -65,7 +65,7 @@ void Weapon::reload()
 
 bool Weapon::isReloading()
 {
-    while (m_isReloading)
+    if (m_isReloading)
     {
         if (m_reloadTimer.elapsed() >= m_reloadTime * 1000.0f)
         {
