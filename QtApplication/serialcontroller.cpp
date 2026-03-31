@@ -49,9 +49,7 @@ void SerialController::closePort()
         serial->close();
 }
 
-// -----------------------
-// Lecture série avec resynchronisation
-// -----------------------
+
 void SerialController::readData()
 {
     buffer.append(serial->readAll());
@@ -82,9 +80,7 @@ void SerialController::readData()
     }
 }
 
-// -----------------------
-// Parsing trame
-// -----------------------
+
 void SerialController::parseCommand(const QByteArray &data)
 {
     if(data.size() != 9 || data.at(0) != '$' || data.at(8) != '#')

@@ -55,7 +55,7 @@ void GameManager::loadMap(const std::string& filename)
     bsp->build(linedefs, verteces);
     cManager = new CollisionManager();
 
-     m_spawnPoints = bsp->collectValidSpawnPoints(verteces, 5.0f);
+    m_spawnPoints = bsp->collectValidSpawnPoints(verteces, 5.0f);
 }
 
 BSP* GameManager::getBSP()
@@ -132,7 +132,7 @@ void GameManager::update(float deltaTime, std::vector<Linedef> renderedWalls)
     {
         if (enemy->getHealth() <= 0) continue;
 
-        enemy->setMovement(true);  
+        enemy->setMovement(true);
         enemy->moveEnemy(*p, deltaTime);
 
         // Collision ennemi avec les murs
@@ -220,14 +220,19 @@ bool GameManager::shoot(QPoint mousePos, QSize screenSize)
         float rayX = playerPos.x + worldDirX * d;
         float rayY = playerPos.y + worldDirY * d;
 
-        float dx = rayX - e->getPosition().x;
-        float dy = rayY - e->getPosition().y;
-
-        if ((dx*dx + dy*dy) < (1.5f * 1.5f))
+        for (Actor* enemy : creatures)
         {
-            qDebug() << "Touché à distance:" << d;
-            e->takeDamage(weapon->getDamage());
-            return true;
+            if (enemy->getHealth() <= 0) continue;
+
+            float dx = rayX - enemy->getPosition().x;
+            float dy = rayY - enemy->getPosition().y;
+
+            if ((dx*dx + dy*dy) < (1.5f * 1.5f))
+            {
+                qDebug() << "Touché à distance:" << d;
+                enemy->takeDamage(weapon->getDamage());
+                return true;
+            }
         }
     }
 
@@ -268,4 +273,3 @@ std::vector<Actor*> GameManager::getRenderedEnemy()
 
     return enemies;
 }
-

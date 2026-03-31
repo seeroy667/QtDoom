@@ -92,7 +92,8 @@ void ControllerManager::keyPressedEvent(QKeyEvent * event)
     if (event->key() == Qt::Key_F)
     {
         shoot = true;
-        if (m_munitionCount > 0)
+
+        if (m_munitionCount > 0 || m_munitionCount == -1)
             m_pendingShots++;
     }
     if(event->key() == Qt::Key_R)
@@ -163,4 +164,3 @@ void ControllerManager::shootReleasedEvent()
     //qDebug() << "shoot released";
     emit shootReleasedSig();
 }
-

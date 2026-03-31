@@ -13,7 +13,7 @@ Actor::Actor()
 {
     position = {0, 0};
     angle = 0.0f;
-    health = 15;
+    health = 5;
     isAlive = true;
 }
 
