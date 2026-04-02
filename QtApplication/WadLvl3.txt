@@ -1,0 +1,88 @@
+
+
+vertex 1 4.0 0.0
+vertex 2 -4.0 0.0
+vertex 3 0.0 4.0
+vertex 4 0.0 -4.0
+vertex 5 20.0 12.0
+vertex 6 20.0 -12.0
+vertex 7 15.0 18.0
+vertex 8 -15.0 18.0
+vertex 9 -20.0 12.0
+vertex 10 -20.0 -12.0
+vertex 11 -15.0 -18.0
+vertex 12 15.0 -18.0
+vertex 13 20.0 -24.0
+vertex 14 20.0 24.0
+vertex 15 -20.0 -24.0
+vertex 16 -20.0 24.0
+vertex 17 -24.0 28.0
+vertex 18 24.0 28.0
+vertex 19 24.0 -28.0
+vertex 20 -24.0 -28.0
+vertex 21 -30.0 33.0
+vertex 22 30.0 33.0
+vertex 23 30.0 -33.0
+vertex 24 -30.0 -33.0
+vertex 25 -30.0 4.0
+vertex 26 30.0 4.0
+vertex 27 30.0 -4.0
+vertex 28 -30.0 -4.0
+vertex 29 -40.0 33.0
+vertex 30 -30.0 42.0
+vertex 31 30.0 42.0
+vertex 32 40.0 33.0
+vertex 33 40.0 -33.0
+vertex 34 30.0 -42.0
+vertex 35 -30.0 -42.0
+vertex 36 -40.0 -33.0
+
+
+
+
+linedef 0 3 8 0 -1 false
+linedef 1 8 7 0 -1 false
+linedef 2 7 3 0 -1 false
+linedef 3 1 5 0 -1 false
+linedef 4 5 6 0 -1 false
+linedef 5 6 1 0 -1 false
+linedef 6 4 12 0 -1 false
+linedef 7 12 11 0 -1 false
+linedef 8 11 4 0 -1 false
+linedef 9 2 10 0 -1 false
+linedef 10 10 9 0 -1 false
+linedef 11 9 2 0 -1 false
+linedef 12 8 16 0 -1 false
+linedef 13 7 14 0 -1 false
+linedef 14 12 13 0 -1 false
+linedef 15 11 15 0 -1 false
+linedef 16 17 21 0 -1 false
+linedef 17 21 25 0 -1 false
+linedef 18 18 22 0 -1 false
+linedef 19 22 26 0 -1 false
+linedef 20 27 23 0 -1 false
+linedef 21 23 19 0 -1 false
+linedef 22 20 24 0 -1 false
+linedef 23 24 28 0 -1 false
+linedef 24 29 30 0 -1 false
+linedef 25 30 31 0 -1 false
+linedef 26 31 32 0 -1 false
+linedef 27 32 33 0 -1 false
+linedef 28 33 34 0 -1 false
+linedef 29 34 35 0 -1 false
+linedef 30 35 36 0 -1 false
+linedef 31 36 29 0 -1 false
+
+
+
+
+
+
+sector 0 15.0 0.0
+
+
+
+
+
+
+
