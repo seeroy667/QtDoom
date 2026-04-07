@@ -12,6 +12,7 @@ Modifications:
 Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QGraphicsView *view)
     : QObject(parent)
 {
+
     uiManager = new UIManager(view);
 
     cManager = new ControllerManager();

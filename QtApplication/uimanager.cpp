@@ -5,7 +5,7 @@ UIManager::UIManager(QGraphicsView *view, QWidget *parent): QWidget(parent) {
     QVBoxLayout *layout = new QVBoxLayout(this);
     stackedWidget = new QStackedWidget;
     layout->addWidget(stackedWidget);
-
+    setCursor(Qt::CrossCursor);
     // Créer les pages
     menuPage = new MenuPage;
     gamePage = new GamePage(view);
