@@ -44,6 +44,7 @@ public slots:
     void keyReleaseEvent(QKeyEvent *event) override;
     void updateBalles(int value);
     void updateVie(int value);
+    void updateScore(int value);
 };
 
 #endif // UIMANAGER_H

@@ -34,29 +34,29 @@ public:
     void update(float deltaTime, std::vector<Linedef> renderedWalls);
     bool inRadius(Actor *p, Actor *e);
     bool shoot(QPoint mousePos, QSize screenSize);
-
     const std::vector<Vertex>& getVerteces() const {return verteces;};
     const std::vector<Linedef>& getLinedefs() const {return linedefs;};
     const std::vector<Sector>& getSectors() const {return sectors;};
-
     void updateVie();
     Weapon* getWeapon();
     void restartGame();
-
     std::vector<Actor*> getRenderedEnemy();
-
     void collectAllWalls(Node* node, std::vector<Linedef>& walls);
-
-
     void spawnWave(int count);
     bool isWaveClear() const;
     int getCurrentWave() const {return m_currentWave;}
     std::vector<Actor*>& getCreatures(){return creatures;}
+    Actor* getBoss();
+    bool isBossRenderable();
 
 private:
     Actor *p;
     Actor *e;
     std::vector<Actor*> creatures;
+    Actor* m_boss = nullptr;
+    void SpawnBoss();
+    bool m_bossAlive = false;
+    bool m_bossSpawn = false;
     BSP* bsp = nullptr;
     Weapon* m_playerWeapon = nullptr;
     MapReader* map;
@@ -72,9 +72,10 @@ private:
     bool m_inContact = false;
 
     std::vector<Vertex> m_spawnPoints;
-    std::vector<int> m_waveSizes = {10,20,30};
+    std::vector<int> m_waveSizes = {1,2,3};
     int m_currentWave = 0;
     bool m_waveActive = false;
+
 
 signals:
     void sigUpdateVie(int value);

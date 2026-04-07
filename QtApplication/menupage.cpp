@@ -22,39 +22,59 @@ MenuPage::MenuPage(QWidget *parent)
     menuButtons.append(menu_playButton);
     connectButtons();
     updateHighlight();
+    m_background.load(":/ressources/background1.png");
 }
 
 void MenuPage::addDoomLabel()
 {
-    label_doom = new QLabel("DOOM");
-    font.setPointSize(36);
-    font.setBold(true);
-    label_doom->setFont(font);
+    label_doom = new QLabel();
+    QPixmap doomLogo(":/ressources/DOOMLOGO.png");
+    QPixmap scaled = doomLogo.scaled(700, 350, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    label_doom->setPixmap(scaled);
+    label_doom->setAlignment(Qt::AlignCenter);
+    label_doom->setStyleSheet("background-color: transparent;");
 }
 
 void MenuPage::addPlayButton()
 {
-    menu_playButton = new QPushButton("Play");
-    menu_playButton->setMinimumSize(150, 40);
-    menu_playButton->setStyleSheet("border-width: 4px; border-style: solid; border-color: green; border-radius: 15px; color:black;");
+    menu_playButton = new QPushButton();
+    menu_playButton->setMinimumSize(450, 120);
+    menu_playButton->setAttribute(Qt::WA_Hover);
+
+    menu_playButton->setStyleSheet(
+        "QPushButton {"
+        "   border-image: url(:/ressources/bouton1.png) 0 0 0 0 stretch stretch;"
+        "}"
+        "QPushButton:hover {"
+        "   border-image: url(:/ressources/bouton2.png) 0 0 0 0 stretch stretch;"
+        "}"
+        );
 }
 
 void MenuPage::addLevelButton()
 {
-    menu_levelButton = new QPushButton("Niveaux");
-    menu_levelButton->setMinimumSize(80, 25);
-    menu_levelButton->setStyleSheet("border-width: 1px; border-style: solid; border-color: black; color:black;");
+    menu_levelButton = new QPushButton();
+    menu_levelButton->setMinimumSize(450, 120);
+    menu_levelButton->setAttribute(Qt::WA_Hover);
+
+    menu_levelButton->setStyleSheet(        "QPushButton {"
+        "   border-image: url(:/ressources/niveau1.png) 0 0 0 0 stretch stretch;"
+        "}"
+        "QPushButton:hover {"
+        "   border-image: url(:/ressources/niveau2.png) 0 0 0 0 stretch stretch;"
+        "}"
+        );
 }
 
 void MenuPage::addPageLayout()
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->addStretch();
+    layout->addSpacing(10);
     layout->addWidget(label_doom, 0, Qt::AlignCenter);
     layout->addSpacing(30);
-    layout->addWidget(menu_levelButton, 0, Qt::AlignCenter);
-    layout->addSpacing(30);
     layout->addWidget(menu_playButton, 0, Qt::AlignCenter);
+    layout->addSpacing(30);
+    layout->addWidget(menu_levelButton, 0, Qt::AlignCenter);
     layout->addStretch();
 }
 
@@ -66,16 +86,13 @@ void MenuPage::connectButtons()
 
 void MenuPage::updateHighlight()
 {
-    //qDebug() << "update light";
-    // Réinitialiser les styles de tous les boutons
-    for (int i=0; i<menuButtons.size(); i++) {
-        menuButtons[i]->setStyleSheet("background-color: black; color: white;");
+    for (int i = 0; i < menuButtons.size(); i++) {
+        if (menuButtons[i] == menu_playButton || menuButtons[i] == menu_levelButton) continue; // ← skip le bouton play
+        menuButtons[i]->setStyleSheet("background-color: black; color: white; border-radius: 15px;");
     }
-
-    // Appliquer un style au bouton sélectionné
-    if (currentIndex < menuButtons.size())
+    if (currentIndex < menuButtons.size() && menuButtons[currentIndex] != menu_playButton && menuButtons[currentIndex]!= menu_levelButton)
     {
-        menuButtons[currentIndex]->setStyleSheet("background-color: darkgray; color: black;");
+        menuButtons[currentIndex]->setStyleSheet("background-color: darkgray; color: black; border-radius: 15px;");
     }
 }
 
@@ -120,4 +137,10 @@ void MenuPage::setupNextSelect()
     //qDebug() << "setup Next";
     currentIndex=0;
     updateHighlight();
+}
+void MenuPage::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(this);
+    painter.drawPixmap(0, 0, width(), height(), m_background);
+    QWidget::paintEvent(event);
 }

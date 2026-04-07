@@ -31,8 +31,7 @@ public:
 
 
     void render(Actor m_player, const std::vector<Actor*>& enemies, BSP* bsp, const std::vector<Vertex>& verteces, const std::vector<Sector>& sectors);
-    void renderActor(Actor* m_actor, const Actor m_player, QColor color);
-
+    void renderActor(Actor* actor, const Actor player, QColor color, float sizeMultiplier = 1.0f);
     std::vector<Linedef> getRenderedWalls();
     void renderRay(float targetScreenX, float targetScreenY, int frames);
     float projectHeight(float worldHeight, float distance);
@@ -40,9 +39,9 @@ public:
     QGraphicsView* getView() const;
     void renderGun();
     void updateScreenSize(int width, int height);
-
     void setHit(bool h) {hit = h;}
     void setPowerUpActive(bool active) { m_isPowerUpActive = active; }
+    void triggerGunAnim();
 
 private:
     QGraphicsScene* m_scene;
@@ -59,7 +58,13 @@ private:
     bool hit = false;
     QPixmap m_wallTexture;
     QPixmap m_enemyTexture;
+    QPixmap m_gunTexture;
     bool m_isPowerUpActive = false;
+    QPixmap m_gunFrames[3];
+    int     m_gunFrame = 0;
+    bool    m_gunAnimating = false;
+    QElapsedTimer m_gunAnimTimer;
+    float   m_frameDuration = 0.1f;
 
 
 

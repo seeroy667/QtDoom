@@ -35,6 +35,7 @@ void Actor::takeDamage(int amount)
     {
         health = 0;
         isAlive = false;
+
     }
 }
 
@@ -110,7 +111,7 @@ void Actor::setMovement(bool movement)
 
 void Actor::resetPlayerHealth()
 {
-    health = 15;
+    health = 5;
 }
 void Actor::setPosition(Vertex newPos)
 {

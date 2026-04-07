@@ -29,6 +29,7 @@ public:
     bool gameIsOn();
     void updateVie(int vie);
     void updateBalles(int balles);
+    void updateScore(int value);
     QLineEdit* amoEdit();
 
 private:
@@ -67,6 +68,7 @@ private:
     QLabel *labelAmo;
     QLabel *popupTitle;
     QLabel *gameOverTitle;
+    QLabel *scoreLabel;
 
     QFont font;
     QFont overFont;
@@ -108,6 +110,7 @@ private:
     void addQuitButtonOverLayout();
     void addPageOverLayout();
     void addBallesProgressBar();
+
 
 signals:
     void menu_quitClickedSig();

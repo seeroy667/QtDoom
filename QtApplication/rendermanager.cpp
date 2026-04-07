@@ -28,6 +28,10 @@ RenderManager::RenderManager(QGraphicsScene* scene, int screenWidth, int screenH
 
     m_wallTexture = QPixmap(":/ressources/temp.jpg");
     m_enemyTexture = QPixmap(":/ressources/enemy.jpg");
+    m_gunTexture = QPixmap(":/ressources/arme.png");
+    m_gunFrames[0] = QPixmap(":/ressources/shoot1.png");
+    m_gunFrames[1] = QPixmap(":/ressources/shoot2.png");
+    m_gunFrames[2] = QPixmap(":/ressources/shoot3.png");
 }
 
 
@@ -149,34 +153,28 @@ float RenderManager::projectHeight(float worldHeight, float distance)
 }
 
 
-void RenderManager::renderActor(Actor* actor, const Actor player, QColor color)
+void RenderManager::renderActor(Actor* actor, const Actor player, QColor color, float sizeMultiplier)
 {
+
     if (actor->getHealth() <= 0) return;
 
     Vertex camPos = coordPlayer(actor->getPosition(), player);
-
-
-    if (camPos.y < distanceMin)
-        return;
-
+    if (camPos.y < distanceMin) return;
 
     float screenX = (camPos.x / camPos.y) * m_focalLength + m_screenWidth / 2.0f;
 
 
-    float spriteHeight = (1.0f / camPos.y) * m_focalLength;
-    float spriteWidth  = spriteHeight * 2.0f;
-
-
-
-    float actorHeight = 5.0f;
-    float eyeHeight   = 3.5f;
     float spriteBottom = projectHeight(0.0f, camPos.y);
-    float spriteTop    = projectHeight(actorHeight, camPos.y);
-    float squareSize   = spriteBottom - spriteTop;
+    float spriteTop    = projectHeight(5.0f, camPos.y);
+    float baseSize     = spriteBottom - spriteTop;
+
+
+    float squareSize = baseSize * sizeMultiplier;
+    float spriteTopAdjusted = spriteBottom - squareSize;
 
     QRectF spriteRect(
         screenX - squareSize / 2.0f,
-        spriteTop,
+        spriteTopAdjusted,
         squareSize,
         squareSize
         );
@@ -224,18 +222,32 @@ void RenderManager::renderRay(float targetScreenX, float targetScreenY, int fram
 
 void RenderManager::renderGun()
 {
-    int gunWidth = 200;
-    int gunHeight = 100;
+    if (m_gunAnimating)
+    {
+        int frameIndex = (int)(m_gunAnimTimer.elapsed() / 1000.0f / m_frameDuration);
+        if (frameIndex >= 3)
+        {
+            frameIndex = 0;
+        }
+        m_gunFrame = frameIndex;
+    }
 
-    float gunX = (m_screenWidth / 2.0f) - (gunWidth / 2.0f);
+    int gunWidth  = 500;
+    int gunHeight = 250;
+    float gunX = (m_screenWidth  / 2.0f) - (gunWidth  / 2.0f);
     float gunY = (m_screenHeight - gunHeight);
 
-    QRectF gunRect(gunX,gunY,gunWidth,gunHeight);
-    QGraphicsRectItem *gunItem = m_scene->addRect(gunRect);
-
-    gunItem->setBrush(QColor(80,80,80));
+    QPixmap scaled = m_gunFrames[m_gunFrame].scaled(gunWidth, gunHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    QGraphicsPixmapItem *gunItem = m_scene->addPixmap(scaled);
+    gunItem->setPos(gunX, gunY);
 }
 
+void RenderManager::triggerGunAnim()
+{
+    m_gunFrame = 0;
+    m_gunAnimating = true;
+    m_gunAnimTimer.restart();
+}
 
 void RenderManager::render(Actor m_player,
                            const std::vector<Actor*>& enemies,

@@ -11,6 +11,7 @@ Modifications:
 #include <QWidget>
 #include <QPushButton>
 #include <QLabel>
+#include <QPainter>
 
 class MenuPage : public QWidget
 {
@@ -35,6 +36,9 @@ private:
     void addLevelButton();
     void addPageLayout();
     void connectButtons();
+    QPixmap m_background;
+protected:
+    void paintEvent(QPaintEvent *event) override;
 
 public slots:
     void changeButtons();

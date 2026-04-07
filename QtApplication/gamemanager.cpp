@@ -21,8 +21,24 @@ void GameManager::restartGame()
     p->setAngle(0.0f);
     p->getWeapon()->resetGameAmmo();
     p->resetPlayerHealth();
+    p->resetScore();
     updateVie();
-    //faut aussi replacer les monstres
+
+    m_currentWave = 0;
+    m_waveActive = false;
+
+
+    for (Actor* a : creatures) delete a;
+    creatures.clear();
+
+
+    if (m_boss)
+    {
+        delete m_boss;
+        m_boss = nullptr;
+    }
+    m_bossAlive = false;
+    m_bossSpawn = false;
 }
 
 Actor* GameManager::getPlayer()
@@ -49,7 +65,7 @@ void GameManager::loadMap(const std::string& filename)
 
     bsp = new BSP();
 
-    m_playerWeapon = new Weapon(1, 1000.0f, 50.0f, 10, 2.5f);
+    m_playerWeapon = new Weapon(1, 1000.0f, 10.0f, 10, 2.0f);
     p->setWeapon(m_playerWeapon);
 
     bsp->build(linedefs, verteces);
@@ -79,6 +95,8 @@ void GameManager::spawnWave(int count)
     }
 
     int spawned = 0;
+    std::vector<Vertex> usedPositions;
+
     for(const Vertex& pos : shuffled)
     {
         if(spawned >= count) break;
@@ -88,12 +106,28 @@ void GameManager::spawnWave(int count)
         if(std::sqrt(dx*dx + dy*dy) < 5.0f) continue;
 
         Actor* enemy = new Actor();
-        enemy->setPosition(pos.x,pos.y);
+        enemy->setPosition(pos.x, pos.y);
         enemy->setAngle(0.0f);
         creatures.push_back(enemy);
+        usedPositions.push_back(pos);
         spawned++;
     }
 
+
+    if(spawned < count && !usedPositions.empty())
+    {
+        int i = 0;
+        while(spawned < count)
+        {
+            Vertex pos = usedPositions[i % usedPositions.size()];
+            Actor* enemy = new Actor();
+            enemy->setPosition(pos.x, pos.y);
+            enemy->setAngle(0.0f);
+            creatures.push_back(enemy);
+            spawned++;
+            i++;
+        }
+    }
 }
 
 bool GameManager::isWaveClear() const
@@ -108,29 +142,48 @@ void GameManager::update(float deltaTime, std::vector<Linedef> renderedWalls)
     // --- Vagues ---
     if (!m_waveActive)
     {
-        m_currentWave++;
-        if (m_currentWave <= (int)m_waveSizes.size())
+        if(m_currentWave >= 3 && !m_bossSpawn)
         {
-            for (Actor* a : creatures) delete a;
-            creatures.clear();
-            spawnWave(m_waveSizes[m_currentWave - 1]);
+            SpawnBoss();
             m_waveActive = true;
         }
+        else if(!m_bossSpawn)
+        {
+            m_currentWave++;
+            if (m_currentWave <= (int)m_waveSizes.size())
+            {
+                for (Actor* a : creatures) delete a;
+                creatures.clear();
+                spawnWave(m_waveSizes[m_currentWave - 1]);
+                m_waveActive = true;
+            }
+        }
     }
+
     else if (isWaveClear())
     {
-        m_waveActive = false;
+        if(m_bossSpawn && m_boss && m_boss->getHealth() <= 0)
+        {
+            m_bossAlive = false;
+            m_waveActive = false;
+            qDebug() << "BOSS MORT";
+        }
+        else if(!m_bossSpawn)
+        {
+            m_waveActive = false;
+        }
     }
 
     // --- Collision joueur ---
-    std::vector<Linedef> broadedWalls;
-    bsp->actorToWallBroading(p->getPosition(), broadedWalls, verteces);
-    cManager->narrowingToCollide(broadedWalls, verteces, p);
+    //std::vector<Linedef> broadedWalls;
+   // bsp->actorToWallBroading(p->getPosition(), broadedWalls, verteces);
+    //cManager->narrowingToCollide(broadedWalls, verteces, p);
 
     // --- Mise à jour creatures---
     for (Actor* enemy : creatures)
     {
         if (enemy->getHealth() <= 0) continue;
+
 
         enemy->setMovement(true);
         enemy->moveEnemy(*p, deltaTime);
@@ -159,6 +212,22 @@ void GameManager::update(float deltaTime, std::vector<Linedef> renderedWalls)
             }
 
             if (p->getHealth() < 1)
+                emit playerDead();
+        }
+    }
+    if(m_bossAlive && m_boss && m_boss->getHealth() > 0)
+    {
+        m_boss->moveEnemy(*p,deltaTime);
+
+        std::vector<Linedef> bossWalls;
+        bsp->actorToWallBroading(m_boss->getPosition(), bossWalls, verteces);
+        cManager->narrowingToCollide(bossWalls,verteces, m_boss);
+
+        if(inRadius(p,m_boss))
+        {
+            p->takeDamage(2);
+            updateVie();
+            if(p->getHealth() < 1)
                 emit playerDead();
         }
     }
@@ -191,6 +260,11 @@ bool GameManager::shoot(QPoint mousePos, QSize screenSize)
     }
 
     weapon->shoot();
+
+    if (weapon->isEmpty())
+    {
+        weapon->reload();
+    }
 
     float screenW    = screenSize.width();
     float focalLength = screenW / 2.0f;
@@ -231,6 +305,27 @@ bool GameManager::shoot(QPoint mousePos, QSize screenSize)
             {
                 qDebug() << "Touché à distance:" << d;
                 enemy->takeDamage(weapon->getDamage());
+
+                if (enemy->getHealth() <= 0)
+                {
+                    p->addScore(1);
+                }
+                return true;
+            }
+        }
+        if(m_bossAlive && m_boss && m_boss->getHealth() > 0)
+        {
+            float dx = rayX - m_boss->getPosition().x;
+            float dy = rayY - m_boss->getPosition().y;
+
+            if((dx*dx + dy*dy) < (2.0f * 2.0f))
+            {
+                m_boss->takeDamage(weapon->getDamage());
+                if(m_boss->getHealth() <=0)
+                {
+                    m_bossAlive = false;
+                    p->addScore(10);
+                }
                 return true;
             }
         }
@@ -271,5 +366,45 @@ std::vector<Actor*> GameManager::getRenderedEnemy()
             enemies.push_back(enemy);
     }
 
+    if (m_bossAlive && m_boss && m_boss->getHealth() > 0)
+    {
+        if (bsp->enemyRendering(p->getPosition(), m_boss->getPosition(), verteces))
+            enemies.push_back(m_boss);
+    }
     return enemies;
+}
+
+void GameManager::SpawnBoss()
+{
+    if(m_spawnPoints.empty())
+    {
+        qDebug() << "Aucun spawn point pour le boss";
+        return;
+    }
+    Vertex bossSpawn = m_spawnPoints[0];
+    for(const Vertex& pos : m_spawnPoints)
+    {
+        float dx = pos.x - p->getPosition().x;
+        float dy = pos.y - p->getPosition().y;
+        if(std::sqrt(dx*dx + dy*dy) > 8.0f)
+        {
+            bossSpawn = pos;
+            break;
+        }
+    }
+    m_boss = new Actor();
+    m_boss->setHealth(20);
+    m_boss->setAngle(0.0f);
+    m_boss->setPosition(bossSpawn.x, bossSpawn.y);
+    m_bossAlive = true;
+    m_bossSpawn = true;
+}
+Actor* GameManager::getBoss()
+{
+    return m_boss;
+}
+
+bool GameManager::isBossRenderable()
+{
+    return m_bossAlive && m_boss && m_boss->getHealth() > 0;
 }

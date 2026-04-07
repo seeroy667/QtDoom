@@ -11,6 +11,11 @@ Modifications:
 GamePage::GamePage(QGraphicsView *view, QWidget *parent)
     : QWidget(parent)
 {
+    //score
+    scoreLabel = new QLabel("0");
+    scoreLabel->setStyleSheet("color: white; font-size: 20px; font-weight: bold;");
+    scoreLabel->show();
+
     mainLayout = new QVBoxLayout(this);
     stackedWidget = new QStackedWidget(this);
     addGameWidget(view);
@@ -91,11 +96,15 @@ void GamePage::addLayoutBarreEtat()
     barLayout->addStretch();
     barLayout->addWidget(labelVie);
     barLayout->addWidget(m_barVie);
+
     barLayout->addSpacing(100);
     /*barLayout->addWidget(labelAmo);
     barLayout->addWidget(m_writeAmo);*/
     barLayout->addWidget(labelBalles);
     barLayout->addWidget(m_barBalles);
+
+    barLayout->addSpacing(40);
+    barLayout->addWidget(scoreLabel);
     barLayout->addStretch();
 }
 
@@ -421,4 +430,8 @@ void GamePage::gameOver()
 {
     stackedWidget->setCurrentWidget(gameOverWidget);
     updateHighlight();
+}
+void GamePage::updateScore(int value)
+{
+    scoreLabel->setText(QString::number(value));
 }

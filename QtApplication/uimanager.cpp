@@ -181,3 +181,7 @@ void UIManager::updateVie(int value)
 {
     getGamePage()->updateVie(value);
 }
+void UIManager::updateScore(int value)
+{
+    getGamePage()->updateScore(value);
+}

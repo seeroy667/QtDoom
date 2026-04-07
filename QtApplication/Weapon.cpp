@@ -33,7 +33,7 @@ bool Weapon::canShoot()
     if (m_isReloading)   return false;
     if (m_currentAmmo <= 0) return false;
 
-    float cd = (1.0f / fireRate) * 10.0f;
+    float cd = (1000.0f / fireRate);
     return m_shootTimer.elapsed() >= cd;
 }
 
@@ -41,7 +41,7 @@ bool Weapon::cooldownReady()
 {
     isReloading();
     if (m_isReloading) return false;
-    float cd = (1.0f / fireRate) * 10.0f;
+    float cd = (1000.0f / fireRate);
     return m_shootTimer.elapsed() >= cd;
 }
 

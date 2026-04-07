@@ -205,15 +205,18 @@ void Engine::gameLoop()
                 float endY   = viewMousePos.y();
 
                 rManager->renderRay(endX, endY, 5);
+                 rManager->triggerGunAnim();
             }
             else
             {
                 weapon->restartShootTimer(); // respecte le cooldown même à 0 munitions
             }
+
         }
         // Toujours consommer le pending shot, que le cooldown soit prêt ou non
         // Sinon les tirs s'accumulent pendant un rechargement et partent en rafale après
         cManager->resetShot();
+        uiManager->updateScore(gManager->getPlayer()->getScore());
     }
 
     if(cManager->isReloading())
@@ -228,7 +231,13 @@ void Engine::gameLoop()
 
     rManager->render(*gManager->getPlayer(), gManager->getRenderedEnemy(),
                      gManager->getBSP(), gManager->getVerteces(), gManager->getSectors());
-
+    if(gManager->isBossRenderable())
+    {
+        if(gManager->getBSP()->enemyRendering(gManager->getPlayer()->getPosition(), gManager->getBoss()->getPosition(), gManager->getVerteces()))
+        {
+            rManager->renderActor(gManager->getBoss(),*gManager->getPlayer(),QColor(150,0,0), 2.5f);
+        }
+    }
     gManager->update(deltaTime, rManager->getRenderedWalls());
 
     if(cManager->isPowerUp())
