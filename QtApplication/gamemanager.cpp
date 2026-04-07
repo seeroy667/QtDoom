@@ -267,8 +267,7 @@ std::vector<Actor*> GameManager::getRenderedEnemy()
     std::vector<Actor*> enemies;
     for (Actor* enemy : creatures)
     {
-        if (bsp->enemyRendering(p->getPosition(), enemy->getPosition(), verteces))
-            enemies.push_back(enemy);
+        enemies.push_back(enemy);
     }
 
     return enemies;

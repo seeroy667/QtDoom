@@ -39,6 +39,8 @@ void RenderManager::renderWall(const Linedef& wall, const std::vector<Vertex>& v
     if (!clipWall(p1, p2))
         return;
 
+    float depth = (p1.y + p2.y) / 2.0f;
+
     // Need to handle FOV culling before rendering the walls.
     // Need to handle overdraw to only render a small amount of walls.
 
@@ -58,6 +60,7 @@ void RenderManager::renderWall(const Linedef& wall, const std::vector<Vertex>& v
             << QPointF(screen1.x, height1_floor);
 
     QGraphicsPolygonItem* wallItem = m_scene->addPolygon(polygon);
+    wallItem->setZValue(-depth);
 
     float wallWidth  = std::abs(screen2.x - screen1.x);
     float wallHeight = std::max(std::abs(height1_floor - height1_ceil),
@@ -155,7 +158,6 @@ void RenderManager::renderActor(Actor* actor, const Actor player, QColor color)
 
     Vertex camPos = coordPlayer(actor->getPosition(), player);
 
-
     if (camPos.y < distanceMin)
         return;
 
@@ -186,6 +188,7 @@ void RenderManager::renderActor(Actor* actor, const Actor player, QColor color)
 
 
     QGraphicsRectItem* spriteItem = m_scene->addRect(spriteRect);
+    spriteItem->setZValue(-camPos.y);
     spriteItem->setPen(Qt::NoPen);
     if (!m_enemyTexture.isNull())
     {
