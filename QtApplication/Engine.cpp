@@ -204,7 +204,7 @@ void Engine::gameLoop()
                 float endX   = viewMousePos.x();
                 float endY   = viewMousePos.y();
 
-                rManager->renderRay(endX, endY, 5);
+                //rManager->renderRay(endX, endY, 5);
                  rManager->triggerGunAnim();
             }
             else
