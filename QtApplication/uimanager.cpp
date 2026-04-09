@@ -23,6 +23,7 @@ UIManager::UIManager(QGraphicsView *view, QWidget *parent): QWidget(parent) {
     connect(menuPage, &MenuPage::menu_playClickedSig, this, [this]() {
         //qDebug() << "connect ok";
         stackedWidget->setCurrentWidget(gamePage);
+        emit loadMap(pathToLevel);
         emit startGame();
         //qDebug() << "le jeu commence";
     });
@@ -42,6 +43,8 @@ UIManager::UIManager(QGraphicsView *view, QWidget *parent): QWidget(parent) {
     connect(levelPage, &LevelPage::level_quitClickedSig, this, [this]() {
         stackedWidget->setCurrentWidget(menuPage);
     });
+
+    connect(levelPage, SIGNAL(chosenLevelPath(QString)), this, SLOT(saveLevelPath(QString)));
 }
 
 GamePage* UIManager::getGamePage()
@@ -181,7 +184,14 @@ void UIManager::updateVie(int value)
 {
     getGamePage()->updateVie(value);
 }
+
 void UIManager::updateScore(int value)
 {
     getGamePage()->updateScore(value);
+}
+
+void UIManager::saveLevelPath(QString path)
+{
+    stackedWidget->setCurrentWidget(menuPage);
+    pathToLevel=path;
 }

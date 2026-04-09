@@ -72,6 +72,7 @@ public slots:
     void restartGame();
     void quitGame();
     void gameOver();
+    void loadMapIntoGame(QString path = "");
 };
 
 #endif

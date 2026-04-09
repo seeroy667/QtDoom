@@ -69,6 +69,7 @@ signals:
     void level_2ClickedSig();
     void level_3ClickedSig();
     void level_quitClickedSig();
+    void chosenLevelPath(QString path = "");
 };
 
 #endif // LEVELPAGE_H

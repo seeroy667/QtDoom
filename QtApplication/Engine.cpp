@@ -25,9 +25,7 @@ Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QG
     m_scene = scene;
     m_view = view;
 
-    QString mapPath = QCoreApplication::applicationDirPath() + "/../../WadLvl2.txt";
-    gManager->loadMap(mapPath.toStdString());
-
+    connect(uiManager, SIGNAL(loadMap(QString)), this, SLOT(loadMapIntoGame(QString)));
     connect(uiManager, SIGNAL(startGame()), this, SLOT(start()));
     connect(uiManager, SIGNAL(keyPressSig(QKeyEvent*)), cManager, SLOT(keyPressedEvent(QKeyEvent*)));
     connect(uiManager, SIGNAL(keyReleaseSig(QKeyEvent*)), cManager, SLOT(keyReleasedEvent(QKeyEvent*)));
@@ -275,4 +273,10 @@ ControllerManager* Engine::getcManager() const
 UIManager* Engine::getuiManager() const
 {
     return uiManager;
+}
+
+void Engine::loadMapIntoGame(QString path)
+{
+    QString mapPath = QCoreApplication::applicationDirPath() + path;
+    gManager->loadMap(mapPath.toStdString());
 }
