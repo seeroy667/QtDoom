@@ -277,6 +277,13 @@ UIManager* Engine::getuiManager() const
 
 void Engine::loadMapIntoGame(QString path)
 {
-    QString mapPath = QCoreApplication::applicationDirPath() + path;
-    gManager->loadMap(mapPath.toStdString());
+    if (path!=oldMap)
+    {
+        delete gManager;
+        gManager = nullptr;
+        gManager = new GameManager();
+        QString mapPath = QCoreApplication::applicationDirPath() + path;
+        gManager->loadMap(mapPath.toStdString());
+    }
+    oldMap=path;
 }

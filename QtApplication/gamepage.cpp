@@ -28,6 +28,7 @@ GamePage::GamePage(QGraphicsView *view, QWidget *parent)
     overButtons.append(over_quitButton);
     connectButtons();
     //stackedWidget->setCurrentWidget(gameOverWidget);
+    m_background.load(":/ressources/background2.png");
 }
 
 void GamePage::addGameWidget(QGraphicsView *view)
@@ -145,23 +146,44 @@ void GamePage::addTitleMenuLayout()
 
 void GamePage::addRetryButtonMenu()
 {
-    menu_retryButton = new QPushButton("Recommencer");
-    menu_retryButton->setStyleSheet("background-color: black; color: white;");
-    menu_retryButton->setFixedSize(120, 40);
+    menu_retryButton = new QPushButton();
+    menu_retryButton->setMinimumSize(450, 120);
+    menu_retryButton->setAttribute(Qt::WA_Hover);
+    menu_retryButton->setStyleSheet(        "QPushButton {"
+                                       "   border-image: url(:/ressources/recommencer1.png) 0 0 0 0 stretch stretch;"
+                                       "}"
+                                       "QPushButton:hover {"
+                                       "   border-image: url(:/ressources/recommencer2.png) 0 0 0 0 stretch stretch;"
+                                       "}"
+                                       );
 }
 
 void GamePage::addContinueButtonMenu()
 {
-    menu_continueButton = new QPushButton("Continuer");
-    menu_continueButton->setStyleSheet("background-color: black; color: white;");
-    menu_continueButton->setFixedSize(120, 40);
+    menu_continueButton = new QPushButton();
+    menu_continueButton->setMinimumSize(450, 120);
+    menu_continueButton->setAttribute(Qt::WA_Hover);
+    menu_continueButton->setStyleSheet(        "QPushButton {"
+                                   "   border-image: url(:/ressources/continuer1.png) 0 0 0 0 stretch stretch;"
+                                   "}"
+                                   "QPushButton:hover {"
+                                   "   border-image: url(:/ressources/continuer2.png) 0 0 0 0 stretch stretch;"
+                                   "}"
+                                   );
 }
 
 void GamePage::addQuitButtonMenu()
 {
-    menu_quitButton = new QPushButton("Quitter");
-    menu_quitButton->setStyleSheet("background-color: black; color: white;");
-    menu_quitButton->setFixedSize(120, 40);
+    menu_quitButton = new QPushButton();
+    menu_quitButton->setMinimumSize(450, 120);
+    menu_quitButton->setAttribute(Qt::WA_Hover);
+    menu_quitButton->setStyleSheet(        "QPushButton {"
+                                   "   border-image: url(:/ressources/quitter1.png) 0 0 0 0 stretch stretch;"
+                                   "}"
+                                   "QPushButton:hover {"
+                                   "   border-image: url(:/ressources/quitter2.png) 0 0 0 0 stretch stretch;"
+                                   "}"
+                                   );
 }
 
 void GamePage::addRetryButtonMenuLayout()
@@ -224,16 +246,30 @@ void GamePage::addTitleOver()
 
 void GamePage::addRetryButtonOver()
 {
-    over_retryButton = new QPushButton("Recommencer");
-    over_retryButton->setStyleSheet("background-color: black; color: white;");
-    over_retryButton->setFixedSize(120, 40);
+    over_retryButton = new QPushButton();
+    over_retryButton->setMinimumSize(450, 120);
+    over_retryButton->setAttribute(Qt::WA_Hover);
+    over_retryButton->setStyleSheet(        "QPushButton {"
+                                   "   border-image: url(:/ressources/recommencer1.png) 0 0 0 0 stretch stretch;"
+                                   "}"
+                                   "QPushButton:hover {"
+                                   "   border-image: url(:/ressources/recommencer2.png) 0 0 0 0 stretch stretch;"
+                                   "}"
+                                   );
 }
 
 void GamePage::addQuitButtonOver()
 {
-    over_quitButton = new QPushButton("Quitter");
-    over_quitButton->setStyleSheet("background-color: black; color: white;");
-    over_quitButton->setFixedSize(120, 40);
+    over_quitButton = new QPushButton();
+    over_quitButton->setMinimumSize(450, 120);
+    over_quitButton->setAttribute(Qt::WA_Hover);
+    over_quitButton->setStyleSheet(        "QPushButton {"
+                                   "   border-image: url(:/ressources/quitter1.png) 0 0 0 0 stretch stretch;"
+                                   "}"
+                                   "QPushButton:hover {"
+                                   "   border-image: url(:/ressources/quitter2.png) 0 0 0 0 stretch stretch;"
+                                   "}"
+                                   );
 }
 
 void GamePage::addTitleOverLayout()
@@ -294,26 +330,62 @@ void GamePage::updateHighlight()
 {
     //qDebug() << "update light";
     // Réinitialiser les styles de tous les boutons
-    for (int i=0; i<menuButtons.size(); i++) {
-        menuButtons[i]->setStyleSheet("background-color: black; color: white;");
-    }
-    for (int i=0; i<overButtons.size(); i++) {
-        overButtons[i]->setStyleSheet("background-color: black; color: white;");
-    }
 
     // Appliquer un style au bouton sélectionné
     if (stackedWidget->currentWidget()==popupWidget)
     {
+        for (int i=0; i<menuButtons.size(); i++) {
+            if (menuButtons[i] == menu_retryButton)
+            {
+                menu_retryButton->setStyleSheet("QPushButton {border-image: url(:/ressources/recommencer1.png) 0 0 0 0 stretch stretch;}");
+            }
+            if (menuButtons[i] == menu_continueButton)
+            {
+                menu_continueButton->setStyleSheet("QPushButton {border-image: url(:/ressources/continuer1.png) 0 0 0 0 stretch stretch;}");
+            }
+            if (menuButtons[i] == menu_quitButton)
+            {
+                menu_quitButton->setStyleSheet("QPushButton {border-image: url(:/ressources/quitter1.png) 0 0 0 0 stretch stretch;}");
+            }
+        }
         if (menuCurrentIndex < menuButtons.size())
         {
-            menuButtons[menuCurrentIndex]->setStyleSheet("background-color: darkgray; color: black;");
+            if (menuButtons[menuCurrentIndex] == menu_retryButton)
+            {
+                menu_retryButton->setStyleSheet("QPushButton {border-image: url(:/ressources/recommencer2.png) 0 0 0 0 stretch stretch;}");
+            }
+            if (menuButtons[menuCurrentIndex] == menu_continueButton)
+            {
+                menu_continueButton->setStyleSheet("QPushButton {border-image: url(:/ressources/continuer2.png) 0 0 0 0 stretch stretch;}");
+            }
+            if (menuButtons[menuCurrentIndex] == menu_quitButton)
+            {
+                menu_quitButton->setStyleSheet("QPushButton {border-image: url(:/ressources/quitter2.png) 0 0 0 0 stretch stretch;}");
+            }
         }
     }
     if (stackedWidget->currentWidget()==gameOverWidget)
     {
+        for (int i=0; i<overButtons.size(); i++) {
+            if (overButtons[i] == over_retryButton)
+            {
+                over_retryButton->setStyleSheet("QPushButton {border-image: url(:/ressources/recommencer1.png) 0 0 0 0 stretch stretch;}");
+            }
+            if (overButtons[i] == over_quitButton)
+            {
+                over_quitButton->setStyleSheet("QPushButton {border-image: url(:/ressources/quitter1.png) 0 0 0 0 stretch stretch;}");
+            }
+        }
         if (overCurrentIndex < overButtons.size())
         {
-            overButtons[overCurrentIndex]->setStyleSheet("background-color: darkgray; color: black;");
+            if (overButtons[overCurrentIndex] == over_retryButton)
+            {
+                over_retryButton->setStyleSheet("QPushButton {border-image: url(:/ressources/recommencer1.png) 0 0 0 0 stretch stretch;}");
+            }
+            if (overButtons[overCurrentIndex] == over_quitButton)
+            {
+                over_quitButton->setStyleSheet("QPushButton {border-image: url(:/ressources/quitter1.png) 0 0 0 0 stretch stretch;}");
+            }
         }
     }
 }
@@ -434,4 +506,11 @@ void GamePage::gameOver()
 void GamePage::updateScore(int value)
 {
     scoreLabel->setText(QString::number(value));
+}
+
+void GamePage::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(this);
+    painter.drawPixmap(0, 0, width(), height(), m_background);
+    QWidget::paintEvent(event);
 }

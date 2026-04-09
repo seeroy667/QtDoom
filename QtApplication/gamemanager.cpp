@@ -408,3 +408,19 @@ bool GameManager::isBossRenderable()
 {
     return m_bossAlive && m_boss && m_boss->getHealth() > 0;
 }
+
+GameManager::~GameManager()
+{
+    delete p;
+    delete e;
+    delete map;
+    delete bsp;
+    delete m_playerWeapon;
+    delete cManager;
+    for (Actor* a : creatures) delete a;
+    creatures.clear();
+    if (m_boss)
+    {
+        delete m_boss;
+    }
+}

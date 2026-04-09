@@ -38,6 +38,7 @@ void MenuPage::addDoomLabel()
 void MenuPage::addPlayButton()
 {
     menu_playButton = new QPushButton();
+    menu_playButton->setObjectName("bouton");
     menu_playButton->setMinimumSize(450, 120);
     menu_playButton->setAttribute(Qt::WA_Hover);
 
@@ -54,6 +55,7 @@ void MenuPage::addPlayButton()
 void MenuPage::addLevelButton()
 {
     menu_levelButton = new QPushButton();
+    menu_levelButton->setObjectName("niveau");
     menu_levelButton->setMinimumSize(450, 120);
     menu_levelButton->setAttribute(Qt::WA_Hover);
 
@@ -87,12 +89,25 @@ void MenuPage::connectButtons()
 void MenuPage::updateHighlight()
 {
     for (int i = 0; i < menuButtons.size(); i++) {
-        if (menuButtons[i] == menu_playButton || menuButtons[i] == menu_levelButton) continue; // ← skip le bouton play
-        menuButtons[i]->setStyleSheet("background-color: black; color: white; border-radius: 15px;");
+        if (menuButtons[i] == menu_playButton)
+        {
+            menu_playButton->setStyleSheet("QPushButton {border-image: url(:/ressources/bouton1.png) 0 0 0 0 stretch stretch;}");
+        }
+        if (menuButtons[i] == menu_levelButton)
+        {
+            menu_levelButton->setStyleSheet("QPushButton {border-image: url(:/ressources/niveau1.png) 0 0 0 0 stretch stretch;}");
+        }
     }
-    if (currentIndex < menuButtons.size() && menuButtons[currentIndex] != menu_playButton && menuButtons[currentIndex]!= menu_levelButton)
+    if (currentIndex < menuButtons.size())
     {
-        menuButtons[currentIndex]->setStyleSheet("background-color: darkgray; color: black; border-radius: 15px;");
+        if (menuButtons[currentIndex]==menu_playButton)
+        {
+            menu_playButton->setStyleSheet("QPushButton {border-image: url(:/ressources/bouton2.png) 0 0 0 0 stretch stretch;}");
+        }
+        if (menuButtons[currentIndex]==menu_levelButton)
+        {
+            menu_levelButton->setStyleSheet("QPushButton {border-image: url(:/ressources/niveau2.png) 0 0 0 0 stretch stretch;}");
+        }
     }
 }
 
@@ -138,6 +153,7 @@ void MenuPage::setupNextSelect()
     currentIndex=0;
     updateHighlight();
 }
+
 void MenuPage::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);

@@ -19,5 +19,11 @@
         <file>ressources/shoot1.png</file>
         <file>ressources/shoot2.png</file>
         <file>ressources/shoot3.png</file>
+        <file>ressources/continuer1.png</file>
+        <file>ressources/continuer2.png</file>
+        <file>ressources/quitter1.png</file>
+        <file>ressources/quitter2.png</file>
+        <file>ressources/recommencer1.png</file>
+        <file>ressources/recommencer2.png</file>
     </qresource>
 </RCC>

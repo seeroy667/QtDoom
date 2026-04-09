@@ -58,6 +58,8 @@ private:
 
     static constexpr float BORDER_ROT_SPEED  = 1.2f;
 
+    QString oldMap = "";
+
 public:
     Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QGraphicsView *view);
     ~Engine();

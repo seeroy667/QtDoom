@@ -27,6 +27,7 @@ class GameManager: public QObject
     Q_OBJECT
 public:
     GameManager();
+    ~GameManager();
     Actor* getPlayer();
     Actor* getEnemy();
     BSP* getBSP();

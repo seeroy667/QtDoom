@@ -80,6 +80,8 @@ private:
     QVector<QPushButton*> menuButtons;
     QVector<QPushButton*> overButtons;
 
+    QPixmap m_background;
+
     bool potTurns=false;
     bool shootPress=false;
     int menuCurrentIndex=0;
@@ -126,6 +128,7 @@ protected:
     void menu_continueClicked();
     void over_quitClicked();
     void over_retryClicked();
+    void paintEvent(QPaintEvent *event) override;
 
 public slots:
     void changeButtons();
