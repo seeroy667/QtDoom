@@ -47,6 +47,9 @@ Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QG
     connect(cManager, SIGNAL(confirmSig()), uiManager, SLOT(shootPressed()));
     connect(&timer, &QTimer::timeout, this, &Engine::gameLoop);
     connect(gManager, SIGNAL(sigUpdateVie(int)), uiManager, SLOT(updateVie(int)));
+    //get score
+    connect(uiManager, SIGNAL(getScore()), gManager, SLOT(giveScore()));
+    connect(gManager, SIGNAL(scoreResult(int)), uiManager, SLOT(setScore(int)));
 }
 
 Engine::~Engine()

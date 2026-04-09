@@ -27,6 +27,7 @@ public:
 private:
     QPushButton *menu_playButton;
     QPushButton *menu_levelButton;
+    QPushButton *loginButton;
     QVector<QPushButton*> menuButtons;
     QLabel *label_doom;
     QFont font;
@@ -34,6 +35,7 @@ private:
     void addDoomLabel();
     void addPlayButton();
     void addLevelButton();
+    void addLoginButton();
     void addPageLayout();
     void connectButtons();
     QPixmap m_background;
@@ -45,10 +47,12 @@ public slots:
     void setupNextSelect();
     void updateHighlight();
     void activateSelectedButton();
+    void loginClicked();
 
 signals:
     void menu_levelClickedSig();
     void menu_playClickedSig();
+    void loginClickedSig();
 };
 
 #endif // MENUPAGE_H

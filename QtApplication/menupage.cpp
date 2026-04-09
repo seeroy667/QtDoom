@@ -16,6 +16,7 @@ MenuPage::MenuPage(QWidget *parent)
     addDoomLabel();
     addPlayButton();
     addLevelButton();
+    addLoginButton();
     addPageLayout();
     //ajout a la liste
     menuButtons.append(menu_levelButton);
@@ -68,6 +69,11 @@ void MenuPage::addLevelButton()
         );
 }
 
+void MenuPage::addLoginButton()
+{
+    loginButton = new QPushButton("changer d'utilisateur");
+}
+
 void MenuPage::addPageLayout()
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -77,6 +83,8 @@ void MenuPage::addPageLayout()
     layout->addWidget(menu_playButton, 0, Qt::AlignCenter);
     layout->addSpacing(30);
     layout->addWidget(menu_levelButton, 0, Qt::AlignCenter);
+    layout->addSpacing(30);
+    layout->addWidget(loginButton, 0, Qt::AlignCenter);
     layout->addStretch();
 }
 
@@ -84,6 +92,7 @@ void MenuPage::connectButtons()
 {
     connect(menu_levelButton, &QPushButton::clicked, this, &MenuPage::menu_levelClicked);
     connect(menu_playButton, &QPushButton::clicked, this, &MenuPage::menu_playClicked);
+    connect(loginButton, &QPushButton::clicked, this, &MenuPage::loginClicked);
 }
 
 void MenuPage::updateHighlight()
@@ -122,6 +131,11 @@ void MenuPage::activateSelectedButton()
     {
         menu_playClicked();
     }
+}
+
+void MenuPage::loginClicked()
+{
+    emit loginClickedSig();
 }
 
 void MenuPage::menu_levelClicked()

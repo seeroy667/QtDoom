@@ -51,6 +51,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         uimanager.h uimanager.cpp
         mapreader.h mapreader.cpp
         images.qrc
+        leaderboard.h leaderboard.cpp
+        compte.h compte.cpp
 
 
 

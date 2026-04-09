@@ -77,11 +77,17 @@ private:
     int m_currentWave = 0;
     bool m_waveActive = false;
 
+    //temporaire pour test
+    int playerScore = 1000;
 
 signals:
     void sigUpdateVie(int value);
     void sigUpdateBalles(int value);
     void playerDead();
+    void scoreResult(int value);
+
+public slots:
+    void giveScore();
 };
 
 #endif // GAMEMANAGER_H

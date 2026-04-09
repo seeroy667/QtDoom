@@ -10,14 +10,19 @@ UIManager::UIManager(QGraphicsView *view, QWidget *parent): QWidget(parent) {
     menuPage = new MenuPage;
     gamePage = new GamePage(view);
     levelPage = new LevelPage;
+    comptePage = new compte;
+    QString mapPath = QCoreApplication::applicationDirPath() + "/../../scores.txt";
+    leaderBoardPage = new leaderBoard(mapPath);
 
     // Ajouter les pages au stacked widget
     stackedWidget->addWidget(menuPage);
     stackedWidget->addWidget(gamePage);
     stackedWidget->addWidget(levelPage);
+    stackedWidget->addWidget(comptePage);
+    stackedWidget->addWidget(leaderBoardPage);
 
     // Page de départ
-    stackedWidget->setCurrentWidget(menuPage);
+    stackedWidget->setCurrentWidget(comptePage);
 
     // Connexions des boutons
     connect(menuPage, &MenuPage::menu_playClickedSig, this, [this]() {
@@ -44,7 +49,27 @@ UIManager::UIManager(QGraphicsView *view, QWidget *parent): QWidget(parent) {
         stackedWidget->setCurrentWidget(menuPage);
     });
 
+    connect(menuPage, &MenuPage::loginClickedSig, this, [this]() {
+        stackedWidget->setCurrentWidget(comptePage);
+        QString username = comptePage->getCurrentUsername();
+        emit getScore();
+        qDebug() << score;
+        leaderBoardPage->saveScore(username,score);
+    });
+
     connect(levelPage, SIGNAL(chosenLevelPath(QString)), this, SLOT(saveLevelPath(QString)));
+
+    connect(comptePage, SIGNAL(loginSig()), this, SLOT(goToMenuPage()));
+}
+
+void UIManager::setScore(int newScore)
+{
+    score=newScore;
+}
+
+void UIManager::goToMenuPage()
+{
+    stackedWidget->setCurrentWidget(menuPage);
 }
 
 GamePage* UIManager::getGamePage()
