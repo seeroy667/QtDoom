@@ -14,6 +14,7 @@ Modifications:
 #include <QProcess>
 #include <QElapsedTimer>
 #include <QObject>
+#include <QRandomGenerator>
 
 #include"actor.h"
 #include"geostructs.h"
@@ -78,7 +79,7 @@ private:
     bool m_waveActive = false;
 
     //temporaire pour test
-    int playerScore = 1000;
+    int playerScore = QRandomGenerator::global()->bounded(100, 5000);
 
 signals:
     void sigUpdateVie(int value);

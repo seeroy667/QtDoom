@@ -1,4 +1,9 @@
+balais, 8000
 bob, 5000
+crevette, 3667
 steve, 1400
 allo, 1000
-anais, 1000
+rideau, 1000
+sin, 1000
+anais, 300
+mope, 80

@@ -7,7 +7,7 @@ GameManager::GameManager() {
 
     //temporaire a modifier
     e = new Actor();
-    e->setPosition(5.0f,5.0f);
+    e->setPosition(0.0f,-2.0f);
     e->setAngle(0.0f);
 
     map = new MapReader();

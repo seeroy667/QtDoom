@@ -56,6 +56,7 @@ public slots:
     void updateScore(int value);
     void saveLevelPath(QString path = "");
     void goToMenuPage();
+    void goToLeaderBoard();
     void setScore(int newScore);
 };
 

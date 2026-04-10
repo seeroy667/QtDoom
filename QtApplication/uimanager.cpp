@@ -58,8 +58,9 @@ UIManager::UIManager(QGraphicsView *view, QWidget *parent): QWidget(parent) {
     });
 
     connect(levelPage, SIGNAL(chosenLevelPath(QString)), this, SLOT(saveLevelPath(QString)));
-
     connect(comptePage, SIGNAL(loginSig()), this, SLOT(goToMenuPage()));
+    connect(leaderBoardPage, SIGNAL(goBackToMenu()), this, SLOT(goToMenuPage()));
+    connect(menuPage, SIGNAL(scoreClickedSig()), this, SLOT(goToLeaderBoard()));
 }
 
 void UIManager::setScore(int newScore)
@@ -70,6 +71,15 @@ void UIManager::setScore(int newScore)
 void UIManager::goToMenuPage()
 {
     stackedWidget->setCurrentWidget(menuPage);
+}
+
+void UIManager::goToLeaderBoard()
+{
+    stackedWidget->setCurrentWidget(leaderBoardPage);
+    QString username = comptePage->getCurrentUsername();
+    emit getScore();
+    leaderBoardPage->saveScore(username,score);
+    leaderBoardPage->load10BestPlayers();
 }
 
 GamePage* UIManager::getGamePage()
