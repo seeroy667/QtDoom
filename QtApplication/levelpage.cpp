@@ -227,19 +227,19 @@ void LevelPage::level_quitClicked()
 void LevelPage::level_1Clicked()
 {
     //qDebug() << "level_1Clicked";
-    emit level_1ClickedSig();
+    emit chosenLevelPath("/../../WadLvl1.txt");
 }
 
 void LevelPage::level_2Clicked()
 {
     //qDebug() << "level_2Clicked";
-    emit level_2ClickedSig();
+    emit chosenLevelPath("/../../WadLvl2.txt");
 }
 
 void LevelPage::level_3Clicked()
 {
     //qDebug() << "level_3Clicked";
-    emit level_3ClickedSig();
+    emit chosenLevelPath("/../../WadLvl3.txt");
 }
 
 void LevelPage::changeButtons()

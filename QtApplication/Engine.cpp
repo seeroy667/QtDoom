@@ -12,6 +12,7 @@ Modifications:
 Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QGraphicsView *view)
     : QObject(parent)
 {
+
     uiManager = new UIManager(view);
 
     cManager = new ControllerManager();
@@ -33,6 +34,7 @@ Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QG
     QString mapPath = QCoreApplication::applicationDirPath() + "/../../WadLvl2.txt";
     gManager->loadMap(mapPath.toStdString());
 
+    connect(uiManager, SIGNAL(loadMap(QString)), this, SLOT(loadMapIntoGame(QString)));
     connect(uiManager, SIGNAL(startGame()), this, SLOT(start()));
     connect(uiManager, SIGNAL(keyPressSig(QKeyEvent*)), cManager, SLOT(keyPressedEvent(QKeyEvent*)));
     connect(uiManager, SIGNAL(keyReleaseSig(QKeyEvent*)), cManager, SLOT(keyReleasedEvent(QKeyEvent*)));
@@ -210,8 +212,8 @@ void Engine::gameLoop()
                 float endX   = viewMousePos.x();
                 float endY   = viewMousePos.y();
 
-                rManager->renderRay(endX, endY, 5);
-                rManager->triggerGunAnim();
+                //rManager->renderRay(endX, endY, 5);
+                 rManager->triggerGunAnim();
             }
             else
             {
@@ -280,4 +282,10 @@ ControllerManager* Engine::getcManager() const
 UIManager* Engine::getuiManager() const
 {
     return uiManager;
+}
+
+void Engine::loadMapIntoGame(QString path)
+{
+    QString mapPath = QCoreApplication::applicationDirPath() + path;
+    gManager->loadMap(mapPath.toStdString());
 }
