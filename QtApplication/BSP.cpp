@@ -4,6 +4,9 @@ Date: Febuary 1, 2026
 File name: BSP.cpp
 Description: Code for the Binary Space Partitioning tree implementation.
 Modifications:
+    Date: April 9, 2026
+        Author: Donavan Sirois
+        Description: Added more readability to the class
 */
 
 #include "bsp.h"
@@ -35,17 +38,9 @@ Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& verteces)
 
     for (int i = 1; i < segments.size(); i++) // Starting at 1, since we use 0 as the partition
     {
-
         // We make the cross product to evaluate the position of a line compared to the partition
-        float deltaXSegmentEnd = verteces[segments[i].end].x - verteces[node->partition.start].x;
-        float deltaYSegmentEnd = verteces[segments[i].end].y - verteces[node->partition.start].y;
-        float deltaXSegmentStart = verteces[segments[i].start].x - verteces[node->partition.start].x;
-        float deltaYSegmentStart = verteces[segments[i].start].y - verteces[node->partition.start].y;
-        float deltaXPartition = verteces[node->partition.end].x - verteces[node->partition.start].x;
-        float deltaYPartition = verteces[node->partition.end].y - verteces[node->partition.start].y;
-
-        float crossProductEnd = (deltaXSegmentEnd * deltaYPartition) - (deltaYSegmentEnd * deltaXPartition);
-        float crossProductStart = (deltaXSegmentStart * deltaYPartition) - (deltaYSegmentStart * deltaXPartition);
+        float crossProductEnd = crossProduct(verteces[node->partition.end], verteces[node->partition.start], verteces[segments[i].end]);
+        float crossProductStart = crossProduct(verteces[node->partition.end], verteces[node->partition.start], verteces[segments[i].start]);
 
         if (crossProductEnd <= 0 && crossProductStart <= 0)
         { // is in front (arbitrarilly), i.e. all point of the line are in front of the partition line
@@ -143,7 +138,7 @@ void BSP::traverseNode(Node* node, const Vertex& playerPosition, std::vector<Lin
 
     float cross = dxPartition * dyPlayer - dyPartition * dxPlayer;
 
-    if (cross > 0)
+    if (cross < 0)
     {
         traverseNode(node->back, playerPosition, walls, verteces);
         walls.push_back(node->partition);

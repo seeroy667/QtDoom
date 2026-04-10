@@ -12,6 +12,7 @@ Modifications:
 #include<QDebug>
 
 #include"geostructs.h"
+#include"utilities.h"
 #include"actor.h"
 
 struct Node
