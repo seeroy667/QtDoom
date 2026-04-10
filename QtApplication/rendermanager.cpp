@@ -27,11 +27,17 @@ RenderManager::RenderManager(QGraphicsScene* scene, int screenWidth, int screenH
     m_screenHeight = screenHeight;
 
     m_wallTexture = QPixmap(":/ressources/temp.jpg");
-    m_enemyTexture = QPixmap(":/ressources/enemy.jpg");
+    m_enemyTexture = QPixmap(":/ressources/Demon5.png");
     m_gunTexture = QPixmap(":/ressources/arme.png");
     m_gunFrames[0] = QPixmap(":/ressources/shoot1.png");
     m_gunFrames[1] = QPixmap(":/ressources/shoot2.png");
     m_gunFrames[2] = QPixmap(":/ressources/shoot3.png");
+    m_enemyFrames[0] = QPixmap(":/ressources/Demon1.png");
+    m_enemyFrames[1] = QPixmap(":/ressources/Demon2.png");
+    m_enemyFrames[2] = QPixmap(":/ressources/Demon3.png");
+    m_enemyFrames[3] = QPixmap(":/ressources/Demon4.png");
+    m_enemyAnimTimer.start();
+
 }
 
 
@@ -62,27 +68,7 @@ void RenderManager::renderWall(const Linedef& wall, const std::vector<Vertex>& v
             << QPointF(screen1.x, height1_floor);
 
     QGraphicsPolygonItem* wallItem = m_scene->addPolygon(polygon);
-
-    float wallWidth  = std::abs(screen2.x - screen1.x);
-    float wallHeight = std::max(std::abs(height1_floor - height1_ceil),
-                                std::abs(height2_floor - height2_ceil));
-
-    if (wallWidth < 1.0f)  wallWidth  = 1.0f;
-    if (wallHeight < 1.0f) wallHeight = 1.0f;
-
-    // Scale via transformation sans créer un nouveau QPixmap
-    float scaleX = wallWidth  / m_wallTexture.width();
-    float scaleY = wallHeight / m_wallTexture.height();
-
-    QTransform transform;
-    transform.translate(std::min(screen1.x, screen2.x),
-                        std::min(height1_ceil, height2_ceil));
-    transform.scale(scaleX, scaleY);
-
-    QBrush textureBrush(m_wallTexture);
-    textureBrush.setTransform(transform);
-
-    wallItem->setBrush(textureBrush);
+    wallItem->setBrush(QColor(60, 60, 60)); // ← gris foncé
     wallItem->setPen(Qt::NoPen);
 }
 
@@ -155,7 +141,6 @@ float RenderManager::projectHeight(float worldHeight, float distance)
 
 void RenderManager::renderActor(Actor* actor, const Actor player, QColor color, float sizeMultiplier)
 {
-
     if (actor->getHealth() <= 0) return;
 
     Vertex camPos = coordPlayer(actor->getPosition(), player);
@@ -163,11 +148,9 @@ void RenderManager::renderActor(Actor* actor, const Actor player, QColor color, 
 
     float screenX = (camPos.x / camPos.y) * m_focalLength + m_screenWidth / 2.0f;
 
-
     float spriteBottom = projectHeight(0.0f, camPos.y);
     float spriteTop    = projectHeight(5.0f, camPos.y);
     float baseSize     = spriteBottom - spriteTop;
-
 
     float squareSize = baseSize * sizeMultiplier;
     float spriteTopAdjusted = spriteBottom - squareSize;
@@ -183,20 +166,35 @@ void RenderManager::renderActor(Actor* actor, const Actor player, QColor color, 
         return;
 
 
+    QPixmap currentTexture;
+    if (actor->isMoving())
+    {
+        // Animation de déplacement boucle sur les 4 frames
+        int frameIndex = (int)(m_enemyAnimTimer.elapsed() / 1000.0f / m_enemyFrameDuration) % 4;
+        if (!m_enemyFrames[frameIndex].isNull())
+            currentTexture = m_enemyFrames[frameIndex];
+        else
+            currentTexture = m_enemyTexture;
+    }
+    else
+    {
+        currentTexture = m_enemyTexture;
+    }
+
     QGraphicsRectItem* spriteItem = m_scene->addRect(spriteRect);
     spriteItem->setPen(Qt::NoPen);
-    if (!m_enemyTexture.isNull())
+
+    if (!currentTexture.isNull())
     {
-        float scaleX = squareSize / m_enemyTexture.width();
-        float scaleY = squareSize / m_enemyTexture.height();
+        float scaleX = squareSize / currentTexture.width();
+        float scaleY = squareSize / currentTexture.height();
 
         QTransform transform;
         transform.translate(spriteRect.left(), spriteRect.top());
         transform.scale(scaleX, scaleY);
 
-        QBrush textureBrush(m_enemyTexture);
+        QBrush textureBrush(currentTexture);
         textureBrush.setTransform(transform);
-
         spriteItem->setBrush(textureBrush);
     }
     else
@@ -211,7 +209,6 @@ void RenderManager::renderActor(Actor* actor, const Actor player, QColor color, 
         spriteItem->setBrush(shadedColor);
     }
 }
-
 void RenderManager::renderRay(float targetScreenX, float targetScreenY, int frames)
 {
     m_rayFramesLeft = frames;

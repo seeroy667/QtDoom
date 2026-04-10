@@ -60,11 +60,19 @@ private:
     QPixmap m_enemyTexture;
     QPixmap m_gunTexture;
     bool m_isPowerUpActive = false;
+
     QPixmap m_gunFrames[3];
     int     m_gunFrame = 0;
     bool    m_gunAnimating = false;
     QElapsedTimer m_gunAnimTimer;
     float   m_frameDuration = 0.1f;
+
+    QPixmap m_enemyFrames[4];
+    int     m_enemyFrame = 0;
+    bool    m_enemyAnimating = false;
+    QElapsedTimer m_enemyAnimTimer;
+    float   m_enemyFrameDuration = 0.15;
+
 
 
 

@@ -18,8 +18,8 @@ MenuPage::MenuPage(QWidget *parent)
     addLevelButton();
     addPageLayout();
     //ajout a la liste
+    menuButtons.append(menu_playButton);   // index 0 → sélectionné par défaut
     menuButtons.append(menu_levelButton);
-    menuButtons.append(menu_playButton);
     connectButtons();
     updateHighlight();
     m_background.load(":/ressources/background1.png");
@@ -86,27 +86,46 @@ void MenuPage::connectButtons()
 
 void MenuPage::updateHighlight()
 {
-    for (int i = 0; i < menuButtons.size(); i++) {
-        if (menuButtons[i] == menu_playButton || menuButtons[i] == menu_levelButton) continue; // ← skip le bouton play
-        menuButtons[i]->setStyleSheet("background-color: black; color: white; border-radius: 15px;");
-    }
-    if (currentIndex < menuButtons.size() && menuButtons[currentIndex] != menu_playButton && menuButtons[currentIndex]!= menu_levelButton)
+    // Remet tous les boutons à leur état normal
+    menu_playButton->setStyleSheet(
+        "QPushButton {"
+        "   border-image: url(:/ressources/bouton1.png) 0 0 0 0 stretch stretch;"
+        "}"
+        "QPushButton:hover {"
+        "   border-image: url(:/ressources/bouton2.png) 0 0 0 0 stretch stretch;"
+        "}"
+        );
+    menu_levelButton->setStyleSheet(
+        "QPushButton {"
+        "   border-image: url(:/ressources/niveau1.png) 0 0 0 0 stretch stretch;"
+        "}"
+        "QPushButton:hover {"
+        "   border-image: url(:/ressources/niveau2.png) 0 0 0 0 stretch stretch;"
+        "}"
+        );
+
+    if (currentIndex == 0) // menu_playButton est à l'index 0
     {
-        menuButtons[currentIndex]->setStyleSheet("background-color: darkgray; color: black; border-radius: 15px;");
+        menu_playButton->setStyleSheet(
+            "QPushButton {"
+            "   border-image: url(:/ressources/bouton2.png) 0 0 0 0 stretch stretch;"
+            "}"
+            );
+    }
+    else if (currentIndex == 1) // menu_levelButton est à l'index 1
+    {
+        menu_levelButton->setStyleSheet(
+            "QPushButton {"
+            "   border-image: url(:/ressources/niveau2.png) 0 0 0 0 stretch stretch;"
+            "}"
+            );
     }
 }
 
 void MenuPage::activateSelectedButton()
 {
-    //qDebug() << "click selection dans menu";
-    if (currentIndex == 0)
-    {
-        menu_levelClicked();
-    }
-    else if (currentIndex == 1)
-    {
-        menu_playClicked();
-    }
+    if (currentIndex == 0) menu_playClicked();
+    else if (currentIndex == 1) menu_levelClicked();
 }
 
 void MenuPage::menu_levelClicked()

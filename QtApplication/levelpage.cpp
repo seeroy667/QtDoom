@@ -37,8 +37,16 @@ void LevelPage::addTitleLevel()
 
 void LevelPage::addQuitButton()
 {
-    m_quitterButton = new QPushButton("Quitter");
-    m_quitterButton->setFixedSize(80, 30);
+    m_quitterButton = new QPushButton();
+    m_quitterButton->setFixedSize(160, 60);
+    m_quitterButton->setAttribute(Qt::WA_Hover);
+    m_quitterButton->setStyleSheet(        "QPushButton {"
+                                   "   border-image: url(:/ressources/retour1.png) 0 0 0 0 stretch stretch;"
+                                   "}"
+                                   "QPushButton:hover {"
+                                   "   border-image: url(:/ressources/retour2.png) 0 0 0 0 stretch stretch;"
+                                   "}"
+                                   );
 }
 
 void LevelPage::addLevelButtons()
@@ -120,19 +128,73 @@ void LevelPage::connectButtons()
 
 void LevelPage::updateHighlight()
 {
-    //qDebug() << "update light";
-    // Réinitialiser les styles de tous les boutons
-    for (int i=0; i<menuButtons.size(); i++) {
-        if(menuButtons[i] == m_niveau1Button || menuButtons[i] == m_niveau2Button || menuButtons[i] == m_niveau3Button) continue;
-        menuButtons[i]->setStyleSheet("background-color: black; color: white;");
-    }
+    // Remet tous les boutons à leur état normal
+    m_quitterButton->setStyleSheet(
+        "QPushButton {"
+        "   border-image: url(:/ressources/retour1.png) 0 0 0 0 stretch stretch;"
+        "}"
+        "QPushButton:hover {"
+        "   border-image: url(:/ressources/retour2.png) 0 0 0 0 stretch stretch;"
+        "}"
+        );
+    m_niveau1Button->setStyleSheet(
+        "QPushButton {"
+        "   border-image: url(:/ressources/portelvl1.1.png) 0 0 0 0 stretch stretch;"
+        "}"
+        "QPushButton:hover {"
+        "   border-image: url(:/ressources/portelvl1.2.png) 0 0 0 0 stretch stretch;"
+        "}"
+        );
+    m_niveau2Button->setStyleSheet(
+        "QPushButton {"
+        "   border-image: url(:/ressources/portelvl2.1.png) 0 0 0 0 stretch stretch;"
+        "}"
+        "QPushButton:hover {"
+        "   border-image: url(:/ressources/portelvl2.2.png) 0 0 0 0 stretch stretch;"
+        "}"
+        );
+    m_niveau3Button->setStyleSheet(
+        "QPushButton {"
+        "   border-image: url(:/ressources/portelvl3.1.png) 0 0 0 0 stretch stretch;"
+        "}"
+        "QPushButton:hover {"
+        "   border-image: url(:/ressources/portelvl3.2.png) 0 0 0 0 stretch stretch;"
+        "}"
+        );
 
-    // Appliquer un style au bouton sélectionné
-    if (currentIndex < menuButtons.size() && menuButtons[currentIndex] != m_niveau1Button && menuButtons[currentIndex] != m_niveau2Button && menuButtons[currentIndex] != m_niveau3Button)
+    // Applique l'image hover sur le bouton sélectionné par la manette
+    if (currentIndex == 0)
     {
-        menuButtons[currentIndex]->setStyleSheet("background-color: darkgray; color: black;");
+        m_quitterButton->setStyleSheet(
+            "QPushButton {"
+            "   border-image: url(:/ressources/retour2.png) 0 0 0 0 stretch stretch;"
+            "}"
+            );
     }
-
+    else if (currentIndex == 1)
+    {
+        m_niveau1Button->setStyleSheet(
+            "QPushButton {"
+            "   border-image: url(:/ressources/portelvl1.2.png) 0 0 0 0 stretch stretch;"
+            "}"
+            );
+    }
+    else if (currentIndex == 2)
+    {
+        m_niveau2Button->setStyleSheet(
+            "QPushButton {"
+            "   border-image: url(:/ressources/portelvl2.2.png) 0 0 0 0 stretch stretch;"
+            "}"
+            );
+    }
+    else if (currentIndex == 3)
+    {
+        m_niveau3Button->setStyleSheet(
+            "QPushButton {"
+            "   border-image: url(:/ressources/portelvl3.2.png) 0 0 0 0 stretch stretch;"
+            "}"
+            );
+    }
 }
 
 void LevelPage::activateSelectedButton()

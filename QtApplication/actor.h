@@ -18,7 +18,7 @@ private:
     bool isAlive;
     float angle;
     float EnemyRange = 40.0f;
-    float EnemySpeed = 5.0f;
+    float EnemySpeed = 10.0f;
     float dx = 0;
     float dy = 0;
     bool canMove = true;
@@ -50,6 +50,7 @@ public:
     int getScore() const { return score; }
     void addScore(int points) { score += points; }
     void resetScore() { score = 0; }
+     bool isMoving() const { return canMove; }
 };
 
 #endif

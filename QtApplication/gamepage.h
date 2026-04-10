@@ -19,6 +19,8 @@ Modifications:
 #include <QHBoxLayout>
 #include <QGraphicsView>
 #include <QStackedWidget>
+#include <QPainter>
+
 
 class GamePage : public QWidget
 {
@@ -80,6 +82,11 @@ private:
     QVector<QPushButton*> menuButtons;
     QVector<QPushButton*> overButtons;
 
+    QPixmap m_pauseBackground;
+    QLabel* m_pauseBgLabel = nullptr;
+    QPixmap m_gameOverBackground;
+    QLabel *m_hudBgLabel = nullptr;
+
     bool potTurns=false;
     bool shootPress=false;
     int menuCurrentIndex=0;
@@ -121,6 +128,8 @@ signals:
 
 protected:
     void showEvent(QShowEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
     void menu_quitClicked();
     void menu_retryClicked();
     void menu_continueClicked();

@@ -24,6 +24,12 @@ Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QG
     m_scene = scene;
     m_view = view;
 
+    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view->setFrameShape(QFrame::NoFrame);
+    view->setStyleSheet("border: none; margin: 0px; padding: 0px; background: transparent;");
+    view->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
     QString mapPath = QCoreApplication::applicationDirPath() + "/../../WadLvl2.txt";
     gManager->loadMap(mapPath.toStdString());
 
@@ -205,7 +211,7 @@ void Engine::gameLoop()
                 float endY   = viewMousePos.y();
 
                 rManager->renderRay(endX, endY, 5);
-                 rManager->triggerGunAnim();
+                rManager->triggerGunAnim();
             }
             else
             {
