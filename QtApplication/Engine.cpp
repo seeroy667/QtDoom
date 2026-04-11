@@ -12,6 +12,7 @@ Modifications:
 Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QGraphicsView *view)
     : QObject(parent)
 {
+
     uiManager = new UIManager(view);
 
     cManager = new ControllerManager();
@@ -24,9 +25,16 @@ Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QG
     m_scene = scene;
     m_view = view;
 
+    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view->setFrameShape(QFrame::NoFrame);
+    view->setStyleSheet("border: none; margin: 0px; padding: 0px; background: transparent;");
+    view->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
     QString mapPath = QCoreApplication::applicationDirPath() + "/../../WadLvl2.txt";
     gManager->loadMap(mapPath.toStdString());
 
+    connect(uiManager, SIGNAL(loadMap(QString)), this, SLOT(loadMapIntoGame(QString)));
     connect(uiManager, SIGNAL(startGame()), this, SLOT(start()));
     connect(uiManager, SIGNAL(keyPressSig(QKeyEvent*)), cManager, SLOT(keyPressedEvent(QKeyEvent*)));
     connect(uiManager, SIGNAL(keyReleaseSig(QKeyEvent*)), cManager, SLOT(keyReleasedEvent(QKeyEvent*)));
@@ -204,16 +212,19 @@ void Engine::gameLoop()
                 float endX   = viewMousePos.x();
                 float endY   = viewMousePos.y();
 
-                rManager->renderRay(endX, endY, 5);
+                //rManager->renderRay(endX, endY, 5);
+                 rManager->triggerGunAnim();
             }
             else
             {
                 weapon->restartShootTimer(); // respecte le cooldown même à 0 munitions
             }
+
         }
         // Toujours consommer le pending shot, que le cooldown soit prêt ou non
         // Sinon les tirs s'accumulent pendant un rechargement et partent en rafale après
         cManager->resetShot();
+        uiManager->updateScore(gManager->getPlayer()->getScore());
     }
 
     if(cManager->isReloading())
@@ -226,9 +237,22 @@ void Engine::gameLoop()
         cManager->resetReload();
     }
 
-    rManager->render(*gManager->getPlayer(), gManager->getRenderedEnemy(),
-                     gManager->getBSP(), gManager->getVerteces(), gManager->getSectors());
+    rManager->render(*gManager->getPlayer(),
+                     gManager->getRenderedEnemy(),
+                     gManager->getRenderedRangedEnemies(),
+                     gManager->getProjectiles(),
+                     gManager->getHeals(),
+                     gManager->getBSP(),
+                     gManager->getVerteces(),
+                     gManager->getSectors());
 
+    if(gManager->isBossRenderable())
+    {
+        if(gManager->getBSP()->enemyRendering(gManager->getPlayer()->getPosition(), gManager->getBoss()->getPosition(), gManager->getVerteces()))
+        {
+            rManager->renderActor(gManager->getBoss(),*gManager->getPlayer(),QColor(150,0,0), 2.5f);
+        }
+    }
     gManager->update(deltaTime, rManager->getRenderedWalls());
 
     if(cManager->isPowerUp())
@@ -265,4 +289,10 @@ ControllerManager* Engine::getcManager() const
 UIManager* Engine::getuiManager() const
 {
     return uiManager;
+}
+
+void Engine::loadMapIntoGame(QString path)
+{
+    QString mapPath = QCoreApplication::applicationDirPath() + path;
+    gManager->loadMap(mapPath.toStdString());
 }

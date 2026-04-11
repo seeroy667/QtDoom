@@ -21,6 +21,7 @@ Modifications:
 #include "Weapon.h"
 #include "mapreader.h"
 #include "collisionmanager.h"
+#include "projectile.h"
 
 class GameManager: public QObject
 {
@@ -34,29 +35,40 @@ public:
     void update(float deltaTime, std::vector<Linedef> renderedWalls);
     bool inRadius(Actor *p, Actor *e);
     bool shoot(QPoint mousePos, QSize screenSize);
-
     const std::vector<Vertex>& getVerteces() const {return verteces;};
     const std::vector<Linedef>& getLinedefs() const {return linedefs;};
     const std::vector<Sector>& getSectors() const {return sectors;};
-
     void updateVie();
     Weapon* getWeapon();
     void restartGame();
-
     std::vector<Actor*> getRenderedEnemy();
-
     void collectAllWalls(Node* node, std::vector<Linedef>& walls);
-
-
     void spawnWave(int count);
     bool isWaveClear() const;
     int getCurrentWave() const {return m_currentWave;}
     std::vector<Actor*>& getCreatures(){return creatures;}
+    Actor* getBoss();
+    bool isBossRenderable();
+
+    //Heal
+    void spawnHealIfNeeded();
+    const std::vector<Vertex>& getHeals() const { return m_healPickups;}
+    void checkHealPickup();
+
+    //Projectile
+    const std::vector<Projectile>& getProjectiles() const {return m_projectiles;}
+    const std::vector<Actor*>& getRangedEnemies() const { return m_rangedEnemies; }
+    std::vector<Actor*> getRenderedRangedEnemies();
+
 
 private:
     Actor *p;
     Actor *e;
     std::vector<Actor*> creatures;
+    Actor* m_boss = nullptr;
+    void SpawnBoss();
+    bool m_bossAlive = false;
+    bool m_bossSpawn = false;
     BSP* bsp = nullptr;
     Weapon* m_playerWeapon = nullptr;
     MapReader* map;
@@ -72,9 +84,18 @@ private:
     bool m_inContact = false;
 
     std::vector<Vertex> m_spawnPoints;
-    std::vector<int> m_waveSizes = {10,20,30};
+    int waveSizeForWave(int wave) const { return 5 + wave; }
     int m_currentWave = 0;
     bool m_waveActive = false;
+
+    std::vector<Vertex> m_healPickups;
+    int m_lastHealScore = 0;
+
+    std::vector<Actor*> m_rangedEnemies;
+    std::vector<Projectile> m_projectiles;
+    void spawnRangedWave(int count, const std::vector<Vertex>& usedPositions);
+    void updateProjectiles(float deltaTime);
+
 
 signals:
     void sigUpdateVie(int value);

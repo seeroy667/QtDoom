@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QStackedWidget>
+#include <QString>
 #include "menupage.h"
 #include "gamepage.h"
 #include "levelpage.h"
@@ -28,12 +29,14 @@ private:
     LevelPage *levelPage;
     bool potTurns=false;
     bool shootPress=false;
+    QString pathToLevel = "/../../WadLvl1.txt"; //par défaut load lvl1
 
 signals:
     void startGame();
     void keyReleaseSig(QKeyEvent *event);
     void keyPressSig(QKeyEvent *event);
     void pauseGame();
+    void loadMap(QString path = "");
 
 public slots:
     void potIsTurning();
@@ -44,6 +47,8 @@ public slots:
     void keyReleaseEvent(QKeyEvent *event) override;
     void updateBalles(int value);
     void updateVie(int value);
+    void updateScore(int value);
+    void saveLevelPath(QString path = "");
 };
 
 #endif // UIMANAGER_H

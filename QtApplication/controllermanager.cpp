@@ -83,6 +83,8 @@ void ControllerManager::updateEncodeur(int value) {
 
 void ControllerManager::keyPressedEvent(QKeyEvent * event)
 {
+
+
     if (event->key() == Qt::Key_W) kFront = true;
     if (event->key() == Qt::Key_S) kBack = true;
     if (event->key() == Qt::Key_A) kLeft = true;
@@ -122,6 +124,7 @@ void ControllerManager::keyPressedEvent(QKeyEvent * event)
 
 void ControllerManager::keyReleasedEvent(QKeyEvent * event)
 {
+
     if (event->key() == Qt::Key_W) kFront = false;
     if (event->key() == Qt::Key_S) kBack = false;
     if (event->key() == Qt::Key_A) kLeft = false;

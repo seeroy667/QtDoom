@@ -14,6 +14,7 @@ Modifications:
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QFont>
+#include <QPainter>
 
 class LevelPage : public QWidget
 {
@@ -43,6 +44,7 @@ private:
     QHBoxLayout *topLayout;
     QHBoxLayout *levelsLayout;
     QVector<QPushButton*> menuButtons;
+    QPixmap m_background;
 
     int currentIndex=0;
     void addTitleLevel();
@@ -52,6 +54,9 @@ private:
     void addLevelButtonsLayout();
     void addPageLayout();
     void connectButtons();
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
 
 public slots:
     void changeButtons();
@@ -64,6 +69,7 @@ signals:
     void level_2ClickedSig();
     void level_3ClickedSig();
     void level_quitClickedSig();
+    void chosenLevelPath(QString path = "");
 };
 
 #endif // LEVELPAGE_H

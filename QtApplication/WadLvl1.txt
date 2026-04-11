@@ -34,14 +34,6 @@ vertex 32 -50.0 -30.0
 vertex 33 -50.0 30.0
 vertex 34 -30.0 50.0
 vertex 35 -10.0 60.0
-vertex 36 -80.0 50.0
-vertex 37 -70.0 70.0
-vertex 38 -50.0 80.0
-vertex 39 -50.0 50.0
-vertex 40 50.0 -50.0
-vertex 41 70.0 -50.0
-vertex 42 80.0 -70.0
-vertex 43 50.0 -80.0
 sector 0 0.0 20.0
 linedef 0 0 1 0 -1 false
 linedef 1 1 2 0 -1 false
@@ -78,11 +70,3 @@ linedef 31 31 32 0 -1 false
 linedef 32 32 33 0 -1 false
 linedef 33 33 34 0 -1 false
 linedef 34 34 35 0 -1 false
-linedef 35 36 37 0 -1 false
-linedef 36 37 38 0 -1 false
-linedef 37 38 39 0 -1 false
-linedef 38 39 36 0 -1 false
-linedef 39 40 41 0 -1 false
-linedef 40 41 42 0 -1 false
-linedef 41 42 43 0 -1 false
-linedef 42 43 40 0 -1 false

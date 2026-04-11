@@ -1,6 +1,43 @@
 <RCC>
     <qresource prefix="/">
         <file>ressources/temp.jpg</file>
-        <file>ressources/enemy.jpg</file>
+        <file>ressources/background1.png</file>
+        <file>ressources/DOOMLOGO.png</file>
+        <file>ressources/bouton1.png</file>
+        <file>ressources/bouton2.png</file>
+        <file>ressources/niveau1.png</file>
+        <file>ressources/niveau2.png</file>
+        <file>ressources/background2.png</file>
+        <file>ressources/portelvl1.1.png</file>
+        <file>ressources/portelvl1.2.png</file>
+        <file>ressources/portelvl2.1.png</file>
+        <file>ressources/portelvl2.2.png</file>
+        <file>ressources/portelvl3.1.png</file>
+        <file>ressources/portelvl3.2.png</file>
+        <file>ressources/arme.png</file>
+        <file>ressources/shoot1.png</file>
+        <file>ressources/shoot2.png</file>
+        <file>ressources/shoot3.png</file>
+        <file>ressources/Demon5.png</file>
+        <file>ressources/Demon1.png</file>
+        <file>ressources/Demon2.png</file>
+        <file>ressources/Demon3.png</file>
+        <file>ressources/Demon4.png</file>
+        <file>ressources/retour1.png</file>
+        <file>ressources/retour2.png</file>
+        <file>ressources/pause.png</file>
+        <file>ressources/pauseLabel.png</file>
+        <file>ressources/continuer1.png</file>
+        <file>ressources/continuer2.png</file>
+        <file>ressources/quitter1.png</file>
+        <file>ressources/quitter2.png</file>
+        <file>ressources/recommencer1.png</file>
+        <file>ressources/recommencer2.png</file>
+        <file>ressources/backgroundMort.png</file>
+        <file>ressources/gameover.png</file>
+        <file>ressources/hud.png</file>
+        <file>ressources/range1.png</file>
+        <file>ressources/range2.png</file>
+        <file>ressources/range3.png</file>
     </qresource>
 </RCC>

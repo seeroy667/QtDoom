@@ -53,6 +53,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         images.qrc
         utilities.cpp
         utilities.h
+        projectile.h
+
 
 
 

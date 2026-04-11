@@ -19,6 +19,8 @@ Modifications:
 #include <QHBoxLayout>
 #include <QGraphicsView>
 #include <QStackedWidget>
+#include <QPainter>
+
 
 class GamePage : public QWidget
 {
@@ -29,6 +31,7 @@ public:
     bool gameIsOn();
     void updateVie(int vie);
     void updateBalles(int balles);
+    void updateScore(int value);
     QLineEdit* amoEdit();
 
 private:
@@ -67,6 +70,7 @@ private:
     QLabel *labelAmo;
     QLabel *popupTitle;
     QLabel *gameOverTitle;
+    QLabel *scoreLabel;
 
     QFont font;
     QFont overFont;
@@ -77,6 +81,11 @@ private:
 
     QVector<QPushButton*> menuButtons;
     QVector<QPushButton*> overButtons;
+
+    QPixmap m_pauseBackground;
+    QLabel* m_pauseBgLabel = nullptr;
+    QPixmap m_gameOverBackground;
+    QLabel *m_hudBgLabel = nullptr;
 
     bool potTurns=false;
     bool shootPress=false;
@@ -109,6 +118,7 @@ private:
     void addPageOverLayout();
     void addBallesProgressBar();
 
+
 signals:
     void menu_quitClickedSig();
     void menu_retryClickedSig();
@@ -118,6 +128,8 @@ signals:
 
 protected:
     void showEvent(QShowEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
     void menu_quitClicked();
     void menu_retryClicked();
     void menu_continueClicked();
