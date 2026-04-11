@@ -150,3 +150,18 @@ void Weapon::resetGameAmmo()
     updateBalles();
 }
 void    Weapon::setCurrentAmmo(int value) { m_currentAmmo = value; }
+
+float Weapon::getPowerUpProgress() const
+{
+    if (m_isPoweredUp)
+    {
+
+        float elapsed = m_powerUpTimer.elapsed();
+        return 1.0f - (elapsed / powerUpDuration);
+    }
+    else
+    {
+        float elapsed = m_powerUpCdTimer.elapsed();
+        return std::min(1.0f, elapsed / powerUpCd);
+    }
+}

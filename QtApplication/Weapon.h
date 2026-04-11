@@ -55,6 +55,7 @@ public:
     void updateBalles();
     void resetGameAmmo();
     void setCurrentAmmo(int value);
+    float getPowerUpProgress() const;
 
 signals:
     void sigUpdateBalles(int value);

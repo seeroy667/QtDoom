@@ -14,7 +14,6 @@
         <file>ressources/portelvl2.2.png</file>
         <file>ressources/portelvl3.1.png</file>
         <file>ressources/portelvl3.2.png</file>
-        <file>ressources/arme.png</file>
         <file>ressources/shoot1.png</file>
         <file>ressources/shoot2.png</file>
         <file>ressources/shoot3.png</file>
@@ -39,5 +38,11 @@
         <file>ressources/range1.png</file>
         <file>ressources/range2.png</file>
         <file>ressources/range3.png</file>
+        <file>ressources/shotgun.png</file>
+        <file>ressources/shotgunMap.png</file>
+        <file>ressources/tir2.png</file>
+        <file>ressources/tir3.png</file>
+        <file>ressources/tir4.png</file>
+        <file>ressources/tir1.png</file>
     </qresource>
 </RCC>

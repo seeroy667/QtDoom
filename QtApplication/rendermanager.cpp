@@ -40,6 +40,12 @@ RenderManager::RenderManager(QGraphicsScene* scene, int screenWidth, int screenH
     m_rangedShootFrames[0] = QPixmap(":/ressources/range1.png");
     m_rangedShootFrames[1] = QPixmap(":/ressources/range2.png");
     m_rangedShootFrames[2] = QPixmap(":/ressources/range3.png");
+    m_shotgunMapTexture  = QPixmap(":/ressources/shotgunMap.png");
+    m_shotgunIdleTexture = QPixmap(":/ressources/shotgun.png");
+    m_shotgunFrames[0]   = QPixmap(":/ressources/tir1.png");
+    m_shotgunFrames[1]   = QPixmap(":/ressources/tir2.png");
+    m_shotgunFrames[2]   = QPixmap(":/ressources/tir3.png");
+    m_shotgunFrames[3]   = QPixmap(":/ressources/tir4.png");
     m_enemyAnimTimer.start();
 
 }
@@ -203,6 +209,25 @@ void RenderManager::renderActor(Actor* actor, const Actor player, QColor color, 
         {
             currentTexture = m_enemyTexture;
         }
+
+        float healthPercent = (float)actor->getHealth() / (float)actor->getMaxHealth();
+
+        float barWidth  = squareSize;
+        float barHeight = 6.0f;
+        float barX      = screenX - squareSize / 2.0f;
+        float barY      = spriteTopAdjusted - 10.0f; // au dessus du sprite
+
+        // Fond rouge
+        QGraphicsRectItem* barBg = m_scene->addRect(barX, barY, barWidth, barHeight);
+        barBg->setBrush(QColor(150, 0, 0));
+        barBg->setPen(Qt::NoPen);
+        barBg->setZValue(-camPos.y + 0.1f);
+
+
+        QGraphicsRectItem* barFg = m_scene->addRect(barX, barY, barWidth * healthPercent, barHeight);
+        barFg->setBrush(QColor(0, 200, 0));
+        barFg->setPen(Qt::NoPen);
+        barFg->setZValue(-camPos.y + 0.2f);
     }
     QGraphicsRectItem* spriteItem = m_scene->addRect(spriteRect);
     spriteItem->setPen(Qt::NoPen);
@@ -243,23 +268,38 @@ void RenderManager::renderRay(float targetScreenX, float targetScreenY, int fram
 
 void RenderManager::renderGun()
 {
+    int maxFrames = m_hasShotgun ? 4 : 3;
+
     if (m_gunAnimating)
     {
         int frameIndex = (int)(m_gunAnimTimer.elapsed() / 1000.0f / m_frameDuration);
-        if (frameIndex >= 3)
+        if (frameIndex >= maxFrames)
         {
-            frameIndex = 0;
+            m_gunAnimating = false;
         }
-        m_gunFrame = frameIndex;
+        else
+        {
+            m_gunFrame = frameIndex;
+        }
     }
 
     int gunWidth  = 500;
     int gunHeight = 250;
-    float gunX = (m_screenWidth  / 2.0f) - (gunWidth  / 2.0f);
+    float gunX = (m_screenWidth / 2.0f) - (gunWidth / 2.0f);
     float gunY = (m_screenHeight - gunHeight);
 
-    QPixmap scaled = m_gunFrames[m_gunFrame].scaled(gunWidth, gunHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    QGraphicsPixmapItem *gunItem = m_scene->addPixmap(scaled);
+    QPixmap toRender;
+    if (m_gunAnimating)
+    {
+        toRender = m_hasShotgun ? m_shotgunFrames[m_gunFrame] : m_gunFrames[m_gunFrame];
+    }
+    else
+    {
+        toRender = m_hasShotgun ? m_shotgunIdleTexture : m_gunFrames[0];
+    }
+
+    QPixmap scaled = toRender.scaled(gunWidth, gunHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    QGraphicsPixmapItem* gunItem = m_scene->addPixmap(scaled);
     gunItem->setPos(gunX, gunY);
 }
 
@@ -275,6 +315,7 @@ void RenderManager::render(Actor m_player,
                            const std::vector<Actor*>& rangedEnemies,
                            const std::vector<Projectile>& projectiles,
                            const std::vector<Vertex>& heals,
+                           const std::vector<Vertex>& weaponPickups,
                            BSP* bsp,
                            const std::vector<Vertex>& verteces,
                            const std::vector<Sector>& sectors)
@@ -299,14 +340,14 @@ void RenderManager::render(Actor m_player,
         Vertex camPos = coordPlayer(proj.position, m_player);
         if (camPos.y < distanceMin) continue;
 
-        // Angle relatif entre la caméra et le projectile
+
         float angleToProj = std::atan2(camPos.x, camPos.y);
 
-        // FOV de 90 degrés (pi/2), donc on mappe l'angle sur la largeur de l'écran
-        float halfFov = M_PI / 2.0f;
-        if (std::abs(angleToProj) > halfFov) continue; // hors FOV
 
-        // Projection basée sur l'angle plutôt que sur x/y directement
+        float halfFov = M_PI / 2.0f;
+        if (std::abs(angleToProj) > halfFov) continue;
+
+
         float screenX = (angleToProj / halfFov) * (m_screenWidth / 2.0f) + m_screenWidth / 2.0f;
 
         float distance = std::sqrt(camPos.x * camPos.x + camPos.y * camPos.y);
@@ -326,6 +367,9 @@ void RenderManager::render(Actor m_player,
     }
     //heal
     renderHeals(heals, m_player);
+
+    //Shotgun
+    renderWeaponPickups(weaponPickups, m_player);
 
     float gunX = (m_screenWidth / 2.0f) - (200 / 2.0f);
     float gunY = (m_screenHeight - 100);
@@ -404,5 +448,58 @@ void RenderManager::renderHeals(const std::vector<Vertex>& heals, const Actor& p
             );
         vBar->setBrush(QColor(0, 200, 0));
         vBar->setPen(Qt::NoPen);
+    }
+}
+void RenderManager::setShotgunMode(bool hasShotgun)
+{
+    m_hasShotgun = hasShotgun;
+}
+
+void RenderManager::renderWeaponPickups(const std::vector<Vertex>& pickups, const Actor& player)
+{
+    for (const Vertex& pickup : pickups)
+    {
+        Vertex camPos = coordPlayer(pickup, player);
+        if (camPos.y < distanceMin) continue;
+
+        float screenX = (camPos.x / camPos.y) * m_focalLength + m_screenWidth / 2.0f;
+        float spriteBottom = projectHeight(0.0f, camPos.y);
+        float spriteTop    = projectHeight(5.0f, camPos.y);
+        float baseSize = (spriteBottom - spriteTop) * 0.8f;
+
+        if (screenX + baseSize < 0 || screenX - baseSize > m_screenWidth) continue;
+
+        float centerY = (spriteBottom + spriteTop) / 2.0f;
+
+
+        float ratio  = m_shotgunMapTexture.isNull() ? 3.0f
+                                                   : (float)m_shotgunMapTexture.width() / m_shotgunMapTexture.height();
+        float height = baseSize;
+        float width  = baseSize * ratio;
+
+        QGraphicsRectItem* item = m_scene->addRect(
+            screenX - width / 2.0f,
+            centerY - height / 2.0f,
+            width,
+            height
+            );
+        item->setPen(Qt::NoPen);
+        item->setZValue(-camPos.y);
+
+        if (!m_shotgunMapTexture.isNull())
+        {
+            float scaleX = width  / m_shotgunMapTexture.width();
+            float scaleY = height / m_shotgunMapTexture.height();
+            QTransform transform;
+            transform.translate(screenX - width / 2.0f, centerY - height / 2.0f);
+            transform.scale(scaleX, scaleY);
+            QBrush brush(m_shotgunMapTexture);
+            brush.setTransform(transform);
+            item->setBrush(brush);
+        }
+        else
+        {
+            item->setBrush(QColor(200, 150, 50));
+        }
     }
 }

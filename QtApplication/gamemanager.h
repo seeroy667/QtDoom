@@ -61,6 +61,8 @@ public:
     const std::vector<Projectile>& getProjectiles() const {return m_projectiles;}
     const std::vector<Actor*>& getRangedEnemies() const { return m_rangedEnemies; }
     std::vector<Actor*> getRenderedRangedEnemies();
+    const std::vector<Vertex>& getWeaponPickups() const { return m_weaponPickups; }
+    bool playerHasShotgun() const { return m_playerHasShotgun; }
 
 
 private:
@@ -97,6 +99,11 @@ private:
     std::vector<Projectile> m_projectiles;
     void spawnRangedWave(int count, const std::vector<Vertex>& usedPositions);
     void updateProjectiles(float deltaTime);
+    std::vector<Vertex> m_weaponPickups;
+    bool m_playerHasShotgun = false;
+    void spawnWeaponPickup();
+    void checkWeaponPickup();
+    int m_shotgunWave = -1;
 
     //temporaire pour test
     int playerScore = QRandomGenerator::global()->bounded(100, 5000);
@@ -105,10 +112,14 @@ signals:
     void sigUpdateVie(int value);
     void sigUpdateBalles(int value);
     void playerDead();
+<<<<<<< Updated upstream
     void scoreResult(int value);
 
 public slots:
     void giveScore();
+=======
+    void sigWeaponChanged();
+>>>>>>> Stashed changes
 };
 
 #endif // GAMEMANAGER_H

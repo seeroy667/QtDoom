@@ -43,6 +43,7 @@ void GamePage::addGameWidget(QGraphicsView *view)
     addVieProgressBar();
     addBallesNum();
     addBallesProgressBar();
+    addPowerUpProgressBar();
     //layout du jeu
     centralLayout->addWidget(view);
     gameLayout->addWidget(centralWidget);
@@ -80,6 +81,27 @@ void GamePage::addBallesProgressBar()
     m_barBalles->setValue(10); //a modifier
 }
 
+void GamePage::addPowerUpProgressBar()
+{
+    labelPowerUp = new QLabel("");
+    labelPowerUp->setStyleSheet("color: white; font-size: 18px;");
+
+    m_barPowerUp = new QProgressBar;
+    m_barPowerUp->setFixedHeight(30);
+    m_barPowerUp->setFixedWidth(150);
+    m_barPowerUp->setTextVisible(false);
+    m_barPowerUp->setRange(0, 100);
+    m_barPowerUp->setValue(0);
+    m_barPowerUp->setStyleSheet(
+        "QProgressBar {"
+        "   background:#222; border: 2px solid #333; border-radius: 4px;"
+        "}"
+        "QProgressBar::chunk {"
+        "   background-color: #00aaff;" // bleu
+        "}"
+        );
+}
+
 void GamePage::addBallesNum()
 {
     labelAmo = new QLabel("balles:");
@@ -93,27 +115,41 @@ void GamePage::addBarreEtat()
 {
     barWidget = new QWidget;
     barWidget->setStyleSheet("background-color: gray;");
-    barWidget->setFixedHeight(100);
+    barWidget->setFixedHeight(140);
 }
 
 void GamePage::addLayoutBarreEtat()
 {
     barLayout = new QHBoxLayout(barWidget);
-    barLayout->addStretch();
-    barLayout->addWidget(labelVie);
-    barLayout->addWidget(m_barVie);
+    barLayout->setContentsMargins(20, 10, 20, 10);
 
-    barLayout->addSpacing(100);
-    /*barLayout->addWidget(labelAmo);
-    barLayout->addWidget(m_writeAmo);*/
-    barLayout->addWidget(labelBalles);
-    barLayout->addWidget(m_barBalles);
+    // --- Colonne GAUCHE : score ---
+    QVBoxLayout* leftLayout = new QVBoxLayout();
+    QLabel* scoreTitle = new QLabel("Score");
+    scoreTitle->setStyleSheet("color: white; font-size: 14px;");
+    leftLayout->addWidget(scoreTitle, 0, Qt::AlignCenter);
+    leftLayout->addWidget(scoreLabel, 0, Qt::AlignCenter);
 
-    barLayout->addSpacing(40);
-    barLayout->addWidget(scoreLabel);
+    // --- Colonne CENTRE : vie (haut) + powerup (bas) alignées au centre ---
+    QVBoxLayout* centerLayout = new QVBoxLayout();
+    centerLayout->setSpacing(8);
+    centerLayout->addWidget(m_barVie, 0, Qt::AlignCenter);    // ← pas de label, centré
+    centerLayout->addWidget(m_barPowerUp, 0, Qt::AlignCenter); // ← pas de label, centré
+
+    // --- Colonne DROITE : balles ---
+    QVBoxLayout* rightLayout = new QVBoxLayout();
+    QLabel* ballesTitle = new QLabel("Balles");
+    ballesTitle->setStyleSheet("color: white; font-size: 14px;");
+    rightLayout->addWidget(ballesTitle, 0, Qt::AlignCenter);
+    rightLayout->addWidget(m_barBalles, 0, Qt::AlignCenter);
+
+    // --- Assemblage ---
+    barLayout->addLayout(leftLayout);
     barLayout->addStretch();
+    barLayout->addLayout(centerLayout);
+    barLayout->addStretch();
+    barLayout->addLayout(rightLayout);
 }
-
 void GamePage::addMenuPopupWidget()
 {
     addTitleMenu();
@@ -550,4 +586,25 @@ void GamePage::gameOver()
 void GamePage::updateScore(int value)
 {
     scoreLabel->setText(QString::number(value));
+}
+void GamePage::updatePowerUp(float progress)
+{
+    m_barPowerUp->setValue((int)(progress * 100));
+
+    // Couleur différente selon l'état
+    if (progress >= 1.0f)
+    {
+        // Pleine charge — clignote en blanc
+        m_barPowerUp->setStyleSheet(
+            "QProgressBar { background:#222; border: 2px solid #00aaff; border-radius: 4px; }"
+            "QProgressBar::chunk { background-color: white; }"
+            );
+    }
+    else
+    {
+        m_barPowerUp->setStyleSheet(
+            "QProgressBar { background:#222; border: 2px solid #333; border-radius: 4px; }"
+            "QProgressBar::chunk { background-color: #00aaff; }"
+            );
+    }
 }

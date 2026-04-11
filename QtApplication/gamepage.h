@@ -32,6 +32,8 @@ public:
     void updateVie(int vie);
     void updateBalles(int balles);
     void updateScore(int value);
+    void updatePowerUp(float progress);
+
     QLineEdit* amoEdit();
 
 private:
@@ -92,6 +94,10 @@ private:
     int menuCurrentIndex=0;
     int overCurrentIndex=0;
 
+    QProgressBar* m_barPowerUp = nullptr;
+    QLabel* labelPowerUp = nullptr;
+
+
     void addGameWidget(QGraphicsView *view);
     void addMenuPopupWidget();
     void addGameoverWidget();
@@ -117,6 +123,7 @@ private:
     void addQuitButtonOverLayout();
     void addPageOverLayout();
     void addBallesProgressBar();
+    void addPowerUpProgressBar();
 
 
 signals:

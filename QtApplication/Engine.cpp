@@ -53,9 +53,13 @@ Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QG
     connect(cManager, SIGNAL(confirmSig()), uiManager, SLOT(shootPressed()));
     connect(&timer, &QTimer::timeout, this, &Engine::gameLoop);
     connect(gManager, SIGNAL(sigUpdateVie(int)), uiManager, SLOT(updateVie(int)));
+<<<<<<< Updated upstream
     //get score
     connect(uiManager, SIGNAL(getScore()), gManager, SLOT(giveScore()));
     connect(gManager, SIGNAL(scoreResult(int)), uiManager, SLOT(setScore(int)));
+=======
+    connect(gManager, SIGNAL(sigWeaponChanged()), this, SLOT(onWeaponChanged()));
+>>>>>>> Stashed changes
 }
 
 Engine::~Engine()
@@ -242,9 +246,11 @@ void Engine::gameLoop()
                      gManager->getRenderedRangedEnemies(),
                      gManager->getProjectiles(),
                      gManager->getHeals(),
+                     gManager->getWeaponPickups(),
                      gManager->getBSP(),
                      gManager->getVerteces(),
-                     gManager->getSectors());
+                     gManager->getSectors()
+                     );
 
     if(gManager->isBossRenderable())
     {
@@ -278,6 +284,7 @@ void Engine::gameLoop()
         if (uiManager->getGamePage()->amoEdit())
             uiManager->getGamePage()->amoEdit()->setText(QString::number(ammo));
         uiManager->updateBalles(ammo);
+        uiManager->getGamePage()->updatePowerUp(weapon->getPowerUpProgress());
     }
 }
 
@@ -302,4 +309,8 @@ void Engine::loadMapIntoGame(QString path)
         gManager->loadMap(mapPath.toStdString());
     }
     oldMap=path;
+}
+void Engine::onWeaponChanged()
+{
+    rManager->setShotgunMode(gManager->playerHasShotgun());
 }

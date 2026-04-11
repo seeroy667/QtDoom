@@ -54,6 +54,7 @@ public slots:
     void updateBalles(int value);
     void updateVie(int value);
     void updateScore(int value);
+    void updatePowerUp(float value);
     void saveLevelPath(QString path = "");
     void goToMenuPage();
     void goToLeaderBoard();

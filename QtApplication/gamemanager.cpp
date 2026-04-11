@@ -44,6 +44,9 @@ void GameManager::restartGame()
     }
     m_bossAlive = false;
     m_bossSpawn = false;
+    m_weaponPickups.clear();
+    m_playerHasShotgun = false;
+    m_shotgunWave = -1;
 }
 
 Actor* GameManager::getPlayer()
@@ -137,6 +140,9 @@ void GameManager::spawnWave(int count)
     m_rangedEnemies.clear();
     m_projectiles.clear();
 
+    if (m_currentWave == 2 || m_currentWave == 5 || m_currentWave == 9 && !m_playerHasShotgun)
+        spawnWeaponPickup();
+
     spawnRangedWave(1 + m_currentWave, usedPositions);
 
 }
@@ -182,11 +188,23 @@ void GameManager::update(float deltaTime, std::vector<Linedef> renderedWalls)
         }
         else if(!m_bossSpawn)
         {
+            if (m_playerHasShotgun && m_currentWave > m_shotgunWave)
+            {
+                m_playerHasShotgun = false;
+                m_shotgunWave = -1;
+                delete m_playerWeapon;
+                m_playerWeapon = new Weapon(1, 1000.0f, 10.0f, 10, 2.0f); // retour arme de base
+                p->setWeapon(m_playerWeapon);
+                emit sigWeaponChanged();
+            }
             m_waveActive = false;
         }
     }
     //---Spawn de Vie---
     checkHealPickup();
+
+    //---ShotGun---
+    checkWeaponPickup();
 
     //---mise a jour creature distance---
     updateProjectiles(deltaTime);
@@ -453,6 +471,7 @@ void GameManager::SpawnBoss()
     }
     m_boss = new Actor();
     m_boss->setHealth(20);
+    m_boss->setMaxHealth(20);
     m_boss->setAngle(0.0f);
     m_boss->setPosition(bossSpawn.x, bossSpawn.y);
     m_bossAlive = true;
@@ -619,6 +638,7 @@ std::vector<Actor*> GameManager::getRenderedRangedEnemies()
     return result;
 }
 
+<<<<<<< Updated upstream
 void GameManager::giveScore()
 {
     emit scoreResult(playerScore);
@@ -641,3 +661,44 @@ GameManager::~GameManager()
         delete m_boss;
     }
 }
+=======
+void GameManager::spawnWeaponPickup()
+{
+    if (m_spawnPoints.empty()) return;
+    // Spawn à un point aléatoire loin du joueur
+    for (const Vertex& pos : m_spawnPoints)
+    {
+        float dx = pos.x - p->getPosition().x;
+        float dy = pos.y - p->getPosition().y;
+        if (std::sqrt(dx*dx + dy*dy) > 8.0f)
+        {
+            m_weaponPickups.push_back(pos);
+            break;
+        }
+    }
+}
+void GameManager::checkWeaponPickup()
+{
+    if (m_weaponPickups.empty()) return;
+    Vertex playerPos = p->getPosition();
+    float pickupRadius = 2.0f;
+
+    for (int i = (int)m_weaponPickups.size() - 1; i >= 0; i--)
+    {
+        float dx = playerPos.x - m_weaponPickups[i].x;
+        float dy = playerPos.y - m_weaponPickups[i].y;
+        if ((dx*dx + dy*dy) < (pickupRadius * pickupRadius))
+        {
+
+            delete m_playerWeapon;
+            m_playerWeapon = new Weapon(5, 1000.0f, 2.0f, 10, 2.0f);
+            p->setWeapon(m_playerWeapon);
+            m_playerHasShotgun = true;
+            m_weaponPickups.erase(m_weaponPickups.begin() + i);
+            emit sigWeaponChanged();
+        }
+    }
+    m_playerHasShotgun = true;
+    m_shotgunWave = m_currentWave;
+}
+>>>>>>> Stashed changes

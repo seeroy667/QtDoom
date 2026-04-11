@@ -225,6 +225,11 @@ void UIManager::updateScore(int value)
     getGamePage()->updateScore(value);
 }
 
+void UIManager::updatePowerUp(float value)
+{
+    getGamePage()->updatePowerUp(value);
+}
+
 void UIManager::saveLevelPath(QString path)
 {
     stackedWidget->setCurrentWidget(menuPage);

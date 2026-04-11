@@ -75,6 +75,7 @@ public slots:
     void quitGame();
     void gameOver();
     void loadMapIntoGame(QString path = "");
+    void onWeaponChanged();
 };
 
 #endif

@@ -16,6 +16,7 @@ class Actor{
 private:
     Vertex position;
     int health;
+    int maxHealth;
     bool isAlive;
     float angle;
     float EnemyRange = 40.0f;
@@ -62,6 +63,8 @@ public:
     void addScore(int points) { score += points; }
     void resetScore() { score = 0; }
     bool isMoving() const { return canMove; }
+    int getMaxHealth() const { return maxHealth; }
+    void setMaxHealth(int h) { maxHealth = h; }
 
     //---Enemy Range---
     bool isRanged()const { return m_isRanged;}
