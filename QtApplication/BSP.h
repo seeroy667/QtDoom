@@ -4,6 +4,9 @@ Date: Febuary 1, 2026
 File name: BSP.h
 Description: Header file for the Binary Space Partitioning tree implementation.
 Modifications:
+    Date: April 10, 2026
+        Author: Donavan Sirois
+        Description: Comments and readibility
 */
 
 #ifndef BSP_H
@@ -27,34 +30,49 @@ class BSP
 public:
     BSP();
 
-    // Builders and traversal front to back
-    Node* Builder(std::vector<Linedef> segments, std::vector<Vertex>& verteces);
-    void traverse(const Vertex& playerPosition, std::vector<Linedef>& renderedWalls, const std::vector<Vertex>& verteces);
-    void traverseNode(Node* node, const Vertex& playerPos, std::vector<Linedef>& walls, const std::vector<Vertex>& verteces);
-    void build(const std::vector<Linedef>& segments, std::vector<Vertex>& verteces);
+    /*
+    Author: Donavan Sirois
+    Date: Febuary 1, 2026
+    Description: This is a recursive function which builds a BSP tree with map data.
+        Each leaf is a segment of a subsegment devided by a partiion line
+    Modifications:
+        Date: April 10, 2026
+            Author: Donavan Sirois
+            Description: Added more readability to the class. Comments and function substitution
+    */
+    Node* Builder(std::vector<Linedef> segments, std::vector<Vertex>& vertices);
+
+    void traverseAndRender(Node* node,
+                           const Vertex& playerPos,
+                           const std::vector<Vertex>& verteces,
+                           std::function<bool(const Linedef&)> renderCallback);
+
+    void traverse(const Vertex& playerPosition, std::vector<Linedef>& renderedWalls, const std::vector<Vertex>& vertices);
+    void traverseNode(Node* node, const Vertex& playerPos, std::vector<Linedef>& walls, const std::vector<Vertex>& vertices);
+    void build(const std::vector<Linedef>& segments, std::vector<Vertex>& vertices);
 
     // For collision on all actors
-    void broadWall(Node* node, const Vertex& playerPosition, std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& verteces);
-    void actorToWallBroading(const Vertex& actorPosition, std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& verteces);
+    void broadWall(Node* node, const Vertex& playerPosition, std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& vertices);
+    void actorToWallBroading(const Vertex& actorPosition, std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& vertices);
 
     // For enemy rendering
-    bool enemyRendering(const Vertex& playerPosition, const Vertex& enemyPosition, const std::vector<Vertex>& verteces);
-    bool enemyRenderingCheck(Node* node, const Vertex& playerPosition, const Vertex& enemyPosition, const std::vector<Vertex>& verteces);
+    bool enemyRendering(const Vertex& playerPosition, const Vertex& enemyPosition, const std::vector<Vertex>& vertices);
+    bool enemyRenderingCheck(Node* node, const Vertex& playerPosition, const Vertex& enemyPosition, const std::vector<Vertex>& vertices);
 
     Node* getRoot() const { return root; };
 
-    std::vector<Vertex> collectValidSpawnPoints(const std::vector<Vertex>& verteces,
+    std::vector<Vertex> collectValidSpawnPoints(const std::vector<Vertex>& vertices,
                                                 float minDistToWall);
 
 private:
     Node* root;
     bool isPointInsideMap(const Vertex& point,
-                          const std::vector<Vertex>& verteces);
+                          const std::vector<Vertex>& vertices);
 
     void collectAllWalls(Node* node, std::vector<Linedef>& walls);
 
     void collectSpawnCandidates(Node* node,
-                                const std::vector<Vertex>& verteces,
+                                const std::vector<Vertex>& vertices,
                                 float minDistToWall,
                                 std::vector<Vertex>& candidates);
 
@@ -64,7 +82,7 @@ private:
 
     bool isFarEnoughFromAllWalls(const Vertex& candidate,
                                  Node* node,
-                                 const std::vector<Vertex>& verteces,
+                                 const std::vector<Vertex>& vertices,
                                  float minDist);
 };
 
