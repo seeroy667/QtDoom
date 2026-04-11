@@ -237,8 +237,15 @@ void Engine::gameLoop()
         cManager->resetReload();
     }
 
-    rManager->render(*gManager->getPlayer(), gManager->getRenderedEnemy(),
-                     gManager->getBSP(), gManager->getVerteces(), gManager->getSectors());
+    rManager->render(*gManager->getPlayer(),
+                     gManager->getRenderedEnemy(),
+                     gManager->getRenderedRangedEnemies(),
+                     gManager->getProjectiles(),
+                     gManager->getHeals(),
+                     gManager->getBSP(),
+                     gManager->getVerteces(),
+                     gManager->getSectors());
+
     if(gManager->isBossRenderable())
     {
         if(gManager->getBSP()->enemyRendering(gManager->getPlayer()->getPosition(), gManager->getBoss()->getPosition(), gManager->getVerteces()))

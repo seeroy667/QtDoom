@@ -20,6 +20,7 @@ Modifications:
 #include "geostructs.h"
 #include "Actor.h"
 #include "bsp.h"
+#include "projectile.h"
 
 class RenderManager
 {
@@ -29,9 +30,15 @@ public:
 
     void renderWall(const Linedef& wall, const std::vector<Vertex>& verteces, const Actor& player, const std::vector<Sector>& sectors);
 
-
-    void render(Actor m_player, const std::vector<Actor*>& enemies, BSP* bsp, const std::vector<Vertex>& verteces, const std::vector<Sector>& sectors);
-    void renderActor(Actor* actor, const Actor player, QColor color, float sizeMultiplier = 1.0f);
+    void render(Actor m_player,
+                const std::vector<Actor*>& enemies,
+                const std::vector<Actor*>& rangedEnemies,
+                const std::vector<Projectile>& projectiles,
+                const std::vector<Vertex>& heals,
+                BSP* bsp,
+                const std::vector<Vertex>& verteces,
+                const std::vector<Sector>& sectors);
+    void renderActor(Actor* actor, const Actor player, QColor color, float sizeMultiplier = 1.0f, bool isRanged = false);
     std::vector<Linedef> getRenderedWalls();
     void renderRay(float targetScreenX, float targetScreenY, int frames);
     float projectHeight(float worldHeight, float distance);
@@ -42,6 +49,7 @@ public:
     void setHit(bool h) {hit = h;}
     void setPowerUpActive(bool active) { m_isPowerUpActive = active; }
     void triggerGunAnim();
+    void renderHeals(const std::vector<Vertex>& heals, const Actor& player);
 
 private:
     QGraphicsScene* m_scene;
@@ -60,25 +68,21 @@ private:
     QPixmap m_enemyTexture;
     QPixmap m_gunTexture;
     bool m_isPowerUpActive = false;
-
     QPixmap m_gunFrames[3];
     int     m_gunFrame = 0;
     bool    m_gunAnimating = false;
     QElapsedTimer m_gunAnimTimer;
     float   m_frameDuration = 0.1f;
-
     QPixmap m_enemyFrames[4];
     int     m_enemyFrame = 0;
     bool    m_enemyAnimating = false;
     QElapsedTimer m_enemyAnimTimer;
     float   m_enemyFrameDuration = 0.15;
-
-
-
+    QPixmap m_rangedEnemyTexture;
+    QPixmap m_rangedShootFrames[3];
 
 
     bool clipWall(Vertex& p1, Vertex& p2);
-
     Vertex projectToScreen(const Vertex& cameraPoint);
 
 

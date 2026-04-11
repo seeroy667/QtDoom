@@ -51,6 +51,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         uimanager.h uimanager.cpp
         mapreader.h mapreader.cpp
         images.qrc
+        projectile.h
 
 
 

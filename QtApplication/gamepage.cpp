@@ -63,8 +63,8 @@ void GamePage::addVieProgressBar()
     m_barVie->setFixedWidth(200);
     m_barVie->setTextVisible(false);
     m_barVie->setStyleSheet("QProgressBar{background-color:lightgrey; border: 2px solid black; border-radius: 5px;} QProgressBar::chunk{background-color:green;}");
-    m_barVie->setRange(0,15);
-    m_barVie->setValue(15); //a modifier
+    m_barVie->setRange(0,5);
+    m_barVie->setValue(5); //a modifier
 }
 
 void GamePage::addBallesProgressBar()

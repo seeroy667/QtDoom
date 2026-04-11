@@ -56,7 +56,7 @@ private:
 
     static constexpr int   BORDER_ZONE       = 40;
 
-    static constexpr float BORDER_ROT_SPEED  = 1.2f;
+    static constexpr float BORDER_ROT_SPEED  = 2.0f;
 
 public:
     Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QGraphicsView *view);

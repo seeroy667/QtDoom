@@ -10,6 +10,7 @@ Modifications:
 #define ACTOR_H
 #include "geostructs.h"
 #include "Weapon.h"
+#include <QElapsedTimer>
 
 class Actor{
 private:
@@ -24,6 +25,16 @@ private:
     bool canMove = true;
     Weapon* m_weapon = nullptr;
       int score = 0;
+
+    //---Enemy Range---
+      bool m_isRanged = false;
+      float m_shootCooldown = 3000.0f;
+      QElapsedTimer m_shootTimer;
+      bool m_timerStarted = false;
+      bool m_isShooting = false;
+      QElapsedTimer m_shootAnimTimer;
+      float m_shootAnimDuration = 0.2f;
+
 
 public:
     Actor();
@@ -50,7 +61,17 @@ public:
     int getScore() const { return score; }
     void addScore(int points) { score += points; }
     void resetScore() { score = 0; }
-     bool isMoving() const { return canMove; }
+    bool isMoving() const { return canMove; }
+
+    //---Enemy Range---
+    bool isRanged()const { return m_isRanged;}
+    void setRanged(bool r) { m_isRanged = r;}
+    bool canShootProjectile();
+    void triggerShootAnim(){m_isShooting = true; m_shootAnimTimer.restart();}
+    bool isShooting()const {return m_isShooting;}
+    float getShootAnimElapsed()const { return m_shootAnimTimer.elapsed() / 1000.0f;}
+    void updateShootAnim();
+
 };
 
 #endif

@@ -36,6 +36,10 @@ RenderManager::RenderManager(QGraphicsScene* scene, int screenWidth, int screenH
     m_enemyFrames[1] = QPixmap(":/ressources/Demon2.png");
     m_enemyFrames[2] = QPixmap(":/ressources/Demon3.png");
     m_enemyFrames[3] = QPixmap(":/ressources/Demon4.png");
+    m_rangedEnemyTexture = QPixmap(":/ressources/range1.png");
+    m_rangedShootFrames[0] = QPixmap(":/ressources/range1.png");
+    m_rangedShootFrames[1] = QPixmap(":/ressources/range2.png");
+    m_rangedShootFrames[2] = QPixmap(":/ressources/range3.png");
     m_enemyAnimTimer.start();
 
 }
@@ -139,7 +143,7 @@ float RenderManager::projectHeight(float worldHeight, float distance)
 }
 
 
-void RenderManager::renderActor(Actor* actor, const Actor player, QColor color, float sizeMultiplier)
+void RenderManager::renderActor(Actor* actor, const Actor player, QColor color, float sizeMultiplier, bool isRanged)
 {
     if (actor->getHealth() <= 0) return;
 
@@ -167,20 +171,39 @@ void RenderManager::renderActor(Actor* actor, const Actor player, QColor color, 
 
 
     QPixmap currentTexture;
-    if (actor->isMoving())
+    if(isRanged)
     {
-        // Animation de déplacement boucle sur les 4 frames
-        int frameIndex = (int)(m_enemyAnimTimer.elapsed() / 1000.0f / m_enemyFrameDuration) % 4;
-        if (!m_enemyFrames[frameIndex].isNull())
-            currentTexture = m_enemyFrames[frameIndex];
+        if(actor->isShooting())
+        {
+            int frameIndex = (int)(actor->getShootAnimElapsed()/0.15f);
+            frameIndex = std::min(frameIndex,2);
+            if(!m_rangedShootFrames[frameIndex].isNull())
+                currentTexture = m_rangedShootFrames[frameIndex];
+            else
+                currentTexture = m_rangedEnemyTexture;
+        }
         else
-            currentTexture = m_enemyTexture;
+        {
+            currentTexture = m_rangedEnemyTexture;
+        }
+
     }
     else
     {
-        currentTexture = m_enemyTexture;
+        if (actor->isMoving())
+        {
+            // Animation de déplacement boucle sur les 4 frames
+            int frameIndex = (int)(m_enemyAnimTimer.elapsed() / 1000.0f / m_enemyFrameDuration) % 4;
+            if (!m_enemyFrames[frameIndex].isNull())
+                currentTexture = m_enemyFrames[frameIndex];
+            else
+                currentTexture = m_enemyTexture;
+        }
+        else
+        {
+            currentTexture = m_enemyTexture;
+        }
     }
-
     QGraphicsRectItem* spriteItem = m_scene->addRect(spriteRect);
     spriteItem->setPen(Qt::NoPen);
 
@@ -208,6 +231,7 @@ void RenderManager::renderActor(Actor* actor, const Actor player, QColor color, 
             );
         spriteItem->setBrush(shadedColor);
     }
+
 }
 void RenderManager::renderRay(float targetScreenX, float targetScreenY, int frames)
 {
@@ -248,6 +272,9 @@ void RenderManager::triggerGunAnim()
 
 void RenderManager::render(Actor m_player,
                            const std::vector<Actor*>& enemies,
+                           const std::vector<Actor*>& rangedEnemies,
+                           const std::vector<Projectile>& projectiles,
+                           const std::vector<Vertex>& heals,
                            BSP* bsp,
                            const std::vector<Vertex>& verteces,
                            const std::vector<Sector>& sectors)
@@ -259,9 +286,46 @@ void RenderManager::render(Actor m_player,
         renderWall(wall, verteces, m_player, sectors);
     }
 
-    qDebug() << enemies.size();
+    //ennemis melee
     for (Actor* enemy : enemies)
-       renderActor(enemy, m_player, QColor(255, 0, 0));
+       renderActor(enemy, m_player, QColor(255, 0, 0), 1.0f, false);
+    //ennemis distance
+    for(Actor* enemy : rangedEnemies)
+        renderActor(enemy, m_player, QColor(200,100,0), 1.0f, true);
+
+    //Projectiles
+    for (const Projectile& proj : projectiles)
+    {
+        Vertex camPos = coordPlayer(proj.position, m_player);
+        if (camPos.y < distanceMin) continue;
+
+        // Angle relatif entre la caméra et le projectile
+        float angleToProj = std::atan2(camPos.x, camPos.y);
+
+        // FOV de 90 degrés (pi/2), donc on mappe l'angle sur la largeur de l'écran
+        float halfFov = M_PI / 2.0f;
+        if (std::abs(angleToProj) > halfFov) continue; // hors FOV
+
+        // Projection basée sur l'angle plutôt que sur x/y directement
+        float screenX = (angleToProj / halfFov) * (m_screenWidth / 2.0f) + m_screenWidth / 2.0f;
+
+        float distance = std::sqrt(camPos.x * camPos.x + camPos.y * camPos.y);
+        float screenY = projectHeight(2.5f, camPos.y);
+
+        float size = (m_focalLength / camPos.y) * 2.5f;
+        size = std::max(25.0f, std::min(size, 80.0f));
+
+        m_scene->addEllipse(screenX - size/2, screenY - size/2, size, size,
+                            QPen(QColor(180, 0, 255), 3),
+                            QBrush(QColor(100, 0, 255, 180)));
+
+        float haloSize = size * 1.4f;
+        m_scene->addEllipse(screenX - haloSize/2, screenY - haloSize/2, haloSize, haloSize,
+                            QPen(QColor(200, 100, 255, 120), 2),
+                            QBrush(Qt::NoBrush));
+    }
+    //heal
+    renderHeals(heals, m_player);
 
     float gunX = (m_screenWidth / 2.0f) - (200 / 2.0f);
     float gunY = (m_screenHeight - 100);
@@ -302,4 +366,43 @@ QGraphicsView* RenderManager::getView() const
     if (m_scene && !m_scene->views().isEmpty())
         return m_scene->views().first();
     return nullptr;
+}
+
+void RenderManager::renderHeals(const std::vector<Vertex>& heals, const Actor& player)
+{
+    for(const Vertex& heal : heals)
+    {
+        Vertex camPos = coordPlayer(heal,player);
+        if(camPos.y < distanceMin) return;
+
+        float screenX = (camPos.x / camPos.y) * m_focalLength + m_screenWidth / 2.0f;
+        float spriteBottom = projectHeight(0.0f, camPos.y);
+        float spriteTop    = projectHeight(5.0f, camPos.y);
+        float size = (spriteBottom - spriteTop) * 0.6f;
+
+        if (screenX + size < 0 || screenX - size > m_screenWidth) continue;
+
+        float centerY = (spriteBottom + spriteTop) / 2.0f;
+        float thickness = size * 0.25f;
+
+        // Barre horizontale
+        QGraphicsRectItem* hBar = m_scene->addRect(
+            screenX - size / 2.0f,
+            centerY - thickness / 2.0f,
+            size,
+            thickness
+            );
+        hBar->setBrush(QColor(0, 200, 0));
+        hBar->setPen(Qt::NoPen);
+
+        // Barre verticale
+        QGraphicsRectItem* vBar = m_scene->addRect(
+            screenX - thickness / 2.0f,
+            centerY - size / 2.0f,
+            thickness,
+            size
+            );
+        vBar->setBrush(QColor(0, 200, 0));
+        vBar->setPen(Qt::NoPen);
+    }
 }

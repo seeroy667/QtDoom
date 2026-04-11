@@ -118,3 +118,25 @@ void Actor::setPosition(Vertex newPos)
     position = newPos;
 }
 
+bool Actor::canShootProjectile()
+{
+    if(!m_timerStarted)
+    {
+        m_shootTimer.start();
+        m_timerStarted = true;
+        return false;
+    }
+    if(m_shootTimer.elapsed() >= m_shootCooldown)
+    {
+        m_shootTimer.restart();
+        return true;
+    }
+    return false;
+}
+
+void Actor::updateShootAnim()
+{
+    if(m_isShooting && m_shootAnimTimer.elapsed() /1000.0f > m_shootAnimDuration * 3)
+        m_isShooting = false;
+}
+

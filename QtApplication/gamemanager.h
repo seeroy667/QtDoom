@@ -21,6 +21,7 @@ Modifications:
 #include "Weapon.h"
 #include "mapreader.h"
 #include "collisionmanager.h"
+#include "projectile.h"
 
 class GameManager: public QObject
 {
@@ -49,6 +50,17 @@ public:
     Actor* getBoss();
     bool isBossRenderable();
 
+    //Heal
+    void spawnHealIfNeeded();
+    const std::vector<Vertex>& getHeals() const { return m_healPickups;}
+    void checkHealPickup();
+
+    //Projectile
+    const std::vector<Projectile>& getProjectiles() const {return m_projectiles;}
+    const std::vector<Actor*>& getRangedEnemies() const { return m_rangedEnemies; }
+    std::vector<Actor*> getRenderedRangedEnemies();
+
+
 private:
     Actor *p;
     Actor *e;
@@ -72,9 +84,17 @@ private:
     bool m_inContact = false;
 
     std::vector<Vertex> m_spawnPoints;
-    std::vector<int> m_waveSizes = {1,2,3};
+    int waveSizeForWave(int wave) const { return 5 + wave; }
     int m_currentWave = 0;
     bool m_waveActive = false;
+
+    std::vector<Vertex> m_healPickups;
+    int m_lastHealScore = 0;
+
+    std::vector<Actor*> m_rangedEnemies;
+    std::vector<Projectile> m_projectiles;
+    void spawnRangedWave(int count, const std::vector<Vertex>& usedPositions);
+    void updateProjectiles(float deltaTime);
 
 
 signals:

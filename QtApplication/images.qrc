@@ -36,5 +36,8 @@
         <file>ressources/backgroundMort.png</file>
         <file>ressources/gameover.png</file>
         <file>ressources/hud.png</file>
+        <file>ressources/range1.png</file>
+        <file>ressources/range2.png</file>
+        <file>ressources/range3.png</file>
     </qresource>
 </RCC>
