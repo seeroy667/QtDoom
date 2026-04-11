@@ -86,17 +86,21 @@ void Engine::resumeGame()
 
 void Engine::restartGame()
 {
+    gManager->saveBestScore();
     qDebug("restartGame");
     elapsedTimer.restart();
     gManager->restartGame();
+    uiManager->updateScore(gManager->getPlayer()->getScore());
     resumeGame();
 }
 
 void Engine::quitGame()
 {
+    gManager->saveBestScore();
     qDebug("quitGame");
     elapsedTimer.restart();
     gManager->restartGame();
+    uiManager->updateScore(gManager->getPlayer()->getScore());
 }
 
 void Engine::gameOver()
@@ -311,6 +315,7 @@ void Engine::loadMapIntoGame(QString path)
         connect(gManager, SIGNAL(sigUpdateVie(int)), uiManager, SLOT(updateVie(int)));
         connect(gManager, SIGNAL(sigWeaponChanged()), this, SLOT(onWeaponChanged()));
         connect(gManager, SIGNAL(scoreResult(int)), uiManager, SLOT(setScore(int)));
+        connect(uiManager, SIGNAL(getScore()), gManager, SLOT(giveScore()));
 
         QString mapPath = QCoreApplication::applicationDirPath() + path;
         gManager->loadMap(mapPath.toStdString());

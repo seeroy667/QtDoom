@@ -105,8 +105,7 @@ private:
     void checkWeaponPickup();
     int m_shotgunWave = -1;
 
-    //temporaire pour test
-    int playerScore = QRandomGenerator::global()->bounded(100, 5000);
+    int bestScore = 0;
 
 signals:
     void sigUpdateVie(int value);
@@ -117,6 +116,7 @@ signals:
 
 public slots:
     void giveScore();
+    void saveBestScore();
 
 };
 

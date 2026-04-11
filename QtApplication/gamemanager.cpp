@@ -641,7 +641,7 @@ std::vector<Actor*> GameManager::getRenderedRangedEnemies()
 
 void GameManager::giveScore()
 {
-    emit scoreResult(playerScore);
+    emit scoreResult(bestScore);
 }
 
 GameManager::~GameManager()
@@ -652,14 +652,19 @@ GameManager::~GameManager()
     delete bsp;
     delete m_playerWeapon;
     delete cManager;
-    for (Actor* a : creatures) delete a;
-    creatures.clear();
-    for (Actor* a : m_rangedEnemies) delete a;
-    m_rangedEnemies.clear();
+
     if (m_boss)
     {
         delete m_boss;
     }
+
+    for (Actor* a : m_rangedEnemies) delete a;
+    m_rangedEnemies.clear();
+    m_projectiles.clear();
+
+
+    for (Actor* a : creatures) delete a;
+    creatures.clear();
 }
 
 void GameManager::spawnWeaponPickup()
@@ -677,6 +682,7 @@ void GameManager::spawnWeaponPickup()
         }
     }
 }
+
 void GameManager::checkWeaponPickup()
 {
     if (m_weaponPickups.empty()) return;
@@ -698,6 +704,17 @@ void GameManager::checkWeaponPickup()
             emit sigWeaponChanged();
         }
     }
-
 }
+
+void GameManager::saveBestScore()
+{
+    int nowScore=p->getScore();
+    if (nowScore>bestScore)
+    {
+        bestScore=nowScore;
+    }
+}
+
+
+
 
