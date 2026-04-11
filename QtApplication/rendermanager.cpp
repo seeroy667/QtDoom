@@ -75,28 +75,7 @@ void RenderManager::renderWall(const Linedef& wall, const std::vector<Vertex>& v
 
     QGraphicsPolygonItem* wallItem = m_scene->addPolygon(polygon);
     wallItem->setZValue(-depth);
-
-    float wallWidth  = std::abs(screen2.x - screen1.x);
-    float wallHeight = std::max(std::abs(height1_floor - height1_ceil),
-                                std::abs(height2_floor - height2_ceil));
-
-    if (wallWidth < 1.0f)  wallWidth  = 1.0f;
-    if (wallHeight < 1.0f) wallHeight = 1.0f;
-
-    // Scale via transformation sans créer un nouveau QPixmap
-    float scaleX = wallWidth  / m_wallTexture.width();
-    float scaleY = wallHeight / m_wallTexture.height();
-
-    QTransform transform;
-    transform.translate(std::min(screen1.x, screen2.x),
-                        std::min(height1_ceil, height2_ceil));
-    transform.scale(scaleX, scaleY);
-
-    QBrush textureBrush(m_wallTexture);
-    textureBrush.setTransform(transform);
-
-    wallItem->setBrush(textureBrush);
-    wallItem->setPen(Qt::NoPen);
+    wallItem->setBrush(QColor(60, 60, 60)); // gris foncé
 }
 
 
