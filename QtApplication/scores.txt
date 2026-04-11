@@ -1,0 +1,13 @@
+balais, 8000
+bob, 5000
+crevette, 3667
+banane, 3362
+legume, 2569
+yooooo, 1451
+pomme, 1401
+steve, 1400
+allo, 1000
+rideau, 1000
+sin, 1000
+anais, 300
+mope, 80

@@ -618,3 +618,26 @@ std::vector<Actor*> GameManager::getRenderedRangedEnemies()
     }
     return result;
 }
+
+void GameManager::giveScore()
+{
+    emit scoreResult(playerScore);
+}
+
+GameManager::~GameManager()
+{
+    delete p;
+    delete e;
+    delete map;
+    delete bsp;
+    delete m_playerWeapon;
+    delete cManager;
+    for (Actor* a : creatures) delete a;
+    creatures.clear();
+    for (Actor* a : m_rangedEnemies) delete a;
+    m_rangedEnemies.clear();
+    if (m_boss)
+    {
+        delete m_boss;
+    }
+}

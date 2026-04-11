@@ -31,9 +31,6 @@ Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QG
     view->setStyleSheet("border: none; margin: 0px; padding: 0px; background: transparent;");
     view->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    QString mapPath = QCoreApplication::applicationDirPath() + "/../../WadLvl2.txt";
-    gManager->loadMap(mapPath.toStdString());
-
     connect(uiManager, SIGNAL(loadMap(QString)), this, SLOT(loadMapIntoGame(QString)));
     connect(uiManager, SIGNAL(startGame()), this, SLOT(start()));
     connect(uiManager, SIGNAL(keyPressSig(QKeyEvent*)), cManager, SLOT(keyPressedEvent(QKeyEvent*)));
@@ -56,6 +53,9 @@ Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QG
     connect(cManager, SIGNAL(confirmSig()), uiManager, SLOT(shootPressed()));
     connect(&timer, &QTimer::timeout, this, &Engine::gameLoop);
     connect(gManager, SIGNAL(sigUpdateVie(int)), uiManager, SLOT(updateVie(int)));
+    //get score
+    connect(uiManager, SIGNAL(getScore()), gManager, SLOT(giveScore()));
+    connect(gManager, SIGNAL(scoreResult(int)), uiManager, SLOT(setScore(int)));
 }
 
 Engine::~Engine()
@@ -293,6 +293,13 @@ UIManager* Engine::getuiManager() const
 
 void Engine::loadMapIntoGame(QString path)
 {
-    QString mapPath = QCoreApplication::applicationDirPath() + path;
-    gManager->loadMap(mapPath.toStdString());
+    if (path!=oldMap)
+    {
+        delete gManager;
+        gManager = nullptr;
+        gManager = new GameManager();
+        QString mapPath = QCoreApplication::applicationDirPath() + path;
+        gManager->loadMap(mapPath.toStdString());
+    }
+    oldMap=path;
 }

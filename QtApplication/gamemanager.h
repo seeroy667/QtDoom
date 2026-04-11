@@ -14,6 +14,7 @@ Modifications:
 #include <QProcess>
 #include <QElapsedTimer>
 #include <QObject>
+#include <QRandomGenerator>
 
 #include"actor.h"
 #include"geostructs.h"
@@ -28,6 +29,7 @@ class GameManager: public QObject
     Q_OBJECT
 public:
     GameManager();
+    ~GameManager();
     Actor* getPlayer();
     Actor* getEnemy();
     BSP* getBSP();
@@ -96,11 +98,17 @@ private:
     void spawnRangedWave(int count, const std::vector<Vertex>& usedPositions);
     void updateProjectiles(float deltaTime);
 
+    //temporaire pour test
+    int playerScore = QRandomGenerator::global()->bounded(100, 5000);
 
 signals:
     void sigUpdateVie(int value);
     void sigUpdateBalles(int value);
     void playerDead();
+    void scoreResult(int value);
+
+public slots:
+    void giveScore();
 };
 
 #endif // GAMEMANAGER_H

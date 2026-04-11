@@ -11,7 +11,7 @@ LevelPage::LevelPage(QWidget *parent)
     : QWidget(parent)
 {
     mainLayout = new QVBoxLayout(this);
-    addTitleLevel();
+    //addTitleLevel();
     addQuitButton();
     addLevelButtons();
     addQuitButtonLayout();
@@ -111,7 +111,7 @@ void LevelPage::addPageLayout()
 {
     mainLayout->addLayout(topLayout);
     mainLayout->addSpacing(100);
-    mainLayout->addWidget(m_label);
+    //mainLayout->addWidget(m_label);
     mainLayout->addSpacing(50);
     mainLayout->addLayout(levelsLayout);
     mainLayout->addStretch();

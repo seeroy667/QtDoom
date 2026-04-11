@@ -52,6 +52,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         mapreader.h mapreader.cpp
         images.qrc
         projectile.h
+        compte.h compte.cpp
+        leaderboard.h leaderboard.cpp
 
 
 
