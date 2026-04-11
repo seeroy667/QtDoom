@@ -638,7 +638,7 @@ std::vector<Actor*> GameManager::getRenderedRangedEnemies()
     return result;
 }
 
-<<<<<<< Updated upstream
+
 void GameManager::giveScore()
 {
     emit scoreResult(playerScore);
@@ -661,7 +661,7 @@ GameManager::~GameManager()
         delete m_boss;
     }
 }
-=======
+
 void GameManager::spawnWeaponPickup()
 {
     if (m_spawnPoints.empty()) return;
@@ -689,16 +689,15 @@ void GameManager::checkWeaponPickup()
         float dy = playerPos.y - m_weaponPickups[i].y;
         if ((dx*dx + dy*dy) < (pickupRadius * pickupRadius))
         {
-
             delete m_playerWeapon;
             m_playerWeapon = new Weapon(5, 1000.0f, 2.0f, 10, 2.0f);
             p->setWeapon(m_playerWeapon);
             m_playerHasShotgun = true;
+            m_shotgunWave = m_currentWave;
             m_weaponPickups.erase(m_weaponPickups.begin() + i);
             emit sigWeaponChanged();
         }
     }
-    m_playerHasShotgun = true;
-    m_shotgunWave = m_currentWave;
+
 }
->>>>>>> Stashed changes
+

@@ -53,13 +53,13 @@ Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QG
     connect(cManager, SIGNAL(confirmSig()), uiManager, SLOT(shootPressed()));
     connect(&timer, &QTimer::timeout, this, &Engine::gameLoop);
     connect(gManager, SIGNAL(sigUpdateVie(int)), uiManager, SLOT(updateVie(int)));
-<<<<<<< Updated upstream
+
     //get score
     connect(uiManager, SIGNAL(getScore()), gManager, SLOT(giveScore()));
     connect(gManager, SIGNAL(scoreResult(int)), uiManager, SLOT(setScore(int)));
-=======
+    //ShotGun
     connect(gManager, SIGNAL(sigWeaponChanged()), this, SLOT(onWeaponChanged()));
->>>>>>> Stashed changes
+
 }
 
 Engine::~Engine()
@@ -300,15 +300,22 @@ UIManager* Engine::getuiManager() const
 
 void Engine::loadMapIntoGame(QString path)
 {
-    if (path!=oldMap)
+    if (path != oldMap)
     {
         delete gManager;
         gManager = nullptr;
         gManager = new GameManager();
+
+
+        connect(gManager, SIGNAL(playerDead()), this, SLOT(gameOver()));
+        connect(gManager, SIGNAL(sigUpdateVie(int)), uiManager, SLOT(updateVie(int)));
+        connect(gManager, SIGNAL(sigWeaponChanged()), this, SLOT(onWeaponChanged()));
+        connect(gManager, SIGNAL(scoreResult(int)), uiManager, SLOT(setScore(int)));
+
         QString mapPath = QCoreApplication::applicationDirPath() + path;
         gManager->loadMap(mapPath.toStdString());
     }
-    oldMap=path;
+    oldMap = path;
 }
 void Engine::onWeaponChanged()
 {

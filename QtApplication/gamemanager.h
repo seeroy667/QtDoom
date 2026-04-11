@@ -112,14 +112,12 @@ signals:
     void sigUpdateVie(int value);
     void sigUpdateBalles(int value);
     void playerDead();
-<<<<<<< Updated upstream
     void scoreResult(int value);
+    void sigWeaponChanged();
 
 public slots:
     void giveScore();
-=======
-    void sigWeaponChanged();
->>>>>>> Stashed changes
+
 };
 
 #endif // GAMEMANAGER_H

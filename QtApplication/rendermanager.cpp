@@ -59,6 +59,8 @@ void RenderManager::renderWall(const Linedef& wall, const std::vector<Vertex>& v
     if (!clipWall(p1, p2))
         return;
 
+    float depth = (p1.y + p2.y) / 2.0f;
+
     // Need to handle FOV culling before rendering the walls.
     // Need to handle overdraw to only render a small amount of walls.
 
@@ -78,8 +80,8 @@ void RenderManager::renderWall(const Linedef& wall, const std::vector<Vertex>& v
             << QPointF(screen1.x, height1_floor);
 
     QGraphicsPolygonItem* wallItem = m_scene->addPolygon(polygon);
-    wallItem->setBrush(QColor(60, 60, 60)); // ← gris foncé
-    wallItem->setPen(Qt::NoPen);
+    wallItem->setZValue(-depth);
+    wallItem->setBrush(QColor(60, 60, 60));
 }
 
 
@@ -231,6 +233,7 @@ void RenderManager::renderActor(Actor* actor, const Actor player, QColor color, 
     }
     QGraphicsRectItem* spriteItem = m_scene->addRect(spriteRect);
     spriteItem->setPen(Qt::NoPen);
+    spriteItem->setZValue(-camPos.y);
 
     if (!currentTexture.isNull())
     {
@@ -276,6 +279,7 @@ void RenderManager::renderGun()
         if (frameIndex >= maxFrames)
         {
             m_gunAnimating = false;
+            m_gunFrame = 0;
         }
         else
         {
@@ -290,13 +294,9 @@ void RenderManager::renderGun()
 
     QPixmap toRender;
     if (m_gunAnimating)
-    {
         toRender = m_hasShotgun ? m_shotgunFrames[m_gunFrame] : m_gunFrames[m_gunFrame];
-    }
     else
-    {
         toRender = m_hasShotgun ? m_shotgunIdleTexture : m_gunFrames[0];
-    }
 
     QPixmap scaled = toRender.scaled(gunWidth, gunHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     QGraphicsPixmapItem* gunItem = m_scene->addPixmap(scaled);
