@@ -172,6 +172,7 @@ void MenuPage::activateSelectedButton()
 
 void MenuPage::loginClicked()
 {
+    setupNextSelect();
     emit loginClickedSig();
 }
 

@@ -150,6 +150,10 @@ void UIManager::updateHighlight()
     {
         getLevelPage()->updateHighlight();
     }
+    if(stackedWidget->currentWidget()==leaderBoardPage)
+    {
+        leaderBoardPage->selectQuitterButton();
+    }
 }
 void UIManager::activateSelectedButton()
 {
@@ -169,6 +173,11 @@ void UIManager::activateSelectedButton()
     {
         //qDebug() << "selection ui level";
         getLevelPage()->activateSelectedButton();
+        return;
+    }
+    if(stackedWidget->currentWidget()==leaderBoardPage)
+    {
+        leaderBoardPage->activateSelectedButton();
         return;
     }
 }

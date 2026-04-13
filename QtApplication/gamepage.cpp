@@ -548,7 +548,7 @@ void GamePage::changeButtons()
 void GamePage::setupNextSelect()
 {
     //qDebug() << "setup Next";
-    menuCurrentIndex=0;
+    menuCurrentIndex = 2;
     overCurrentIndex = 0;
 }
 

@@ -29,6 +29,9 @@ public:
     void saveScore(QString username, int score);
     int loadScore(QString username);
     void load10BestPlayers();
+    void selectQuitterButton();
+    void activateSelectedButton();
+    void unselectQuitterButton();
 
 private:
     QTableWidget* m_table = nullptr;
