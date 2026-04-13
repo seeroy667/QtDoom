@@ -16,6 +16,21 @@ BSP::BSP()
     root = nullptr;
 }
 
+void BSP::build(const std::vector<Linedef>& segments, std::vector<Vertex>& vertices)
+{
+    // Safety verifications, although they should never happen within the scope of this software
+    if (segments.empty() || vertices.empty())
+    {
+        qDebug() << "ERROR: BSP cannot be built, segment or vertices list is empty";
+        qDebug() << segments.size();
+        qDebug() << vertices.size();
+        return;
+    }
+
+    delete root;
+    root = Builder(segments, vertices);
+}
+
 Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& vertices)
 {
     // Safety verifications, although they should never happen within the scope of this software
@@ -94,7 +109,7 @@ Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& vertices)
                 intersection.y = (slopeSeg*intersection.x) + bSeg;
             }
 
-            std::vector<Vertex>::iterator found = vertices.end(); // The iterator is a Vertex
+            std::vector<Vertex>::iterator found = vertices.end();
 
             for (std::vector<Vertex>::iterator i = vertices.begin(); i != vertices.end(); i++)
             {
@@ -146,7 +161,7 @@ Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& vertices)
     return node;
 }
 
-// These functions order the walls. THEY DO NOT ACCOUNT FOR VIEW CULLING YET! THIS MEANS EVERY WALL GETS RENDERED!
+// These functions order the walls into the vector renderedWalls. THEY DO NOT ACCOUNT FOR VIEW CULLING.
 void BSP::traverse(const Vertex& playerPosition, std::vector<Linedef>& renderedWalls, const std::vector<Vertex>& vertices)
 {
     renderedWalls.clear();
@@ -164,7 +179,7 @@ void BSP::traverseNode(Node* node, const Vertex& playerPosition, std::vector<Lin
 
     float cross = dxPartition * dyPlayer - dyPartition * dxPlayer;
 
-    if (cross < 0)
+    if (cross < 0) // Front to back
     {
         traverseNode(node->back, playerPosition, walls, vertices);
         walls.push_back(node->partition);
@@ -178,21 +193,7 @@ void BSP::traverseNode(Node* node, const Vertex& playerPosition, std::vector<Lin
     }
 }
 
-void BSP::build(const std::vector<Linedef>& segments, std::vector<Vertex>& vertices)
-{
-    // Safety verifications, although they should never happen within the scope of this software
-    if (segments.empty() || vertices.empty())
-    {
-        qDebug() << "ERROR: BSP cannot be built, segment or vertices list is empty";
-        qDebug() << segments.size();
-        qDebug() << vertices.size();
-        return;
-    }
-
-    delete root;
-    root = Builder(segments, vertices);
-}
-
+// This is used in collision detection
 void BSP::actorToWallBroading(const Vertex& actorPosition, std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& vertices)
 {
     broadedWalls.clear();

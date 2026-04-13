@@ -22,6 +22,31 @@ Modifications:
 #include "bsp.h"
 #include "projectile.h"
 
+/* To render, we want to occlude certain polygons where some are already drawn.
+ * To do this, we will keep in memory which walls were drawn where, and then
+ * decide to render the full polygon, cut it into smaller ones, or occlude it.
+ * We keep in memore a column of screen height into a vector of size screen width.
+ */
+struct RenderingColumn
+{
+    int topPosition; // starts at 0, since in Qt, the top left coordinate is (0 ; 0)
+    int bottomPosition; // starts at screenHeight
+    // a column is full if: bool isFull = topPosition >= bottomPosition;
+};
+
+struct PolygonCoordinates
+{
+    // For the clipping, the column position (index of columns) where it starts and where it ends
+    int columnStart;
+    int columnEnd;
+
+    // Screen positions of the polygon
+    float topRight;
+    float topLeft;
+    float botRight;
+    float botLeft;
+};
+
 class RenderManager
 {
 
@@ -88,13 +113,11 @@ private:
     QPixmap m_shotgunIdleTexture;
     QPixmap m_shotgunFrames[4];
 
+    // For occlusion
+    std::vector<RenderingColumn> columns;
 
     bool clipWall(Vertex& p1, Vertex& p2);
     Vertex projectToScreen(const Vertex& cameraPoint);
-
-
-
-
 };
 
 #endif // RENDERMANAGER_H

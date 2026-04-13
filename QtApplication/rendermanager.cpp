@@ -4,9 +4,9 @@ Date: Febuary 12, 2026
 File name: Painter.cpp
 Goal: Code for rendering walls.
 Modifications:
-    Date: March 24, 2026
+    Date: April 13, 2026
         Author: Donavan Sirois
-        Description: Added FOV culling and overdraw manager. For a map of 152 walls, 87 were rendered after clipping.
+        Description: Added overdraw manager. We now render front to back.
         After these integrations, for the same map, we render walls.
 */
 
@@ -16,7 +16,6 @@ Modifications:
 #include <algorithm>
 #include <cmath>
 
-
 RenderManager::RenderManager(QGraphicsScene* scene, int screenWidth, int screenHeight)
 {
     m_focalLength = screenWidth / 2.0f;
@@ -24,6 +23,7 @@ RenderManager::RenderManager(QGraphicsScene* scene, int screenWidth, int screenH
 
     m_scene = scene;
     m_screenWidth = screenWidth;
+    qDebug() << "Screenwidth" << screenWidth;
     m_screenHeight = screenHeight;
 
     m_wallTexture = QPixmap(":/ressources/temp.jpg");
@@ -48,43 +48,206 @@ RenderManager::RenderManager(QGraphicsScene* scene, int screenWidth, int screenH
     m_shotgunFrames[3]   = QPixmap(":/ressources/tir4.png");
     m_enemyAnimTimer.start();
 
+    // For occlusion
+    columns.resize(screenWidth);
 }
 
+void RenderManager::render(Actor m_player,
+                           const std::vector<Actor*>& enemies,
+                           const std::vector<Actor*>& rangedEnemies,
+                           const std::vector<Projectile>& projectiles,
+                           const std::vector<Vertex>& heals,
+                           const std::vector<Vertex>& weaponPickups,
+                           BSP* bsp,
+                           const std::vector<Vertex>& verteces,
+                           const std::vector<Sector>& sectors)
+{
+    m_scene->clear();
+    bsp->traverse(m_player.getPosition(), renderedWalls, verteces);
+
+    // Initializing the columns on screen for clipping
+    columns.resize(m_screenWidth);
+    for (int i = 0; i < m_screenWidth; i++)
+    {
+        columns[i].topPosition = 0;
+        columns[i].bottomPosition = m_screenHeight;
+    }
+
+    for (const Linedef& wall : renderedWalls) {
+        renderWall(wall, verteces, m_player, sectors);
+
+        bool ended = true;
+        for (int i = 0; i < m_screenWidth; i++)
+        {
+            ended = columns[i].topPosition >= columns[i].bottomPosition;
+            if (ended == false) break;
+        }
+        if (ended == true) break;
+    }
+
+    //ennemis melee
+    for (Actor* enemy : enemies)
+        renderActor(enemy, m_player, QColor(255, 0, 0), 1.0f, false);
+    //ennemis distance
+    for(Actor* enemy : rangedEnemies)
+        renderActor(enemy, m_player, QColor(200,100,0), 1.0f, true);
+
+    //Projectiles
+    for (const Projectile& proj : projectiles)
+    {
+        Vertex camPos = coordPlayer(proj.position, m_player);
+        if (camPos.y < distanceMin) continue;
+
+
+        float angleToProj = std::atan2(camPos.x, camPos.y);
+
+
+        float halfFov = M_PI / 2.0f;
+        if (std::abs(angleToProj) > halfFov) continue;
+
+
+        float screenX = (angleToProj / halfFov) * (m_screenWidth / 2.0f) + m_screenWidth / 2.0f;
+
+        float distance = std::sqrt(camPos.x * camPos.x + camPos.y * camPos.y);
+        float screenY = projectHeight(2.5f, camPos.y);
+
+        float size = (m_focalLength / camPos.y) * 2.5f;
+        size = std::max(25.0f, std::min(size, 80.0f));
+
+        m_scene->addEllipse(screenX - size/2, screenY - size/2, size, size,
+                            QPen(QColor(180, 0, 255), 3),
+                            QBrush(QColor(100, 0, 255, 180)));
+
+        float haloSize = size * 1.4f;
+        m_scene->addEllipse(screenX - haloSize/2, screenY - haloSize/2, haloSize, haloSize,
+                            QPen(QColor(200, 100, 255, 120), 2),
+                            QBrush(Qt::NoBrush));
+    }
+    //heal
+    renderHeals(heals, m_player);
+
+    //Shotgun
+    renderWeaponPickups(weaponPickups, m_player);
+
+    float gunX = (m_screenWidth / 2.0f) - (200 / 2.0f);
+    float gunY = (m_screenHeight - 100);
+    if (m_rayFramesLeft > 0)
+    {
+        if(hit)
+        {
+            m_scene->addEllipse(m_rayTargetX, m_rayTargetY, 25, 25, QPen(QColor(255, 255, 0), 3),QBrush(QColor(255, 255, 0, 255)));
+        }
+        m_scene->addEllipse(gunX+90,gunY-20,25, 25, QPen(QColor(255, 255, 0), 3),QBrush(QColor(255, 255, 0, 255)));
+        m_rayFramesLeft--;
+    }
+    renderGun();
+
+    if(m_isPowerUpActive)
+    {
+        QGraphicsRectItem* overlay = m_scene->addRect(0, 0, m_screenWidth, m_screenHeight);
+        overlay->setBrush(QColor(255, 0, 0, 60)); // 60 = transparence
+        overlay->setPen(Qt::NoPen);
+    }
+}
 
 void RenderManager::renderWall(const Linedef& wall, const std::vector<Vertex>& verteces, const Actor& player, const std::vector<Sector>& sectors)
 {
     Vertex p1 = coordPlayer(verteces[wall.start], player);
     Vertex p2 = coordPlayer(verteces[wall.end], player);
 
-    if (!clipWall(p1, p2))
-        return;
+    if (!clipWall(p1, p2)) return; // The wall is behind the player, and does not need to be rendered
 
-    float depth = (p1.y + p2.y) / 2.0f;
-
-    // Need to handle FOV culling before rendering the walls.
-    // Need to handle overdraw to only render a small amount of walls.
-
+    // Perspective calculations
     Vertex screen1 = projectToScreen(p1);
     Vertex screen2 = projectToScreen(p2);
 
-    float height1_floor = projectHeight(sectors[wall.sideFront].floorHeight, p1.y);
-    float height1_ceil  = projectHeight(sectors[wall.sideFront].ceilingHeight, p1.y);
+    if (screen1.x > screen2.x)
+    {
+        std::swap(p1, p2);
+        std::swap(screen1, screen2);
+    }
 
-    float height2_floor = projectHeight(sectors[wall.sideFront].floorHeight, p2.y);
-    float height2_ceil  = projectHeight(sectors[wall.sideFront].ceilingHeight, p2.y);
+    float polyLength = screen2.x - screen1.x;
+    if (polyLength == 0) return;
 
-    QPolygonF polygon;
-    polygon << QPointF(screen1.x, height1_ceil)
-            << QPointF(screen2.x, height2_ceil)
-            << QPointF(screen2.x, height2_floor)
-            << QPointF(screen1.x, height1_floor);
+    // Culling verification. The rendering now works with the following logic:
+    // We parse through the entire length of the wall. For each column, we check if it is full.
+    // If it isn't, we parse through adding new polygons to render as we go if the wall is split multiple times.
+    std::vector<PolygonCoordinates> polygonsToRender;
+    PolygonCoordinates currentPolygon;
+    bool isInVector = false;
 
-    QGraphicsPolygonItem* wallItem = m_scene->addPolygon(polygon);
-    wallItem->setZValue(-depth);
-    wallItem->setBrush(QColor(60, 60, 60));
+    if (std::isnan(screen1.x) || std::isnan(screen2.x))
+        return;
+
+    int x1 = std::max(0, (int)std::ceil(screen1.x));
+    int x2 = std::min(m_screenWidth - 1, (int)std::floor(screen2.x));
+
+    if (x1 > x2) return;
+
+    for (int i = x1; i <= x2; i++)
+    {
+        if (columns[i].topPosition >= columns[i].bottomPosition) // Column is full
+        {
+            if (isInVector) // If a polygon was being built on the last iteration (last column wasn't full) we add it to be rendered
+            {
+                polygonsToRender.push_back(currentPolygon);
+                isInVector = false;
+            }
+            continue;
+        }
+
+        // We need to compute where in the wall the current column is
+        // (i.e. if it was in the middle of the polygon (the rest was clipped), we need the coordinates of the reduced polygon)
+        float t = (i - screen1.x) / polyLength;
+
+
+        // Linear interpolation. We want the depth (Distance between the camera of the player to the new point of the wall)
+        float invZ =  (1.0f / p1.y) + t * ((1.0f / p2.y) - (1.0f / p1.y));
+        float depth = 1.0f / invZ;
+
+        // New wall coordinates computation
+        float wallTop = projectHeight(sectors[wall.sideFront].ceilingHeight,  depth);
+        float wallBottom = projectHeight(sectors[wall.sideFront].floorHeight, depth);
+
+        float drawTop = std::max(wallTop, (float)columns[i].topPosition);
+        float drawBot = std::min(wallBottom, (float)columns[i].bottomPosition);
+
+        // Start a new polygon if needed (Last column saw itself add a polygon)
+        if (!isInVector)
+        {
+            currentPolygon.columnStart = i;
+            currentPolygon.topLeft = drawTop;
+            currentPolygon.botLeft = drawBot;
+            isInVector = true;
+        }
+
+        // Extend the polygon to the new column
+        currentPolygon.columnEnd = i;
+        currentPolygon.topRight = drawTop;
+        currentPolygon.botRight = drawBot;
+
+        // Update the new drawing heights for the current column, so that the next parse knows how much of the column is used
+        columns[i].topPosition = (int)drawTop;
+        columns[i].bottomPosition = (int)drawBot;
+    }
+
+    if (isInVector) polygonsToRender.push_back(currentPolygon); // Added if was building a polygon and reached the end of the screen
+    // End of overdraw and culling computing
+
+    // Drawing all of the polygons
+    for (const PolygonCoordinates& polygon : polygonsToRender)
+    {
+        QPolygonF p;
+        p << QPointF(polygon.columnStart, polygon.topLeft)
+          << QPointF(polygon.columnEnd, polygon.topRight)
+          << QPointF(polygon.columnEnd, polygon.botRight)
+          << QPointF(polygon.columnStart, polygon.botLeft);
+
+        QGraphicsPolygonItem* wallItem = m_scene->addPolygon(p);
+        wallItem->setBrush(QColor(60, 60, 60));
+    }
 }
-
-
 
 Vertex RenderManager::coordPlayer(const Vertex& point, const Actor& player)
 {
@@ -142,9 +305,7 @@ Vertex RenderManager::projectToScreen(const Vertex& cameraPoint)
 float RenderManager::projectHeight(float worldHeight, float distance)
 {
     float eyeHeight = 2.5f;
-
     float relativeHeight = worldHeight - eyeHeight;
-
     float screenHeight = (relativeHeight / distance) * m_focalLength;
 
     return m_screenHeight / 2.0f - screenHeight;
@@ -159,7 +320,6 @@ void RenderManager::renderActor(Actor* actor, const Actor player, QColor color, 
 
     if (camPos.y < distanceMin)
         return;
-
 
     float screenX = (camPos.x / camPos.y) * m_focalLength + m_screenWidth / 2.0f;
 
@@ -179,7 +339,6 @@ void RenderManager::renderActor(Actor* actor, const Actor player, QColor color, 
 
     if (spriteRect.right() < 0 || spriteRect.left() > m_screenWidth)
         return;
-
 
     QPixmap currentTexture;
     if(isRanged)
@@ -227,18 +386,18 @@ void RenderManager::renderActor(Actor* actor, const Actor player, QColor color, 
     QGraphicsRectItem* barBg = m_scene->addRect(barX, barY, barWidth, barHeight);
     barBg->setBrush(QColor(150, 0, 0));
     barBg->setPen(Qt::NoPen);
-    barBg->setZValue(-camPos.y + 0.1f);
+    barBg->setZValue(camPos.y + 0.1f);
 
 
     QGraphicsRectItem* barFg = m_scene->addRect(barX, barY, barWidth * healthPercent, barHeight);
     barFg->setBrush(QColor(0, 200, 0));
     barFg->setPen(Qt::NoPen);
-    barFg->setZValue(-camPos.y + 0.2f);
+    barFg->setZValue(camPos.y + 0.2f);
 
     QGraphicsRectItem* spriteItem = m_scene->addRect(spriteRect);
-    spriteItem->setZValue(-camPos.y);
+    spriteItem->setZValue(camPos.y);
     spriteItem->setPen(Qt::NoPen);
-    spriteItem->setZValue(-camPos.y);
+    spriteItem->setZValue(camPos.y);
 
     if (!currentTexture.isNull())
     {
@@ -313,88 +472,6 @@ void RenderManager::triggerGunAnim()
     m_gunFrame = 0;
     m_gunAnimating = true;
     m_gunAnimTimer.restart();
-}
-
-void RenderManager::render(Actor m_player,
-                           const std::vector<Actor*>& enemies,
-                           const std::vector<Actor*>& rangedEnemies,
-                           const std::vector<Projectile>& projectiles,
-                           const std::vector<Vertex>& heals,
-                           const std::vector<Vertex>& weaponPickups,
-                           BSP* bsp,
-                           const std::vector<Vertex>& verteces,
-                           const std::vector<Sector>& sectors)
-{
-    m_scene->clear();
-    bsp->traverse(m_player.getPosition(), renderedWalls, verteces);
-
-    for (const Linedef& wall : renderedWalls) {
-        renderWall(wall, verteces, m_player, sectors);
-    }
-
-    //ennemis melee
-    for (Actor* enemy : enemies)
-       renderActor(enemy, m_player, QColor(255, 0, 0), 1.0f, false);
-    //ennemis distance
-    for(Actor* enemy : rangedEnemies)
-        renderActor(enemy, m_player, QColor(200,100,0), 1.0f, true);
-
-    //Projectiles
-    for (const Projectile& proj : projectiles)
-    {
-        Vertex camPos = coordPlayer(proj.position, m_player);
-        if (camPos.y < distanceMin) continue;
-
-
-        float angleToProj = std::atan2(camPos.x, camPos.y);
-
-
-        float halfFov = M_PI / 2.0f;
-        if (std::abs(angleToProj) > halfFov) continue;
-
-
-        float screenX = (angleToProj / halfFov) * (m_screenWidth / 2.0f) + m_screenWidth / 2.0f;
-
-        float distance = std::sqrt(camPos.x * camPos.x + camPos.y * camPos.y);
-        float screenY = projectHeight(2.5f, camPos.y);
-
-        float size = (m_focalLength / camPos.y) * 2.5f;
-        size = std::max(25.0f, std::min(size, 80.0f));
-
-        m_scene->addEllipse(screenX - size/2, screenY - size/2, size, size,
-                            QPen(QColor(180, 0, 255), 3),
-                            QBrush(QColor(100, 0, 255, 180)));
-
-        float haloSize = size * 1.4f;
-        m_scene->addEllipse(screenX - haloSize/2, screenY - haloSize/2, haloSize, haloSize,
-                            QPen(QColor(200, 100, 255, 120), 2),
-                            QBrush(Qt::NoBrush));
-    }
-    //heal
-    renderHeals(heals, m_player);
-
-    //Shotgun
-    renderWeaponPickups(weaponPickups, m_player);
-
-    float gunX = (m_screenWidth / 2.0f) - (200 / 2.0f);
-    float gunY = (m_screenHeight - 100);
-    if (m_rayFramesLeft > 0)
-    {
-        if(hit)
-        {
-            m_scene->addEllipse(m_rayTargetX, m_rayTargetY, 25, 25, QPen(QColor(255, 255, 0), 3),QBrush(QColor(255, 255, 0, 255)));
-        }
-        m_scene->addEllipse(gunX+90,gunY-20,25, 25, QPen(QColor(255, 255, 0), 3),QBrush(QColor(255, 255, 0, 255)));
-        m_rayFramesLeft--;
-    }
-    renderGun();
-
-    if(m_isPowerUpActive)
-    {
-        QGraphicsRectItem* overlay = m_scene->addRect(0, 0, m_screenWidth, m_screenHeight);
-        overlay->setBrush(QColor(255, 0, 0, 60)); // 60 = transparence
-        overlay->setPen(Qt::NoPen);
-    }
 }
 
 void RenderManager::updateScreenSize(int width, int height)
