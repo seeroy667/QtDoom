@@ -28,15 +28,11 @@ void GameManager::restartGame()
     m_lastHealScore = 0;
     m_currentWave = 0;
     m_waveActive = false;
-
     for (Actor* a : m_rangedEnemies) delete a;
     m_rangedEnemies.clear();
     m_projectiles.clear();
-
-
     for (Actor* a : creatures) delete a;
     creatures.clear();
-
     if (m_boss)
     {
         delete m_boss;
@@ -47,6 +43,11 @@ void GameManager::restartGame()
     m_weaponPickups.clear();
     m_playerHasShotgun = false;
     m_shotgunWave = -1;
+
+    delete m_playerWeapon;
+    m_playerWeapon = new Weapon(1, 1000.0f, 10.0f, 10, 2.0f);
+    p->setWeapon(m_playerWeapon);
+    emit sigWeaponChanged();
 }
 
 Actor* GameManager::getPlayer()
