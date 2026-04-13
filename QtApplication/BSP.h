@@ -40,29 +40,46 @@ public:
             Author: Donavan Sirois
             Description: Added more readability to the class. Comments and function substitution
     */
-    Node* Builder(std::vector<Linedef> segments, std::vector<Vertex>& vertices);
+    Node* Builder(std::vector<Linedef> segments,
+                  std::vector<Vertex>& vertices);
 
     void traverseAndRender(Node* node,
                            const Vertex& playerPos,
                            const std::vector<Vertex>& verteces,
                            std::function<bool(const Linedef&)> renderCallback);
 
-    void traverse(const Vertex& playerPosition, std::vector<Linedef>& renderedWalls, const std::vector<Vertex>& vertices);
-    void traverseNode(Node* node, const Vertex& playerPos, std::vector<Linedef>& walls, const std::vector<Vertex>& vertices);
-    void build(const std::vector<Linedef>& segments, std::vector<Vertex>& vertices);
+    void traverse(const Vertex& playerPosition,
+                  std::vector<Linedef>& renderedWalls,
+                  const std::vector<Vertex>& vertices);
+    void traverseNode(Node* node,
+                      const Vertex& playerPos,
+                      std::vector<Linedef>& walls,
+                      const std::vector<Vertex>& vertices);
+    void build(const std::vector<Linedef>& segments,
+               std::vector<Vertex>& vertices);
 
     // For collision on all actors
-    void broadWall(Node* node, const Vertex& playerPosition, std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& vertices);
-    void actorToWallBroading(const Vertex& actorPosition, std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& vertices);
+    void broadWall(Node* node,
+                   const Vertex& playerPosition,
+                   std::vector<Linedef>& broadedWalls,
+                   const std::vector<Vertex>& vertices);
+    void actorToWallBroading(const Vertex& actorPosition,
+                             std::vector<Linedef>& broadedWalls,
+                             const std::vector<Vertex>& vertices);
 
     // For enemy rendering
-    bool enemyRendering(const Vertex& playerPosition, const Vertex& enemyPosition, const std::vector<Vertex>& vertices);
-    bool enemyRenderingCheck(Node* node, const Vertex& playerPosition, const Vertex& enemyPosition, const std::vector<Vertex>& vertices);
-
-    Node* getRoot() const { return root; };
-
+    bool enemyRendering(const Vertex& playerPosition,
+                        const Vertex& enemyPosition,
+                        const std::vector<Vertex>& vertices);
+    bool enemyRenderingCheck(Node* node,
+                             const Vertex& playerPosition,
+                             const Vertex& enemyPosition,
+                             const std::vector<Vertex>& vertices);
     std::vector<Vertex> collectValidSpawnPoints(const std::vector<Vertex>& vertices,
                                                 float minDistToWall);
+
+    // Annexes
+    Node* getRoot() const { return root; };
 
 private:
     Node* root;

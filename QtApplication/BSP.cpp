@@ -94,11 +94,24 @@ Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& vertices)
                 intersection.y = (slopeSeg*intersection.x) + bSeg;
             }
 
-            auto found = std::find_if(vertices.begin(), vertices.end(),
-                                      [&](const Vertex& v) {
-                                          return fabs(v.x - intersection.x) < 0.001f &&
-                                                 fabs(v.y - intersection.y) < 0.001f;
-                                      });
+            std::vector<Vertex>::iterator found = vertices.end(); // The iterator is a Vertex
+
+            for (std::vector<Vertex>::iterator i = vertices.begin(); i != vertices.end(); i++)
+            {
+                const Vertex& v = *i; // Could replace the type by iterator
+
+                float dx = v.x - intersection.x;
+                float dy = v.y - intersection.y;
+
+                bool sameX = (dx == 0);
+                bool sameY = (dy == 0);
+
+                if (sameX && sameY)
+                {
+                    found = i;
+                    break;
+                }
+            }
 
             int vertexIndex = 0;
             if (found != vertices.end()) {
@@ -147,8 +160,8 @@ void BSP::traverseAndRender(Node* node,
     float cross = dxPartition * dyPlayer - dyPartition * dxPlayer;
 
     // Front-to-back: near side first
-    Node* nearChild = (cross < 0) ? node->front : node->back;
-    Node* farChild  = (cross < 0) ? node->back  : node->front;
+    Node* nearChild = (cross > 0) ? node->front : node->back;
+    Node* farChild  = (cross > 0) ? node->back  : node->front;
 
     traverseAndRender(nearChild, playerPos, verteces, renderCallback);
 
@@ -267,26 +280,11 @@ bool BSP::enemyRenderingCheck(Node* node, const Vertex& playerPosition, const Ve
         if (t >= 0.0f && t <= 1.0f && s >= 0.0f && s <= 1.0f) return false;
     }
 
-    float dxPartition = vertices[node->partition.end].x - vertices[node->partition.start].x;
-    float dyPartition = vertices[node->partition.end].y - vertices[node->partition.start].y;
-    float dxPlayer = playerPosition.x - vertices[node->partition.start].x;
-    float dyPlayer = playerPosition.y - vertices[node->partition.start].y;
-    cross = dxPlayer * dyPartition - dyPlayer * dxPartition;
-
+    cross = crossProduct(vertices[node->partition.start], vertices[node->partition.end], playerPosition);
     if (!enemyRenderingCheck(node->front, playerPosition, enemyPosition, vertices))
         return false;
 
     return enemyRenderingCheck(node->back, playerPosition, enemyPosition, vertices);
-}
-
-float crossProduct(Vertex v, Linedef l)
-{
-    return 0.1f;
-}
-
-float crossProduct(Linedef l1, Linedef l2)
-{
-    return 0.1f;
 }
 
 float BSP::distancePointToSegment(const Vertex& point,const Vertex& segStart,const Vertex& segEnd)

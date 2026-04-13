@@ -11,6 +11,6 @@ Modifications:
 
 #include"geoStructs.h"
 
-float crossProduct(Vertex& v1, Vertex& v2, Vertex& v3);
+float crossProduct(const Vertex& v1, const Vertex& v2, const Vertex& v3);
 
 #endif // UTILITIES_H

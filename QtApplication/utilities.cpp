@@ -9,7 +9,7 @@ Modifications:
 #include"utilities.h"
 
 // Description: Computes the cross product between a segment (first two verteces) and a vertex. Returns the cross product
-float crossProduct(Vertex& segmentV1, Vertex& segmentV2, Vertex& vertex)
+float crossProduct(const Vertex& segmentV1, const Vertex& segmentV2, const Vertex& vertex)
 {
     float dxSeg = segmentV1.x - segmentV2.x;
     float dySeg = segmentV1.y - segmentV2.y;
