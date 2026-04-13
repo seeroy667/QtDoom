@@ -33,6 +33,7 @@ UIManager::UIManager(QGraphicsView *view, QWidget *parent): QWidget(parent) {
         //qDebug() << "le jeu commence";
     });
 
+
     connect(menuPage, &MenuPage::menu_levelClickedSig, this, [this]() {
         stackedWidget->setCurrentWidget(levelPage);
     });

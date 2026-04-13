@@ -50,7 +50,7 @@ leaderBoard::leaderBoard(QString filename, QWidget *parent)
 
     // Hauteur des rangées
     for (int i = 0; i < 10; i++)
-        m_table->setRowHeight(i, 38);
+        m_table->setRowHeight(i, 30);
 
     m_menuButton = new QPushButton(this); // ← ajoute 'this' et garde la référence
     m_menuButton->setMinimumSize(450, 120);

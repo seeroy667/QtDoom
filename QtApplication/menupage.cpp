@@ -121,6 +121,7 @@ void MenuPage::connectButtons()
     connect(menu_playButton, &QPushButton::clicked, this, &MenuPage::menu_playClicked);
     connect(loginButton, &QPushButton::clicked, this, &MenuPage::loginClicked);
     connect(scoreButton, &QPushButton::clicked, this, &MenuPage::scoreClicked);
+
 }
 
 void MenuPage::updateHighlight()
