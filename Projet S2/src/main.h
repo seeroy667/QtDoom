@@ -10,7 +10,8 @@
 #include <LCD.h>
 
 void WriteTrame();
-void ReadTrame();
 void UpdateReloadAnimation();
+void UpdateSignalDetection();
+
 
 #endif
