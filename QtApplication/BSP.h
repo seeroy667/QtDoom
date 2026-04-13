@@ -43,11 +43,6 @@ public:
     Node* Builder(std::vector<Linedef> segments,
                   std::vector<Vertex>& vertices);
 
-    void traverseAndRender(Node* node,
-                           const Vertex& playerPos,
-                           const std::vector<Vertex>& verteces,
-                           std::function<bool(const Linedef&)> renderCallback);
-
     void traverse(const Vertex& playerPosition,
                   std::vector<Linedef>& renderedWalls,
                   const std::vector<Vertex>& vertices);

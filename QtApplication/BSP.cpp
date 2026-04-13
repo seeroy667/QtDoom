@@ -146,30 +146,6 @@ Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& vertices)
     return node;
 }
 
-void BSP::traverseAndRender(Node* node,
-                            const Vertex& playerPos,
-                            const std::vector<Vertex>& verteces,
-                            std::function<bool(const Linedef&)> renderCallback)
-{
-    if (!node) return;
-
-    float dxPartition = verteces[node->partition.end].x - verteces[node->partition.start].x;
-    float dyPartition = verteces[node->partition.end].y - verteces[node->partition.start].y;
-    float dxPlayer = playerPos.x - verteces[node->partition.start].x;
-    float dyPlayer = playerPos.y - verteces[node->partition.start].y;
-    float cross = dxPartition * dyPlayer - dyPartition * dxPlayer;
-
-    // Front-to-back: near side first
-    Node* nearChild = (cross > 0) ? node->front : node->back;
-    Node* farChild  = (cross > 0) ? node->back  : node->front;
-
-    traverseAndRender(nearChild, playerPos, verteces, renderCallback);
-
-    if (!renderCallback(node->partition)) return; // screen full, stop
-
-    traverseAndRender(farChild, playerPos, verteces, renderCallback);
-}
-
 // These functions order the walls. THEY DO NOT ACCOUNT FOR VIEW CULLING YET! THIS MEANS EVERY WALL GETS RENDERED!
 void BSP::traverse(const Vertex& playerPosition, std::vector<Linedef>& renderedWalls, const std::vector<Vertex>& vertices)
 {
@@ -204,6 +180,15 @@ void BSP::traverseNode(Node* node, const Vertex& playerPosition, std::vector<Lin
 
 void BSP::build(const std::vector<Linedef>& segments, std::vector<Vertex>& vertices)
 {
+    // Safety verifications, although they should never happen within the scope of this software
+    if (segments.empty() || vertices.empty())
+    {
+        qDebug() << "ERROR: BSP cannot be built, segment or vertices list is empty";
+        qDebug() << segments.size();
+        qDebug() << vertices.size();
+        return;
+    }
+
     delete root;
     root = Builder(segments, vertices);
 }
