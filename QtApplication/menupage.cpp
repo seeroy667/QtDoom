@@ -20,8 +20,10 @@ MenuPage::MenuPage(QWidget *parent)
     addScoreButton();
     addPageLayout();
     //ajout a la liste
-    menuButtons.append(menu_playButton);   // index 0 → sélectionné par défaut
+    menuButtons.append(menu_playButton);
     menuButtons.append(menu_levelButton);
+    menuButtons.append(loginButton);
+    menuButtons.append(scoreButton);
     connectButtons();
     updateHighlight();
     m_background.load(":/ressources/background1.png");
@@ -125,44 +127,47 @@ void MenuPage::updateHighlight()
 {
     // Remet tous les boutons à leur état normal
     menu_playButton->setStyleSheet(
-        "QPushButton {"
-        "   border-image: url(:/ressources/bouton1.png) 0 0 0 0 stretch stretch;"
-        "}"
-        "QPushButton:hover {"
-        "   border-image: url(:/ressources/bouton2.png) 0 0 0 0 stretch stretch;"
-        "}"
+        "QPushButton { border-image: url(:/ressources/bouton1.png) 0 0 0 0 stretch stretch; }"
+        "QPushButton:hover { border-image: url(:/ressources/bouton2.png) 0 0 0 0 stretch stretch; }"
         );
     menu_levelButton->setStyleSheet(
-        "QPushButton {"
-        "   border-image: url(:/ressources/niveau1.png) 0 0 0 0 stretch stretch;"
-        "}"
-        "QPushButton:hover {"
-        "   border-image: url(:/ressources/niveau2.png) 0 0 0 0 stretch stretch;"
-        "}"
+        "QPushButton { border-image: url(:/ressources/niveau1.png) 0 0 0 0 stretch stretch; }"
+        "QPushButton:hover { border-image: url(:/ressources/niveau2.png) 0 0 0 0 stretch stretch; }"
+        );
+    loginButton->setStyleSheet(
+        "QPushButton { border-image: url(:/ressources/utilisateur1.png) 0 0 0 0 stretch stretch; }"
+        "QPushButton:hover { border-image: url(:/ressources/utilisateur2.png) 0 0 0 0 stretch stretch; }"
+        );
+    scoreButton->setStyleSheet(
+        "QPushButton { border-image: url(:/ressources/classement1.png) 0 0 0 0 stretch stretch; }"
+        "QPushButton:hover { border-image: url(:/ressources/classement2.png) 0 0 0 0 stretch stretch; }"
         );
 
-    if (currentIndex == 0) // menu_playButton est à l'index 0
-    {
+    // Applique le highlight sur le bouton sélectionné
+    if (currentIndex == 0)
         menu_playButton->setStyleSheet(
-            "QPushButton {"
-            "   border-image: url(:/ressources/bouton2.png) 0 0 0 0 stretch stretch;"
-            "}"
+            "QPushButton { border-image: url(:/ressources/bouton2.png) 0 0 0 0 stretch stretch; }"
             );
-    }
-    else if (currentIndex == 1) // menu_levelButton est à l'index 1
-    {
+    else if (currentIndex == 1)
         menu_levelButton->setStyleSheet(
-            "QPushButton {"
-            "   border-image: url(:/ressources/niveau2.png) 0 0 0 0 stretch stretch;"
-            "}"
+            "QPushButton { border-image: url(:/ressources/niveau2.png) 0 0 0 0 stretch stretch; }"
             );
-    }
+    else if (currentIndex == 2)
+        loginButton->setStyleSheet(
+            "QPushButton { border-image: url(:/ressources/utilisateur2.png) 0 0 0 0 stretch stretch; }"
+            );
+    else if (currentIndex == 3)
+        scoreButton->setStyleSheet(
+            "QPushButton { border-image: url(:/ressources/classement2.png) 0 0 0 0 stretch stretch; }"
+            );
 }
 
 void MenuPage::activateSelectedButton()
 {
-    if (currentIndex == 0) menu_playClicked();
+    if (currentIndex == 0)      menu_playClicked();
     else if (currentIndex == 1) menu_levelClicked();
+    else if (currentIndex == 2) loginClicked();
+    else if (currentIndex == 3) scoreClicked();
 }
 
 void MenuPage::loginClicked()
@@ -189,15 +194,10 @@ void MenuPage::menu_playClicked()
 
 void MenuPage::changeButtons()
 {
-    //qDebug() << "changeButtons";
     currentIndex++;
-    if (currentIndex > 1)
-    {
+    if (currentIndex > 3)
         currentIndex = 0;
-    }
-    //qDebug() << "current index:" << currentIndex;
 }
-
 void MenuPage::setupNextSelect()
 {
     //qDebug() << "setup Next";

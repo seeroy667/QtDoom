@@ -7,3 +7,6 @@ seeroy, 0
 j, 0
 s, 0
 f, 0
+tset, 0
+est, 0
+esst, 0

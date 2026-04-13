@@ -50,7 +50,7 @@ leaderBoard::leaderBoard(QString filename, QWidget *parent)
 
     // Hauteur des rangées
     for (int i = 0; i < 10; i++)
-        m_table->setRowHeight(i, 36);
+        m_table->setRowHeight(i, 38);
 
     m_menuButton = new QPushButton(this); // ← ajoute 'this' et garde la référence
     m_menuButton->setMinimumSize(450, 120);
@@ -100,7 +100,7 @@ int leaderBoard::loadScore(QString username)
 
 void leaderBoard::load10BestPlayers()
 {
-    for (int i = 0; i < 9; i++)
+    for (int i = 0; i < 10; i++)
     {
         QString nom   = i < m_users.size() ? m_users[i].first  : "-";
         QString score = i < m_users.size() ? QString::number(m_users[i].second) : "-";
@@ -163,7 +163,7 @@ void leaderBoard::resizeEvent(QResizeEvent* event)
 
     // Ces 4 valeurs définissent le rectangle du tableau dans l'image
     int tableX = (int)(430 * scaleX);
-    int tableY = (int)(385 * scaleY);
+    int tableY = (int)(345 * scaleY);
     int tableW = (int)(480 * scaleX);
     int tableH = (int)(500 * scaleY);
 
