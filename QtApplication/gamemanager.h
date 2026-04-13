@@ -117,7 +117,7 @@ signals:
 public slots:
     void giveScore();
     void saveBestScore();
-
+    void resetBestScore();
 };
 
 #endif // GAMEMANAGER_H

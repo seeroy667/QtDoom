@@ -715,6 +715,11 @@ void GameManager::saveBestScore()
     }
 }
 
+void GameManager::resetBestScore()
+{
+    bestScore=0;
+}
+
 
 
 
