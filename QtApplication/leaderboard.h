@@ -37,6 +37,7 @@ private:
     void writeScoresInFile();
     QList<QPair<QString, int>> m_users;
     QPixmap m_background;
+    QPushButton* m_menuButton = nullptr;
 
 protected:
     void paintEvent(QPaintEvent *event) override;

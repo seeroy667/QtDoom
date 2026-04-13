@@ -50,11 +50,11 @@ leaderBoard::leaderBoard(QString filename, QWidget *parent)
 
     // Hauteur des rangées
     for (int i = 0; i < 10; i++)
-        m_table->setRowHeight(i, 35);
+        m_table->setRowHeight(i, 36);
 
-    QPushButton* menuButton = new QPushButton();
-    menuButton->setMinimumSize(450,120);
-    menuButton->setStyleSheet(
+    m_menuButton = new QPushButton(this); // ← ajoute 'this' et garde la référence
+    m_menuButton->setMinimumSize(450, 120);
+    m_menuButton->setStyleSheet(
         "QPushButton {"
         "   border-image: url(:/ressources/quitter1.png) 0 0 0 0 stretch stretch;"
         "}"
@@ -62,9 +62,7 @@ leaderBoard::leaderBoard(QString filename, QWidget *parent)
         "   border-image: url(:/ressources/quitter2.png) 0 0 0 0 stretch stretch;"
         "}"
         );
-    menuButton->move(450, 640);
-
-    connect(menuButton, &QPushButton::clicked, this, &leaderBoard::menuButtonClicked);
+    connect(m_menuButton, &QPushButton::clicked, this, &leaderBoard::menuButtonClicked);
     m_background.load(":/ressources/backgroundClassement.png");
 
 }
@@ -170,5 +168,11 @@ void leaderBoard::resizeEvent(QResizeEvent* event)
     int tableH = (int)(500 * scaleY);
 
     m_table->setGeometry(tableX, tableY, tableW, tableH);
+
+    int btnW = (int)(450 * scaleX);
+    int btnH = (int)(120 * scaleY);
+    int btnX = (width() - btnW) / 2;
+    int btnY = (int)(730 * scaleY);
+    m_menuButton->setGeometry(btnX, btnY, btnW, btnH);
 }
 
