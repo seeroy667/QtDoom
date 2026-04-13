@@ -55,6 +55,7 @@ UIManager::UIManager(QGraphicsView *view, QWidget *parent): QWidget(parent) {
         emit getScore();
         qDebug() << score;
         leaderBoardPage->saveScore(username,score);
+        emit newPlayer();
     });
 
     connect(levelPage, SIGNAL(chosenLevelPath(QString)), this, SLOT(saveLevelPath(QString)));
@@ -80,6 +81,13 @@ void UIManager::goToLeaderBoard()
     emit getScore();
     leaderBoardPage->saveScore(username,score);
     leaderBoardPage->load10BestPlayers();
+}
+
+void UIManager::saveScoreBeforeNextLevel()
+{
+    QString username = comptePage->getCurrentUsername();
+    emit getScore();
+    leaderBoardPage->saveScore(username,score);
 }
 
 GamePage* UIManager::getGamePage()

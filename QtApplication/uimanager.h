@@ -23,6 +23,7 @@ public:
     void setupNextSelect();
     void updateHighlight();
     void activateSelectedButton();
+    void saveScoreBeforeNextLevel();
 
 private:
     QStackedWidget *stackedWidget;
@@ -43,6 +44,7 @@ signals:
     void pauseGame();
     void loadMap(QString path = "");
     void getScore();
+    void newPlayer();
 
 public slots:
     void potIsTurning();

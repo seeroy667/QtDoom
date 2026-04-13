@@ -59,7 +59,7 @@ Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QG
     connect(gManager, SIGNAL(scoreResult(int)), uiManager, SLOT(setScore(int)));
     //ShotGun
     connect(gManager, SIGNAL(sigWeaponChanged()), this, SLOT(onWeaponChanged()));
-
+    connect(uiManager, SIGNAL(newPlayer()), gManager, SLOT(resetBestScore()));
 }
 
 Engine::~Engine()
@@ -86,17 +86,21 @@ void Engine::resumeGame()
 
 void Engine::restartGame()
 {
+    gManager->saveBestScore();
     qDebug("restartGame");
     elapsedTimer.restart();
     gManager->restartGame();
+    uiManager->updateScore(gManager->getPlayer()->getScore());
     resumeGame();
 }
 
 void Engine::quitGame()
 {
+    gManager->saveBestScore();
     qDebug("quitGame");
     elapsedTimer.restart();
     gManager->restartGame();
+    uiManager->updateScore(gManager->getPlayer()->getScore());
 }
 
 void Engine::gameOver()
@@ -300,6 +304,7 @@ UIManager* Engine::getuiManager() const
 
 void Engine::loadMapIntoGame(QString path)
 {
+    uiManager->saveScoreBeforeNextLevel();
     if (path != oldMap)
     {
         delete gManager;
@@ -310,6 +315,8 @@ void Engine::loadMapIntoGame(QString path)
         connect(gManager, SIGNAL(sigUpdateVie(int)), uiManager, SLOT(updateVie(int)));
         connect(gManager, SIGNAL(sigWeaponChanged()), this, SLOT(onWeaponChanged()));
         connect(gManager, SIGNAL(scoreResult(int)), uiManager, SLOT(setScore(int)));
+        connect(uiManager, SIGNAL(getScore()), gManager, SLOT(giveScore()));
+        connect(uiManager, SIGNAL(newPlayer()), gManager, SLOT(resetBestScore()));
 
         QString mapPath = QCoreApplication::applicationDirPath() + path;
         gManager->loadMap(mapPath.toStdString());
