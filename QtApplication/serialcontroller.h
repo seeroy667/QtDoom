@@ -10,7 +10,7 @@ class SerialController : public QObject
 {
     Q_OBJECT
 public:
-    explicit SerialController(QObject *parent = nullptr, const QString &portName = "COM3", int baud = 9600);
+    explicit SerialController(QObject *parent = nullptr, const QString &portName = "COM3", int baud = 115200);
     ~SerialController();
 
     void openPort();
