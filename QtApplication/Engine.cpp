@@ -306,7 +306,6 @@ void Engine::loadMapIntoGame(QString path)
         gManager = nullptr;
         gManager = new GameManager();
 
-
         connect(gManager, SIGNAL(playerDead()), this, SLOT(gameOver()));
         connect(gManager, SIGNAL(sigUpdateVie(int)), uiManager, SLOT(updateVie(int)));
         connect(gManager, SIGNAL(sigWeaponChanged()), this, SLOT(onWeaponChanged()));

@@ -70,12 +70,31 @@ void MenuPage::addLevelButton()
 
 void MenuPage::addLoginButton()
 {
-    loginButton = new QPushButton("changer d'utilisateur");
+    loginButton = new QPushButton();
+    loginButton->setMinimumSize(450,120);
+    loginButton->setAttribute(Qt::WA_Hover);
+
+    loginButton->setStyleSheet(        "QPushButton {"
+                               "   border-image: url(:/ressources/utilisateur1.png) 0 0 0 0 stretch stretch;"
+                               "}"
+                               "QPushButton:hover {"
+                               "   border-image: url(:/ressources/utilisateur2.png) 0 0 0 0 stretch stretch;"
+                               "}"
+                               );
 }
 
 void MenuPage::addScoreButton()
 {
-    scoreButton = new QPushButton("Classement");
+    scoreButton = new QPushButton();
+    scoreButton->setMinimumSize(450,120);
+    scoreButton->setAttribute(Qt::WA_Hover);
+    scoreButton->setStyleSheet(  "QPushButton {"
+                               "   border-image: url(:/ressources/classement1.png) 0 0 0 0 stretch stretch;"
+                               "}"
+                               "QPushButton:hover {"
+                               "   border-image: url(:/ressources/classement2.png) 0 0 0 0 stretch stretch;"
+                               "}"
+                               );
 }
 
 void MenuPage::addPageLayout()
@@ -85,11 +104,11 @@ void MenuPage::addPageLayout()
     layout->addWidget(label_doom, 0, Qt::AlignCenter);
     layout->addSpacing(30);
     layout->addWidget(menu_playButton, 0, Qt::AlignCenter);
-    layout->addSpacing(30);
+    layout->addSpacing(10);
     layout->addWidget(menu_levelButton, 0, Qt::AlignCenter);
-    layout->addSpacing(30);
+    layout->addSpacing(10);
     layout->addWidget(loginButton, 0, Qt::AlignCenter);
-    layout->addSpacing(30);
+    layout->addSpacing(10);
     layout->addWidget(scoreButton, 0, Qt::AlignCenter);
     layout->addStretch();
 }

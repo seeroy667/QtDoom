@@ -44,5 +44,13 @@
         <file>ressources/tir3.png</file>
         <file>ressources/tir4.png</file>
         <file>ressources/tir1.png</file>
+        <file>ressources/backgroundUser.png</file>
+        <file>ressources/utilisateur1.png</file>
+        <file>ressources/utilisateur2.png</file>
+        <file>ressources/classement1.png</file>
+        <file>ressources/classement2.png</file>
+        <file>ressources/jouer1.png</file>
+        <file>ressources/jouer2.png</file>
+        <file>ressources/backgroundClassement.png</file>
     </qresource>
 </RCC>

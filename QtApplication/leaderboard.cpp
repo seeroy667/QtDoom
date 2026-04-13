@@ -26,94 +26,47 @@ leaderBoard::leaderBoard(QString filename, QWidget *parent)
         }
         file.close();
     }
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    QLabel *leaderBoard = new QLabel("Classement");
-    QPushButton *menuButton = new QPushButton("quitter");
-    QLabel *position1 = new QLabel("1er");
-    QLabel *position2 = new QLabel("2e");
-    QLabel *position3 = new QLabel("3e");
-    QLabel *position4 = new QLabel("4e");
-    QLabel *position5 = new QLabel("5e");
-    QLabel *position6 = new QLabel("6e");
-    QLabel *position7 = new QLabel("7e");
-    QLabel *position8 = new QLabel("8e");
-    QLabel *position9 = new QLabel("9e");
-    QLabel *position10 = new QLabel("10e");
-    joueur1 = new QLabel("joueur");
-    joueur2 = new QLabel("joueur");
-    joueur3 = new QLabel("joueur");
-    joueur4 = new QLabel("joueur");
-    joueur5 = new QLabel("joueur");
-    joueur6 = new QLabel("joueur");
-    joueur7 = new QLabel("joueur");
-    joueur8 = new QLabel("joueur");
-    joueur9 = new QLabel("joueur");
-    joueur10 = new QLabel("joueur");
-    score1 = new QLabel("score");
-    score2 = new QLabel("score");
-    score3 = new QLabel("score");
-    score4 = new QLabel("score");
-    score5 = new QLabel("score");
-    score6 = new QLabel("score");
-    score7 = new QLabel("score");
-    score8 = new QLabel("score");
-    score9 = new QLabel("score");
-    score10 = new QLabel("score");
-    QHBoxLayout *layout1 = new QHBoxLayout;
-    QHBoxLayout *layout2 = new QHBoxLayout;
-    QHBoxLayout *layout3 = new QHBoxLayout;
-    QHBoxLayout *layout4 = new QHBoxLayout;
-    QHBoxLayout *layout5 = new QHBoxLayout;
-    QHBoxLayout *layout6 = new QHBoxLayout;
-    QHBoxLayout *layout7 = new QHBoxLayout;
-    QHBoxLayout *layout8 = new QHBoxLayout;
-    QHBoxLayout *layout9 = new QHBoxLayout;
-    QHBoxLayout *layout10 = new QHBoxLayout;
-    layout1->addWidget(position1);
-    layout1->addWidget(joueur1);
-    layout1->addWidget(score1);
-    layout2->addWidget(position2);
-    layout2->addWidget(joueur2);
-    layout2->addWidget(score2);
-    layout3->addWidget(position3);
-    layout3->addWidget(joueur3);
-    layout3->addWidget(score3);
-    layout4->addWidget(position4);
-    layout4->addWidget(joueur4);
-    layout4->addWidget(score4);
-    layout5->addWidget(position5);
-    layout5->addWidget(joueur5);
-    layout5->addWidget(score5);
-    layout6->addWidget(position6);
-    layout6->addWidget(joueur6);
-    layout6->addWidget(score6);
-    layout7->addWidget(position7);
-    layout7->addWidget(joueur7);
-    layout7->addWidget(score7);
-    layout8->addWidget(position8);
-    layout8->addWidget(joueur8);
-    layout8->addWidget(score8);
-    layout9->addWidget(position9);
-    layout9->addWidget(joueur9);
-    layout9->addWidget(score9);
-    layout10->addWidget(position10);
-    layout10->addWidget(joueur10);
-    layout10->addWidget(score10);
-    mainLayout->addStretch();
-    mainLayout->addWidget(leaderBoard, 0, Qt::AlignCenter);
-    mainLayout->addLayout(layout1);
-    mainLayout->addLayout(layout2);
-    mainLayout->addLayout(layout3);
-    mainLayout->addLayout(layout4);
-    mainLayout->addLayout(layout5);
-    mainLayout->addLayout(layout6);
-    mainLayout->addLayout(layout7);
-    mainLayout->addLayout(layout8);
-    mainLayout->addLayout(layout9);
-    mainLayout->addLayout(layout10);
-    mainLayout->addStretch();
-    mainLayout->addWidget(menuButton, 0, Qt::AlignCenter);
+    setMinimumSize(1000, 700);
+
+
+    m_table = new QTableWidget(10, 2, this); // 10 lignes, 2 colonnes
+    m_table->setShowGrid(false);
+    m_table->verticalHeader()->setVisible(false);
+    m_table->horizontalHeader()->setVisible(false);
+    m_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    m_table->setSelectionMode(QAbstractItemView::NoSelection);
+    m_table->setFocusPolicy(Qt::NoFocus);
+
+    // Transparent pour voir l'image en dessous
+    m_table->setStyleSheet(
+        "QTableWidget { background: transparent; border: none; color: #c8a050; font-size: 16px; font-weight: bold; }"
+        "QTableWidget::item { background: transparent; padding: 2px 10px; }"
+        );
+
+    // Largeur des colonnes
+    m_table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    m_table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
+    m_table->horizontalHeader()->resizeSection(1, 120);
+
+    // Hauteur des rangées
+    for (int i = 0; i < 10; i++)
+        m_table->setRowHeight(i, 35);
+
+    QPushButton* menuButton = new QPushButton();
+    menuButton->setMinimumSize(450,120);
+    menuButton->setStyleSheet(
+        "QPushButton {"
+        "   border-image: url(:/ressources/quitter1.png) 0 0 0 0 stretch stretch;"
+        "}"
+        "QPushButton:hover {"
+        "   border-image: url(:/ressources/quitter2.png) 0 0 0 0 stretch stretch;"
+        "}"
+        );
+    menuButton->move(450, 640);
+
     connect(menuButton, &QPushButton::clicked, this, &leaderBoard::menuButtonClicked);
+    m_background.load(":/ressources/backgroundClassement.png");
+
 }
 
 void leaderBoard::saveScore(QString username, int score)
@@ -149,21 +102,22 @@ int leaderBoard::loadScore(QString username)
 
 void leaderBoard::load10BestPlayers()
 {
-    QLabel* joueurs[10] = { joueur1, joueur2, joueur3, joueur4, joueur5, joueur6, joueur7, joueur8, joueur9, joueur10 };
-    QLabel* scores[10] = { score1, score2, score3, score4, score5, score6, score7, score8, score9, score10 };
-
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < 9; i++)
     {
-        if (i < m_users.size())
-        {
-            joueurs[i]->setText(m_users[i].first);
-            scores[i]->setText(QString::number(m_users[i].second));
-        }
-        else //s'il y a moins que 10 joueurs
-        {
-            joueurs[i]->setText("-");
-            scores[i]->setText("-");
-        }
+        QString nom   = i < m_users.size() ? m_users[i].first  : "-";
+        QString score = i < m_users.size() ? QString::number(m_users[i].second) : "-";
+
+        QTableWidgetItem* nomItem   = new QTableWidgetItem(nom);
+        QTableWidgetItem* scoreItem = new QTableWidgetItem(score);
+
+        scoreItem->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        nomItem->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+
+        nomItem->setForeground(QColor("#c8a050"));
+        scoreItem->setForeground(QColor("#c8a050"));
+
+        m_table->setItem(i, 0, nomItem);
+        m_table->setItem(i, 1, scoreItem);
     }
 }
 
@@ -193,5 +147,28 @@ void leaderBoard::writeScoresInFile()
 void leaderBoard::menuButtonClicked()
 {
     emit goBackToMenu();
+}
+
+void leaderBoard::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(this);
+    painter.drawPixmap(0, 0, width(), height(), m_background);
+    QWidget::paintEvent(event);
+}
+
+void leaderBoard::resizeEvent(QResizeEvent* event)
+{
+    QWidget::resizeEvent(event);
+
+    float scaleX = (float)width()  / 1340.0f;
+    float scaleY = (float)height() / 860.0f;
+
+    // Ces 4 valeurs définissent le rectangle du tableau dans l'image
+    int tableX = (int)(430 * scaleX);
+    int tableY = (int)(385 * scaleY);
+    int tableW = (int)(480 * scaleX);
+    int tableH = (int)(500 * scaleY);
+
+    m_table->setGeometry(tableX, tableY, tableW, tableH);
 }
 

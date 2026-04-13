@@ -96,6 +96,8 @@ private:
 
     QProgressBar* m_barPowerUp = nullptr;
     QLabel* labelPowerUp = nullptr;
+    QPixmap m_hudBackground;
+
 
 
     void addGameWidget(QGraphicsView *view);

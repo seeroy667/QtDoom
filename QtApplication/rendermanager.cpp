@@ -212,25 +212,26 @@ void RenderManager::renderActor(Actor* actor, const Actor player, QColor color, 
             currentTexture = m_enemyTexture;
         }
 
-        float healthPercent = (float)actor->getHealth() / (float)actor->getMaxHealth();
-
-        float barWidth  = squareSize;
-        float barHeight = 6.0f;
-        float barX      = screenX - squareSize / 2.0f;
-        float barY      = spriteTopAdjusted - 10.0f; // au dessus du sprite
-
-        // Fond rouge
-        QGraphicsRectItem* barBg = m_scene->addRect(barX, barY, barWidth, barHeight);
-        barBg->setBrush(QColor(150, 0, 0));
-        barBg->setPen(Qt::NoPen);
-        barBg->setZValue(-camPos.y + 0.1f);
-
-
-        QGraphicsRectItem* barFg = m_scene->addRect(barX, barY, barWidth * healthPercent, barHeight);
-        barFg->setBrush(QColor(0, 200, 0));
-        barFg->setPen(Qt::NoPen);
-        barFg->setZValue(-camPos.y + 0.2f);
     }
+    float healthPercent = (float)actor->getHealth() / (float)actor->getMaxHealth();
+
+    float barWidth  = squareSize;
+    float barHeight = 6.0f;
+    float barX      = screenX - squareSize / 2.0f;
+    float barY      = spriteTopAdjusted - 10.0f; // au dessus du sprite
+
+    // Fond rouge
+    QGraphicsRectItem* barBg = m_scene->addRect(barX, barY, barWidth, barHeight);
+    barBg->setBrush(QColor(150, 0, 0));
+    barBg->setPen(Qt::NoPen);
+    barBg->setZValue(-camPos.y + 0.1f);
+
+
+    QGraphicsRectItem* barFg = m_scene->addRect(barX, barY, barWidth * healthPercent, barHeight);
+    barFg->setBrush(QColor(0, 200, 0));
+    barFg->setPen(Qt::NoPen);
+    barFg->setZValue(-camPos.y + 0.2f);
+
     QGraphicsRectItem* spriteItem = m_scene->addRect(spriteRect);
     spriteItem->setPen(Qt::NoPen);
     spriteItem->setZValue(-camPos.y);
@@ -414,10 +415,10 @@ QGraphicsView* RenderManager::getView() const
 
 void RenderManager::renderHeals(const std::vector<Vertex>& heals, const Actor& player)
 {
-    for(const Vertex& heal : heals)
+    for (const Vertex& heal : heals)
     {
-        Vertex camPos = coordPlayer(heal,player);
-        if(camPos.y < distanceMin) return;
+        Vertex camPos = coordPlayer(heal, player);
+        if (camPos.y < distanceMin) continue;
 
         float screenX = (camPos.x / camPos.y) * m_focalLength + m_screenWidth / 2.0f;
         float spriteBottom = projectHeight(0.0f, camPos.y);
@@ -426,28 +427,24 @@ void RenderManager::renderHeals(const std::vector<Vertex>& heals, const Actor& p
 
         if (screenX + size < 0 || screenX - size > m_screenWidth) continue;
 
-        float centerY = (spriteBottom + spriteTop) / 2.0f;
+        float centerY  = (spriteBottom + spriteTop) / 2.0f;
         float thickness = size * 0.25f;
 
-        // Barre horizontale
         QGraphicsRectItem* hBar = m_scene->addRect(
             screenX - size / 2.0f,
             centerY - thickness / 2.0f,
-            size,
-            thickness
-            );
+            size, thickness);
         hBar->setBrush(QColor(0, 200, 0));
         hBar->setPen(Qt::NoPen);
+        hBar->setZValue(-camPos.y);
 
-        // Barre verticale
         QGraphicsRectItem* vBar = m_scene->addRect(
             screenX - thickness / 2.0f,
             centerY - size / 2.0f,
-            thickness,
-            size
-            );
+            thickness, size);
         vBar->setBrush(QColor(0, 200, 0));
         vBar->setPen(Qt::NoPen);
+        vBar->setZValue(-camPos.y);
     }
 }
 void RenderManager::setShotgunMode(bool hasShotgun)

@@ -1,6 +1,6 @@
+
 #ifndef LEADERBOARD_H
 #define LEADERBOARD_H
-
 #include <QWidget>
 #include <QPushButton>
 #include <QLabel>
@@ -17,11 +17,13 @@
 #include <QDebug>
 #include <QList>
 #include <QPair>
+#include <QPainter>
+#include <QTableWidget>
+#include <QHeaderView>
 
-class leaderBoard : public QWidget
+    class leaderBoard : public QWidget
 {
     Q_OBJECT
-
 public:
     leaderBoard(QString filename = "", QWidget *parent = nullptr);
     void saveScore(QString username, int score);
@@ -29,31 +31,16 @@ public:
     void load10BestPlayers();
 
 private:
-    QLabel *joueur1;
-    QLabel *joueur2;
-    QLabel *joueur3;
-    QLabel *joueur4;
-    QLabel *joueur5;
-    QLabel *joueur6;
-    QLabel *joueur7;
-    QLabel *joueur8;
-    QLabel *joueur9;
-    QLabel *joueur10;
-    QLabel *score1;
-    QLabel *score2;
-    QLabel *score3;
-    QLabel *score4;
-    QLabel *score5;
-    QLabel *score6;
-    QLabel *score7;
-    QLabel *score8;
-    QLabel *score9;
-    QLabel *score10;
-
+    QTableWidget* m_table = nullptr;
     QString m_filename;
     void sortScores();
     void writeScoresInFile();
     QList<QPair<QString, int>> m_users;
+    QPixmap m_background;
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
+    void resizeEvent(QResizeEvent* event) override;
 
 public slots:
     void menuButtonClicked();
@@ -61,6 +48,5 @@ public slots:
 signals:
     void goBackToMenu();
 };
-
 #endif // LEADERBOARD_H
 
