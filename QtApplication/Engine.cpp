@@ -31,9 +31,6 @@ Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QG
     view->setStyleSheet("border: none; margin: 0px; padding: 0px; background: transparent;");
     view->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    QString mapPath = QCoreApplication::applicationDirPath() + "/../../WadLvl2.txt";
-    gManager->loadMap(mapPath.toStdString());
-
     connect(uiManager, SIGNAL(loadMap(QString)), this, SLOT(loadMapIntoGame(QString)));
     connect(uiManager, SIGNAL(startGame()), this, SLOT(start()));
     connect(uiManager, SIGNAL(keyPressSig(QKeyEvent*)), cManager, SLOT(keyPressedEvent(QKeyEvent*)));
@@ -56,6 +53,13 @@ Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QG
     connect(cManager, SIGNAL(confirmSig()), uiManager, SLOT(shootPressed()));
     connect(&timer, &QTimer::timeout, this, &Engine::gameLoop);
     connect(gManager, SIGNAL(sigUpdateVie(int)), uiManager, SLOT(updateVie(int)));
+
+    //get score
+    connect(uiManager, SIGNAL(getScore()), gManager, SLOT(giveScore()));
+    connect(gManager, SIGNAL(scoreResult(int)), uiManager, SLOT(setScore(int)));
+    //ShotGun
+    connect(gManager, SIGNAL(sigWeaponChanged()), this, SLOT(onWeaponChanged()));
+    connect(uiManager, SIGNAL(newPlayer()), gManager, SLOT(resetBestScore()));
 }
 
 Engine::~Engine()
@@ -82,17 +86,21 @@ void Engine::resumeGame()
 
 void Engine::restartGame()
 {
+    gManager->saveBestScore();
     qDebug("restartGame");
     elapsedTimer.restart();
     gManager->restartGame();
+    uiManager->updateScore(gManager->getPlayer()->getScore());
     resumeGame();
 }
 
 void Engine::quitGame()
 {
+    gManager->saveBestScore();
     qDebug("quitGame");
     elapsedTimer.restart();
     gManager->restartGame();
+    uiManager->updateScore(gManager->getPlayer()->getScore());
 }
 
 void Engine::gameOver()
@@ -242,9 +250,11 @@ void Engine::gameLoop()
                      gManager->getRenderedRangedEnemies(),
                      gManager->getProjectiles(),
                      gManager->getHeals(),
+                     gManager->getWeaponPickups(),
                      gManager->getBSP(),
                      gManager->getVerteces(),
-                     gManager->getSectors());
+                     gManager->getSectors()
+                     );
 
     if(gManager->isBossRenderable())
     {
@@ -278,6 +288,7 @@ void Engine::gameLoop()
         if (uiManager->getGamePage()->amoEdit())
             uiManager->getGamePage()->amoEdit()->setText(QString::number(ammo));
         uiManager->updateBalles(ammo);
+        uiManager->getGamePage()->updatePowerUp(weapon->getPowerUpProgress());
     }
 }
 
@@ -293,6 +304,26 @@ UIManager* Engine::getuiManager() const
 
 void Engine::loadMapIntoGame(QString path)
 {
-    QString mapPath = QCoreApplication::applicationDirPath() + path;
-    gManager->loadMap(mapPath.toStdString());
+    uiManager->saveScoreBeforeNextLevel();
+    if (path != oldMap)
+    {
+        delete gManager;
+        gManager = nullptr;
+        gManager = new GameManager();
+
+        connect(gManager, SIGNAL(playerDead()), this, SLOT(gameOver()));
+        connect(gManager, SIGNAL(sigUpdateVie(int)), uiManager, SLOT(updateVie(int)));
+        connect(gManager, SIGNAL(sigWeaponChanged()), this, SLOT(onWeaponChanged()));
+        connect(gManager, SIGNAL(scoreResult(int)), uiManager, SLOT(setScore(int)));
+        connect(uiManager, SIGNAL(getScore()), gManager, SLOT(giveScore()));
+        connect(uiManager, SIGNAL(newPlayer()), gManager, SLOT(resetBestScore()));
+
+        QString mapPath = QCoreApplication::applicationDirPath() + path;
+        gManager->loadMap(mapPath.toStdString());
+    }
+    oldMap = path;
+}
+void Engine::onWeaponChanged()
+{
+    rManager->setShotgunMode(gManager->playerHasShotgun());
 }

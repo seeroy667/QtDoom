@@ -14,6 +14,7 @@ Actor::Actor()
     position = {0, 0};
     angle = 0.0f;
     health = 5;
+    maxHealth = 5;
     isAlive = true;
 }
 
@@ -112,6 +113,7 @@ void Actor::setMovement(bool movement)
 void Actor::resetPlayerHealth()
 {
     health = 5;
+    maxHealth = 5;
 }
 void Actor::setPosition(Vertex newPos)
 {

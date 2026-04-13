@@ -16,6 +16,8 @@ MenuPage::MenuPage(QWidget *parent)
     addDoomLabel();
     addPlayButton();
     addLevelButton();
+    addLoginButton();
+    addScoreButton();
     addPageLayout();
     //ajout a la liste
     menuButtons.append(menu_playButton);   // index 0 → sélectionné par défaut
@@ -66,6 +68,35 @@ void MenuPage::addLevelButton()
         );
 }
 
+void MenuPage::addLoginButton()
+{
+    loginButton = new QPushButton();
+    loginButton->setMinimumSize(450,120);
+    loginButton->setAttribute(Qt::WA_Hover);
+
+    loginButton->setStyleSheet(        "QPushButton {"
+                               "   border-image: url(:/ressources/utilisateur1.png) 0 0 0 0 stretch stretch;"
+                               "}"
+                               "QPushButton:hover {"
+                               "   border-image: url(:/ressources/utilisateur2.png) 0 0 0 0 stretch stretch;"
+                               "}"
+                               );
+}
+
+void MenuPage::addScoreButton()
+{
+    scoreButton = new QPushButton();
+    scoreButton->setMinimumSize(450,120);
+    scoreButton->setAttribute(Qt::WA_Hover);
+    scoreButton->setStyleSheet(  "QPushButton {"
+                               "   border-image: url(:/ressources/classement1.png) 0 0 0 0 stretch stretch;"
+                               "}"
+                               "QPushButton:hover {"
+                               "   border-image: url(:/ressources/classement2.png) 0 0 0 0 stretch stretch;"
+                               "}"
+                               );
+}
+
 void MenuPage::addPageLayout()
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -73,8 +104,12 @@ void MenuPage::addPageLayout()
     layout->addWidget(label_doom, 0, Qt::AlignCenter);
     layout->addSpacing(30);
     layout->addWidget(menu_playButton, 0, Qt::AlignCenter);
-    layout->addSpacing(30);
+    layout->addSpacing(10);
     layout->addWidget(menu_levelButton, 0, Qt::AlignCenter);
+    layout->addSpacing(10);
+    layout->addWidget(loginButton, 0, Qt::AlignCenter);
+    layout->addSpacing(10);
+    layout->addWidget(scoreButton, 0, Qt::AlignCenter);
     layout->addStretch();
 }
 
@@ -82,6 +117,8 @@ void MenuPage::connectButtons()
 {
     connect(menu_levelButton, &QPushButton::clicked, this, &MenuPage::menu_levelClicked);
     connect(menu_playButton, &QPushButton::clicked, this, &MenuPage::menu_playClicked);
+    connect(loginButton, &QPushButton::clicked, this, &MenuPage::loginClicked);
+    connect(scoreButton, &QPushButton::clicked, this, &MenuPage::scoreClicked);
 }
 
 void MenuPage::updateHighlight()
@@ -126,6 +163,16 @@ void MenuPage::activateSelectedButton()
 {
     if (currentIndex == 0) menu_playClicked();
     else if (currentIndex == 1) menu_levelClicked();
+}
+
+void MenuPage::loginClicked()
+{
+    emit loginClickedSig();
+}
+
+void MenuPage::scoreClicked()
+{
+    emit scoreClickedSig();
 }
 
 void MenuPage::menu_levelClicked()

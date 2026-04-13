@@ -7,6 +7,8 @@
 #include "menupage.h"
 #include "gamepage.h"
 #include "levelpage.h"
+#include "leaderboard.h"
+#include "compte.h"
 
 class UIManager : public QWidget
 {
@@ -21,15 +23,19 @@ public:
     void setupNextSelect();
     void updateHighlight();
     void activateSelectedButton();
+    void saveScoreBeforeNextLevel();
 
 private:
     QStackedWidget *stackedWidget;
     MenuPage *menuPage;
     GamePage *gamePage;
     LevelPage *levelPage;
+    compte *comptePage;
+    leaderBoard *leaderBoardPage;
     bool potTurns=false;
     bool shootPress=false;
     QString pathToLevel = "/../../WadLvl1.txt"; //par défaut load lvl1
+    int score = 0;
 
 signals:
     void startGame();
@@ -37,6 +43,8 @@ signals:
     void keyPressSig(QKeyEvent *event);
     void pauseGame();
     void loadMap(QString path = "");
+    void getScore();
+    void newPlayer();
 
 public slots:
     void potIsTurning();
@@ -48,7 +56,11 @@ public slots:
     void updateBalles(int value);
     void updateVie(int value);
     void updateScore(int value);
+    void updatePowerUp(float value);
     void saveLevelPath(QString path = "");
+    void goToMenuPage();
+    void goToLeaderBoard();
+    void setScore(int newScore);
 };
 
 #endif // UIMANAGER_H

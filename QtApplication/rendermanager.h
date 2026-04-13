@@ -35,6 +35,7 @@ public:
                 const std::vector<Actor*>& rangedEnemies,
                 const std::vector<Projectile>& projectiles,
                 const std::vector<Vertex>& heals,
+                const std::vector<Vertex>& weaponPickups,
                 BSP* bsp,
                 const std::vector<Vertex>& verteces,
                 const std::vector<Sector>& sectors);
@@ -50,6 +51,8 @@ public:
     void setPowerUpActive(bool active) { m_isPowerUpActive = active; }
     void triggerGunAnim();
     void renderHeals(const std::vector<Vertex>& heals, const Actor& player);
+    void renderWeaponPickups(const std::vector<Vertex>& pickups, const Actor& player);
+    void setShotgunMode(bool hasShotgun);
 
 private:
     QGraphicsScene* m_scene;
@@ -72,7 +75,7 @@ private:
     int     m_gunFrame = 0;
     bool    m_gunAnimating = false;
     QElapsedTimer m_gunAnimTimer;
-    float   m_frameDuration = 0.1f;
+    float   m_frameDuration = 0.15f;
     QPixmap m_enemyFrames[4];
     int     m_enemyFrame = 0;
     bool    m_enemyAnimating = false;
@@ -80,6 +83,10 @@ private:
     float   m_enemyFrameDuration = 0.15;
     QPixmap m_rangedEnemyTexture;
     QPixmap m_rangedShootFrames[3];
+    bool m_hasShotgun = false;
+    QPixmap m_shotgunMapTexture;
+    QPixmap m_shotgunIdleTexture;
+    QPixmap m_shotgunFrames[4];
 
 
     bool clipWall(Vertex& p1, Vertex& p2);

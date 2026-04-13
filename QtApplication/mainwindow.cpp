@@ -31,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
      scene->setBackgroundBrush(QBrush(Qt::black));
     view->setFrameStyle(0);
+    scene->setBackgroundBrush(QBrush(Qt::black));
     engine = new Engine(scene, view->width(), view->height(), this, view);
     setCentralWidget(engine->getuiManager());
 }

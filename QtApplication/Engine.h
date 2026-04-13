@@ -58,6 +58,8 @@ private:
 
     static constexpr float BORDER_ROT_SPEED  = 2.0f;
 
+    QString oldMap = "";
+
 public:
     Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QGraphicsView *view);
     ~Engine();
@@ -73,6 +75,7 @@ public slots:
     void quitGame();
     void gameOver();
     void loadMapIntoGame(QString path = "");
+    void onWeaponChanged();
 };
 
 #endif

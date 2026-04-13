@@ -54,6 +54,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         utilities.cpp
         utilities.h
         projectile.h
+        compte.h compte.cpp
+        leaderboard.h leaderboard.cpp
 
 
 

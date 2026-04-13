@@ -14,6 +14,7 @@ Modifications:
 #include <QProcess>
 #include <QElapsedTimer>
 #include <QObject>
+#include <QRandomGenerator>
 
 #include"actor.h"
 #include"geostructs.h"
@@ -28,6 +29,7 @@ class GameManager: public QObject
     Q_OBJECT
 public:
     GameManager();
+    ~GameManager();
     Actor* getPlayer();
     Actor* getEnemy();
     BSP* getBSP();
@@ -59,6 +61,8 @@ public:
     const std::vector<Projectile>& getProjectiles() const {return m_projectiles;}
     const std::vector<Actor*>& getRangedEnemies() const { return m_rangedEnemies; }
     std::vector<Actor*> getRenderedRangedEnemies();
+    const std::vector<Vertex>& getWeaponPickups() const { return m_weaponPickups; }
+    bool playerHasShotgun() const { return m_playerHasShotgun; }
 
 
 private:
@@ -95,12 +99,25 @@ private:
     std::vector<Projectile> m_projectiles;
     void spawnRangedWave(int count, const std::vector<Vertex>& usedPositions);
     void updateProjectiles(float deltaTime);
+    std::vector<Vertex> m_weaponPickups;
+    bool m_playerHasShotgun = false;
+    void spawnWeaponPickup();
+    void checkWeaponPickup();
+    int m_shotgunWave = -1;
 
+    int bestScore = 0;
 
 signals:
     void sigUpdateVie(int value);
     void sigUpdateBalles(int value);
     void playerDead();
+    void scoreResult(int value);
+    void sigWeaponChanged();
+
+public slots:
+    void giveScore();
+    void saveBestScore();
+    void resetBestScore();
 };
 
 #endif // GAMEMANAGER_H
