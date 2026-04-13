@@ -16,10 +16,16 @@ BSP::BSP()
     root = nullptr;
 }
 
-Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& verteces)
+Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& vertices)
 {
-    // Safety verifications
-    if (segments.empty()) return nullptr;
+    // Safety verifications, although they should never happen within the scope of this software
+    if (segments.empty() || vertices.empty())
+    {
+        qDebug() << "ERROR: BSP cannot be built, segment or vertices list is empty";
+        return nullptr;
+    }
+
+    // Exit statement of recursivity. When we reach the very last wall, it is added to this node, and the childs are nullptr
     if (segments.size() == 1)
     {
         Node* node = new Node();
@@ -29,81 +35,99 @@ Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& verteces)
         return node;
     }
 
-    // Defining the partition (later will be called optimally, right now we only use the first segment)
+    // Defining the partition. This could be chosen optimally, but for
+    // the scope of this project, we just take the first segment of the list.
     Node* node = new Node();
     node->partition = segments[0];
 
+    // Vector creation for storing childs of the node (segments that have not been partitioned yet)
     std::vector<Linedef> frontLines;
     std::vector<Linedef> backLines;
 
+
+    // We iterate for every wall, we classify it if ever it is in front or behind.
     for (int i = 1; i < segments.size(); i++) // Starting at 1, since we use 0 as the partition
     {
         // We make the cross product to evaluate the position of a line compared to the partition
-        float crossProductEnd = crossProduct(verteces[node->partition.end], verteces[node->partition.start], verteces[segments[i].end]);
-        float crossProductStart = crossProduct(verteces[node->partition.end], verteces[node->partition.start], verteces[segments[i].start]);
+        float crossProductEnd = crossProduct(vertices[node->partition.end], vertices[node->partition.start], vertices[segments[i].end]);
+        float crossProductStart = crossProduct(vertices[node->partition.end], vertices[node->partition.start], vertices[segments[i].start]);
 
         if (crossProductEnd <= 0 && crossProductStart <= 0)
-        { // is in front (arbitrarilly), i.e. all point of the line are in front of the partition line
+        { // is in front (chosen arbitrarilly), i.e. all point of the line are in front of the partition line
             frontLines.push_back(segments[i]);
         }
         else if (crossProductEnd >= 0 && crossProductStart >= 0)
-        { // is at the back (arbitrarilly), i.e. all the points of the line are at the back of the partition line
+        { // is at the back (chosen arbitrarilly), i.e. all the points of the line are at the back of the partition line
             backLines.push_back(segments[i]);
         }
-        else // is split by the segment
+        else // is split by the segment. In this case, we need to subdivide the segments into smaller ones.
         {
             // Let's create a new point to divide the segment into a front one and a back one
             Vertex intersection;
 
-            float dxSeg = verteces[segments[i].end].x - verteces[segments[i].start].x;
-            float dySeg = verteces[segments[i].end].y - verteces[segments[i].start].y;
-            float dxPar = verteces[node->partition.end].x - verteces[node->partition.start].x;
-            float dyPar = verteces[node->partition.end].y - verteces[node->partition.start].y;
+            float dxSeg = vertices[segments[i].end].x - vertices[segments[i].start].x;
+            float dySeg = vertices[segments[i].end].y - vertices[segments[i].start].y;
+            float dxPar = vertices[node->partition.end].x - vertices[node->partition.start].x;
+            float dyPar = vertices[node->partition.end].y - vertices[node->partition.start].y;
 
             if (dxSeg == 0) // vertical segment case
             {
-                intersection.x = verteces[segments[i].start].x;
-                intersection.y = verteces[node->partition.start].y +
-                                 (intersection.x - verteces[node->partition.start].x) * (dyPar / dxPar);
+                intersection.x = vertices[segments[i].start].x;
+                intersection.y = vertices[node->partition.start].y +
+                                 (intersection.x - vertices[node->partition.start].x) * (dyPar / dxPar);
             }
             else if (dxPar == 0) // vertical partition case
             {
-                intersection.x = verteces[node->partition.start].x;
-                intersection.y = verteces[segments[i].start].y + (intersection.x - verteces[segments[i].start].x) * dySeg / dxSeg;
+                intersection.x = vertices[node->partition.start].x;
+                intersection.y = vertices[segments[i].start].y + (intersection.x - vertices[segments[i].start].x) * dySeg / dxSeg;
             }
-            else
+            else // We find the equation for the segment
             {
                 float slopeSeg = dySeg/dxSeg;
                 float slopePar = dyPar/dxPar;
 
-                float bSeg = verteces[segments[i].end].y - (slopeSeg*verteces[segments[i].end].x);
-                float bPar = verteces[node->partition.end].y - (slopePar*verteces[node->partition.end].x);
+                float bSeg = vertices[segments[i].end].y - (slopeSeg*vertices[segments[i].end].x);
+                float bPar = vertices[node->partition.end].y - (slopePar*vertices[node->partition.end].x);
 
-                // Now, we find the intersection point.
-                // This could be done from the biginning, but for readability, we created new variables.
+                // Now, we find the intersection point by equalizing them
                 intersection.x = (bSeg - bPar) / (slopePar - slopeSeg);
                 intersection.y = (slopeSeg*intersection.x) + bSeg;
             }
 
-            auto found = std::find_if(verteces.begin(), verteces.end(),
-                                      [&](const Vertex& v) {
-                                          return fabs(v.x - intersection.x) < 0.001f &&
-                                                 fabs(v.y - intersection.y) < 0.001f;
-                                      });
+            std::vector<Vertex>::iterator found = vertices.end(); // The iterator is a Vertex
+
+            for (std::vector<Vertex>::iterator i = vertices.begin(); i != vertices.end(); i++)
+            {
+                const Vertex& v = *i; // Could replace the type by iterator
+
+                float dx = v.x - intersection.x;
+                float dy = v.y - intersection.y;
+
+                bool sameX = (dx == 0);
+                bool sameY = (dy == 0);
+
+                if (sameX && sameY)
+                {
+                    found = i;
+                    break;
+                }
+            }
 
             int vertexIndex = 0;
-            if (found != verteces.end()) {
-                vertexIndex = std::distance(verteces.begin(), found);
+            if (found != vertices.end()) {
+                vertexIndex = std::distance(vertices.begin(), found);
             } else {
-                verteces.push_back(intersection);
-                vertexIndex = verteces.size() - 1;
+                vertices.push_back(intersection);
+                vertexIndex = vertices.size() - 1;
             }
 
             // Now, we just devide the segment with the two points and we push.
             Linedef segA = {segments[i].start, vertexIndex, segments[i].sideFront, segments[i].sideBack, segments[i].twoSided};
             Linedef segB = {vertexIndex, segments[i].end, segments[i].sideFront, segments[i].sideBack, segments[i].twoSided};
 
-            if (crossProductStart < 0)
+            // If the starting point of the segment is in the back, this means that we push back the first segment and front the second.
+            // else, we do the oposite
+            if (crossProductStart <= 0)
             {
                 frontLines.push_back(segA);
                 backLines.push_back(segB);
@@ -115,65 +139,91 @@ Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& verteces)
             }
         }
     }
-    node->front = Builder(frontLines, verteces);
-    node->back = Builder(backLines, verteces);
+
+    // Recursively keep building the subtree with the front lines and the backlines.
+    node->front = Builder(frontLines, vertices);
+    node->back = Builder(backLines, vertices);
     return node;
 }
 
-// These functions order the walls. THEY DO NOT ACCOUNT FOR VIEW CULLING YET! THIS MEANS EVERY WALL GETS RENDERED!
-void BSP::traverse(const Vertex& playerPosition, std::vector<Linedef>& renderedWalls, const std::vector<Vertex>& verteces)
-{
-    renderedWalls.clear();
-    traverseNode(root, playerPosition, renderedWalls, verteces);
-}
-
-void BSP::traverseNode(Node* node, const Vertex& playerPosition, std::vector<Linedef>& walls, const std::vector<Vertex>& verteces)
+void BSP::traverseAndRender(Node* node,
+                            const Vertex& playerPos,
+                            const std::vector<Vertex>& verteces,
+                            std::function<bool(const Linedef&)> renderCallback)
 {
     if (!node) return;
 
     float dxPartition = verteces[node->partition.end].x - verteces[node->partition.start].x;
     float dyPartition = verteces[node->partition.end].y - verteces[node->partition.start].y;
-    float dxPlayer = playerPosition.x - verteces[node->partition.start].x;
-    float dyPlayer = playerPosition.y - verteces[node->partition.start].y;
+    float dxPlayer = playerPos.x - verteces[node->partition.start].x;
+    float dyPlayer = playerPos.y - verteces[node->partition.start].y;
+    float cross = dxPartition * dyPlayer - dyPartition * dxPlayer;
+
+    // Front-to-back: near side first
+    Node* nearChild = (cross > 0) ? node->front : node->back;
+    Node* farChild  = (cross > 0) ? node->back  : node->front;
+
+    traverseAndRender(nearChild, playerPos, verteces, renderCallback);
+
+    if (!renderCallback(node->partition)) return; // screen full, stop
+
+    traverseAndRender(farChild, playerPos, verteces, renderCallback);
+}
+
+// These functions order the walls. THEY DO NOT ACCOUNT FOR VIEW CULLING YET! THIS MEANS EVERY WALL GETS RENDERED!
+void BSP::traverse(const Vertex& playerPosition, std::vector<Linedef>& renderedWalls, const std::vector<Vertex>& vertices)
+{
+    renderedWalls.clear();
+    traverseNode(root, playerPosition, renderedWalls, vertices);
+}
+
+void BSP::traverseNode(Node* node, const Vertex& playerPosition, std::vector<Linedef>& walls, const std::vector<Vertex>& vertices)
+{
+    if (!node) return;
+
+    float dxPartition = vertices[node->partition.end].x - vertices[node->partition.start].x;
+    float dyPartition = vertices[node->partition.end].y - vertices[node->partition.start].y;
+    float dxPlayer = playerPosition.x - vertices[node->partition.start].x;
+    float dyPlayer = playerPosition.y - vertices[node->partition.start].y;
 
     float cross = dxPartition * dyPlayer - dyPartition * dxPlayer;
 
     if (cross < 0)
     {
-        traverseNode(node->back, playerPosition, walls, verteces);
+        traverseNode(node->back, playerPosition, walls, vertices);
         walls.push_back(node->partition);
-        traverseNode(node->front, playerPosition, walls, verteces);
+        traverseNode(node->front, playerPosition, walls, vertices);
     }
     else
     {
-        traverseNode(node->front, playerPosition, walls, verteces);
+        traverseNode(node->front, playerPosition, walls, vertices);
         walls.push_back(node->partition);
-        traverseNode(node->back, playerPosition, walls, verteces);
+        traverseNode(node->back, playerPosition, walls, vertices);
     }
 }
 
-void BSP::build(const std::vector<Linedef>& segments, std::vector<Vertex>& verteces)
+void BSP::build(const std::vector<Linedef>& segments, std::vector<Vertex>& vertices)
 {
     delete root;
-    root = Builder(segments, verteces);
+    root = Builder(segments, vertices);
 }
 
-void BSP::actorToWallBroading(const Vertex& actorPosition, std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& verteces)
+void BSP::actorToWallBroading(const Vertex& actorPosition, std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& vertices)
 {
     broadedWalls.clear();
-    broadWall(root, actorPosition, broadedWalls, verteces);
+    broadWall(root, actorPosition, broadedWalls, vertices);
 }
 
-void BSP::broadWall(Node* node, const Vertex& playerPosition, std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& verteces)
+void BSP::broadWall(Node* node, const Vertex& playerPosition, std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& vertices)
 {
     if (!node) return;
 
     float radius = 2.0f;
 
-    float dxPartition = verteces[node->partition.end].x - verteces[node->partition.start].x;
-    float dyPartition = verteces[node->partition.end].y - verteces[node->partition.start].y;
-    float dxPlayer = playerPosition.x - verteces[node->partition.start].x;
-    float dyPlayer = playerPosition.y - verteces[node->partition.start].y;
+    float dxPartition = vertices[node->partition.end].x - vertices[node->partition.start].x;
+    float dyPartition = vertices[node->partition.end].y - vertices[node->partition.start].y;
+    float dxPlayer = playerPosition.x - vertices[node->partition.start].x;
+    float dyPlayer = playerPosition.y - vertices[node->partition.start].y;
 
     float cross = dxPlayer * dyPartition - dyPlayer * dxPartition;
 
@@ -189,40 +239,40 @@ void BSP::broadWall(Node* node, const Vertex& playerPosition, std::vector<Linede
 
     if (distance < -radius)
     {
-        broadWall(node->front, playerPosition, broadedWalls, verteces);
+        broadWall(node->front, playerPosition, broadedWalls, vertices);
     }
     else if (distance > radius)
     {
-        broadWall(node->back, playerPosition, broadedWalls, verteces);
+        broadWall(node->back, playerPosition, broadedWalls, vertices);
     }
     else
     {
-        broadWall(node->front, playerPosition, broadedWalls, verteces);
-        broadWall(node->back, playerPosition, broadedWalls, verteces);
+        broadWall(node->front, playerPosition, broadedWalls, vertices);
+        broadWall(node->back, playerPosition, broadedWalls, vertices);
     }
 }
 
-bool BSP::enemyRendering(const Vertex& playerPosition, const Vertex& enemyPosition, const std::vector<Vertex>& verteces)
+bool BSP::enemyRendering(const Vertex& playerPosition, const Vertex& enemyPosition, const std::vector<Vertex>& vertices)
 {
-    return enemyRenderingCheck(root, playerPosition, enemyPosition, verteces);
+    return enemyRenderingCheck(root, playerPosition, enemyPosition, vertices);
 }
 
-bool BSP::enemyRenderingCheck(Node* node, const Vertex& playerPosition, const Vertex& enemyPosition, const std::vector<Vertex>& verteces)
+bool BSP::enemyRenderingCheck(Node* node, const Vertex& playerPosition, const Vertex& enemyPosition, const std::vector<Vertex>& vertices)
 {
     if (!node) return true;
 
     float rx = enemyPosition.x - playerPosition.x;
     float ry = enemyPosition.y - playerPosition.y;
 
-    float sx = verteces[node->partition.end].x - verteces[node->partition.start].x;
-    float sy = verteces[node->partition.end].y - verteces[node->partition.start].y;
+    float sx = vertices[node->partition.end].x - vertices[node->partition.start].x;
+    float sy = vertices[node->partition.end].y - vertices[node->partition.start].y;
 
     float cross = rx * sy - ry * sx;
 
     if (std::abs(cross) > 0)
     {
-        float dx = verteces[node->partition.start].x - playerPosition.x;
-        float dy = verteces[node->partition.start].y - playerPosition.y;
+        float dx = vertices[node->partition.start].x - playerPosition.x;
+        float dy = vertices[node->partition.start].y - playerPosition.y;
 
         float t = (dx * sy - dy * sx) / cross;
         float s = (dx * ry - dy * rx) / cross;
@@ -230,26 +280,11 @@ bool BSP::enemyRenderingCheck(Node* node, const Vertex& playerPosition, const Ve
         if (t >= 0.0f && t <= 1.0f && s >= 0.0f && s <= 1.0f) return false;
     }
 
-    float dxPartition = verteces[node->partition.end].x - verteces[node->partition.start].x;
-    float dyPartition = verteces[node->partition.end].y - verteces[node->partition.start].y;
-    float dxPlayer = playerPosition.x - verteces[node->partition.start].x;
-    float dyPlayer = playerPosition.y - verteces[node->partition.start].y;
-    cross = dxPlayer * dyPartition - dyPlayer * dxPartition;
-
-    if (!enemyRenderingCheck(node->front, playerPosition, enemyPosition, verteces))
+    cross = crossProduct(vertices[node->partition.start], vertices[node->partition.end], playerPosition);
+    if (!enemyRenderingCheck(node->front, playerPosition, enemyPosition, vertices))
         return false;
 
-    return enemyRenderingCheck(node->back, playerPosition, enemyPosition, verteces);
-}
-
-float crossProduct(Vertex v, Linedef l)
-{
-    return 0.1f;
-}
-
-float crossProduct(Linedef l1, Linedef l2)
-{
-    return 0.1f;
+    return enemyRenderingCheck(node->back, playerPosition, enemyPosition, vertices);
 }
 
 float BSP::distancePointToSegment(const Vertex& point,const Vertex& segStart,const Vertex& segEnd)
@@ -276,13 +311,13 @@ float BSP::distancePointToSegment(const Vertex& point,const Vertex& segStart,con
 
 bool BSP::isFarEnoughFromAllWalls(const Vertex& candidate,
                                   Node* node,
-                                  const std::vector<Vertex>& verteces,
+                                  const std::vector<Vertex>& vertices,
                                   float minDist)
 {
     if (!node) return true;
 
-    const Vertex& wStart = verteces[node->partition.start];
-    const Vertex& wEnd   = verteces[node->partition.end];
+    const Vertex& wStart = vertices[node->partition.start];
+    const Vertex& wEnd   = vertices[node->partition.end];
 
     float dist = distancePointToSegment(candidate, wStart, wEnd);
     if (dist < minDist)
@@ -294,14 +329,14 @@ bool BSP::isFarEnoughFromAllWalls(const Vertex& candidate,
     float cross = (candidate.x - wStart.x) * dy - (candidate.y - wStart.y) * dx;
 
     if (cross <= 0)
-        return isFarEnoughFromAllWalls(candidate, node->front, verteces, minDist);
+        return isFarEnoughFromAllWalls(candidate, node->front, vertices, minDist);
     else
-        return isFarEnoughFromAllWalls(candidate, node->back, verteces, minDist);
+        return isFarEnoughFromAllWalls(candidate, node->back, vertices, minDist);
 }
 
 
 bool BSP::isPointInsideMap(const Vertex& point,
-                           const std::vector<Vertex>& verteces)
+                           const std::vector<Vertex>& vertices)
 {
     std::vector<Linedef> allWalls;
     collectAllWalls(root, allWalls);
@@ -310,8 +345,8 @@ bool BSP::isPointInsideMap(const Vertex& point,
 
     for (const Linedef& wall : allWalls)
     {
-        const Vertex& v1 = verteces[wall.start];
-        const Vertex& v2 = verteces[wall.end];
+        const Vertex& v1 = vertices[wall.start];
+        const Vertex& v2 = vertices[wall.end];
 
         // Rayon vers +X depuis le point
         // Le mur doit traverser la hauteur Y du point
@@ -339,14 +374,14 @@ void BSP::collectAllWalls(Node* node, std::vector<Linedef>& walls)
     collectAllWalls(node->back, walls);
 }
 void BSP::collectSpawnCandidates(Node* node,
-                                 const std::vector<Vertex>& verteces,
+                                 const std::vector<Vertex>& vertices,
                                  float minDistToWall,
                                  std::vector<Vertex>& candidates)
 {
     if (!node) return;
 
-    const Vertex& wStart = verteces[node->partition.start];
-    const Vertex& wEnd   = verteces[node->partition.end];
+    const Vertex& wStart = vertices[node->partition.start];
+    const Vertex& wEnd   = vertices[node->partition.end];
 
     Vertex wallMid = {
         (wStart.x + wEnd.x) / 2.0f,
@@ -368,27 +403,27 @@ void BSP::collectSpawnCandidates(Node* node,
         Vertex backCandidate  = { wallMid.x - nx * offset,
                                 wallMid.y - ny * offset };
 
-        if (isPointInsideMap(frontCandidate, verteces) &&
-            isFarEnoughFromAllWalls(frontCandidate, root, verteces, minDistToWall))
+        if (isPointInsideMap(frontCandidate, vertices) &&
+            isFarEnoughFromAllWalls(frontCandidate, root, vertices, minDistToWall))
         {
             candidates.push_back(frontCandidate);
         }
 
-        if (isPointInsideMap(backCandidate, verteces) &&
-            isFarEnoughFromAllWalls(backCandidate, root, verteces, minDistToWall))
+        if (isPointInsideMap(backCandidate, vertices) &&
+            isFarEnoughFromAllWalls(backCandidate, root, vertices, minDistToWall))
         {
             candidates.push_back(backCandidate);
         }
     }
 
-    collectSpawnCandidates(node->front, verteces, minDistToWall, candidates);
-    collectSpawnCandidates(node->back,  verteces, minDistToWall, candidates);
+    collectSpawnCandidates(node->front, vertices, minDistToWall, candidates);
+    collectSpawnCandidates(node->back,  vertices, minDistToWall, candidates);
 }
-std::vector<Vertex> BSP::collectValidSpawnPoints(const std::vector<Vertex>& verteces,
+std::vector<Vertex> BSP::collectValidSpawnPoints(const std::vector<Vertex>& vertices,
                                                  float minDistToWall)
 {
     std::vector<Vertex> candidates;
-    collectSpawnCandidates(root, verteces, minDistToWall, candidates);
+    collectSpawnCandidates(root, vertices, minDistToWall, candidates);
     qDebug() << "BSP:" << candidates.size() << "spawn points valides";
     return candidates;
 }
