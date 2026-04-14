@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     scene->setSceneRect(0, 0, view->width(), view->height());
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-     scene->setBackgroundBrush(QBrush(Qt::black));
+    scene->setBackgroundBrush(QBrush(Qt::black));
     view->setFrameStyle(0);
     scene->setBackgroundBrush(QBrush(Qt::black));
     engine = new Engine(scene, view->width(), view->height(), this, view);
