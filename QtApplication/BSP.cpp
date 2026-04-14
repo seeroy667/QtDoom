@@ -162,13 +162,19 @@ Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& vertices)
 }
 
 // These functions order the walls into the vector renderedWalls. THEY DO NOT ACCOUNT FOR VIEW CULLING.
-void BSP::traverse(const Vertex& playerPosition, std::vector<Linedef>& renderedWalls, const std::vector<Vertex>& vertices)
+// As of the 13th of April 2026, this is not used anymore for the rendering. The method is still here just in case,
+// but is never used. It can be usefull to understand tree parsing, though.
+void BSP::traverse(const Vertex& playerPosition,
+                   std::vector<Linedef>& renderedWalls,
+                   const std::vector<Vertex>& vertices)
 {
     renderedWalls.clear();
     traverseNode(root, playerPosition, renderedWalls, vertices);
 }
 
-void BSP::traverseNode(Node* node, const Vertex& playerPosition, std::vector<Linedef>& walls, const std::vector<Vertex>& vertices)
+void BSP::traverseNode(Node* node, const Vertex& playerPosition,
+                       std::vector<Linedef>& walls,
+                       const std::vector<Vertex>& vertices)
 {
     if (!node) return;
 
@@ -191,6 +197,36 @@ void BSP::traverseNode(Node* node, const Vertex& playerPosition, std::vector<Lin
         walls.push_back(node->partition);
         traverseNode(node->back, playerPosition, walls, vertices);
     }
+}
+
+void BSP::traverseAndRender(Node* node,
+                            const Vertex& playerPosition,
+                            const std::vector<Vertex>& vertices,
+                            std::function<bool(const Linedef&)> callback)
+{
+    if (!node) return;
+
+    float cross = crossProduct(vertices[node->partition.start], vertices[node->partition.end], playerPosition);
+
+    Node* nearChild;
+    Node* farChild;
+
+    if (cross < 0) // Front to back
+    {
+        nearChild = node->back;
+        farChild = node->front;
+    }
+    else
+    {
+        nearChild = node->front;
+        farChild = node->back;
+    }
+
+    traverseAndRender(nearChild, playerPosition, vertices, callback);
+
+    if (!callback(node->partition)) return; // screen full, stop
+
+    traverseAndRender(farChild, playerPosition, vertices, callback);
 }
 
 // This is used in collision detection
@@ -247,13 +283,19 @@ bool BSP::enemyRenderingCheck(Node* node, const Vertex& playerPosition, const Ve
 {
     if (!node) return true;
 
-    float rx = enemyPosition.x - playerPosition.x;
-    float ry = enemyPosition.y - playerPosition.y;
+    float rxCenter = enemyPosition.x - playerPosition.x;
+    float ryCenter = enemyPosition.y - playerPosition.y;
+
+    float rxRight = enemyPosition.x - playerPosition.x;
+    float ryRight = enemyPosition.y - playerPosition.y;
+
+    float rxLeft = enemyPosition.x - playerPosition.x;
+    float ryLeft = enemyPosition.y - playerPosition.y;
 
     float sx = vertices[node->partition.end].x - vertices[node->partition.start].x;
     float sy = vertices[node->partition.end].y - vertices[node->partition.start].y;
 
-    float cross = rx * sy - ry * sx;
+    float cross = rxCenter * sy - ryCenter * sx;
 
     if (std::abs(cross) > 0)
     {
@@ -261,7 +303,7 @@ bool BSP::enemyRenderingCheck(Node* node, const Vertex& playerPosition, const Ve
         float dy = vertices[node->partition.start].y - playerPosition.y;
 
         float t = (dx * sy - dy * sx) / cross;
-        float s = (dx * ry - dy * rx) / cross;
+        float s = (dx * ryCenter - dy * rxCenter) / cross;
 
         if (t >= 0.0f && t <= 1.0f && s >= 0.0f && s <= 1.0f) return false;
     }

@@ -72,18 +72,28 @@ void RenderManager::render(Actor m_player,
         columns[i].topPosition = 0;
         columns[i].bottomPosition = m_screenHeight;
     }
+    m_closedColumns = 0;
+    renderedWalls.clear();
 
-    for (const Linedef& wall : renderedWalls) {
-        renderWall(wall, verteces, m_player, sectors);
-
-        bool ended = true;
-        for (int i = 0; i < m_screenWidth; i++)
+    // This is an anonymous function callback within a method in a different class
+    // Trying to find a solution to stop a function in its track under a certain
+    // condition when in another class led me (Donavan Sirois) to learning this
+    // Pretty interesting thing to anyone who wants to read on it
+    // You basically define a small scoped function you pass in parameter which computes the condition you want.
+    // When the condition is met, the method of the other class returns
+    // Here, when all columns are full on screen, we stop parsing through the BSP.
+    bsp->traverseAndRender(
+        bsp->getRoot(),
+        m_player.getPosition(),
+        verteces,
+        [&](const Linedef& wall) -> bool // template of the anonymous function: [capture] (parameters) -> return value { code };
         {
-            ended = columns[i].topPosition >= columns[i].bottomPosition;
-            if (ended == false) break;
-        }
-        if (ended == true) break;
-    }
+            // in this case, we capture everything as adresses, the paremeters
+            //passed is the wall, the return value is a boolean, and then the code is below
+            renderWall(wall, verteces, m_player, sectors);
+            renderedWalls.push_back(wall);
+            return m_closedColumns < m_screenWidth; // Check if all columns are full
+        });
 
     //ennemis melee
     for (Actor* enemy : enemies)
@@ -267,8 +277,6 @@ Vertex RenderManager::coordPlayer(const Vertex& point, const Actor& player)
     return camera;
 }
 
-
-
 bool RenderManager::clipWall(Vertex& p1, Vertex& p2)
 {
     if (p1.y < distanceMin && p2.y < distanceMin)
@@ -330,6 +338,11 @@ void RenderManager::renderActor(Actor* actor, const Actor player, QColor color, 
     float squareSize = baseSize * sizeMultiplier;
     float spriteTopAdjusted = spriteBottom - squareSize;
 
+    // Computing depth to render order properly
+    float dx = player.getPosition().x - actor->getPosition().x;
+    float dy = player.getPosition().y - actor->getPosition().y;
+    float depth = sqrt(dx*dx + dy*dy);
+
     QRectF spriteRect(
         screenX - squareSize / 2.0f,
         spriteTopAdjusted,
@@ -386,18 +399,18 @@ void RenderManager::renderActor(Actor* actor, const Actor player, QColor color, 
     QGraphicsRectItem* barBg = m_scene->addRect(barX, barY, barWidth, barHeight);
     barBg->setBrush(QColor(150, 0, 0));
     barBg->setPen(Qt::NoPen);
-    barBg->setZValue(camPos.y + 0.1f);
+    barBg->setZValue(-depth + 1000.1f);
 
 
     QGraphicsRectItem* barFg = m_scene->addRect(barX, barY, barWidth * healthPercent, barHeight);
     barFg->setBrush(QColor(0, 200, 0));
     barFg->setPen(Qt::NoPen);
-    barFg->setZValue(camPos.y + 0.2f);
+    barFg->setZValue(-depth + 1000.2f);
 
     QGraphicsRectItem* spriteItem = m_scene->addRect(spriteRect);
     spriteItem->setZValue(camPos.y);
     spriteItem->setPen(Qt::NoPen);
-    spriteItem->setZValue(camPos.y);
+    spriteItem->setZValue(-depth + 1000.0f);
 
     if (!currentTexture.isNull())
     {
@@ -517,7 +530,7 @@ void RenderManager::renderHeals(const std::vector<Vertex>& heals, const Actor& p
             size, thickness);
         hBar->setBrush(QColor(0, 200, 0));
         hBar->setPen(Qt::NoPen);
-        hBar->setZValue(-camPos.y);
+        hBar->setZValue(camPos.y);
 
         QGraphicsRectItem* vBar = m_scene->addRect(
             screenX - thickness / 2.0f,
@@ -525,7 +538,7 @@ void RenderManager::renderHeals(const std::vector<Vertex>& heals, const Actor& p
             thickness, size);
         vBar->setBrush(QColor(0, 200, 0));
         vBar->setPen(Qt::NoPen);
-        vBar->setZValue(-camPos.y);
+        vBar->setZValue(camPos.y);
     }
 }
 void RenderManager::setShotgunMode(bool hasShotgun)
@@ -562,7 +575,7 @@ void RenderManager::renderWeaponPickups(const std::vector<Vertex>& pickups, cons
             height
             );
         item->setPen(Qt::NoPen);
-        item->setZValue(-camPos.y);
+        item->setZValue(camPos.y);
 
         if (!m_shotgunMapTexture.isNull())
         {

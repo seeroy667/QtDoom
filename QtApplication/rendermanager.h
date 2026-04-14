@@ -115,6 +115,7 @@ private:
 
     // For occlusion
     std::vector<RenderingColumn> columns;
+    int m_closedColumns;
 
     bool clipWall(Vertex& p1, Vertex& p2);
     Vertex projectToScreen(const Vertex& cameraPoint);
