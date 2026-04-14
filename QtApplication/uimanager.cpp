@@ -59,6 +59,12 @@ UIManager::UIManager(QGraphicsView *view, QWidget *parent): QWidget(parent) {
         emit newPlayer();
     });
 
+    connect(comptePage, &compte::annulerChangeUser, this, [this]() {
+        stackedWidget->setCurrentWidget(menuPage);
+        QString username=comptePage->getCurrentUsername();
+        qDebug()<< username;
+    });
+
     connect(levelPage, SIGNAL(chosenLevelPath(QString)), this, SLOT(saveLevelPath(QString)));
     connect(comptePage, SIGNAL(loginSig()), this, SLOT(goToMenuPage()));
     connect(leaderBoardPage, SIGNAL(goBackToMenu()), this, SLOT(goToMenuPage()));
@@ -179,6 +185,11 @@ void UIManager::activateSelectedButton()
     if(stackedWidget->currentWidget()==leaderBoardPage)
     {
         leaderBoardPage->activateSelectedButton();
+        return;
+    }
+    if(stackedWidget->currentWidget()==comptePage)
+    {
+        comptePage->activateSelectedButton();
         return;
     }
 }

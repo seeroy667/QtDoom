@@ -688,7 +688,7 @@ void GameManager::checkWeaponPickup()
 {
     if (m_weaponPickups.empty()) return;
     Vertex playerPos = p->getPosition();
-    float pickupRadius = 2.0f;
+    float pickupRadius = 3.0f;
 
     for (int i = (int)m_weaponPickups.size() - 1; i >= 0; i--)
     {

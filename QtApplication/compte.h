@@ -20,6 +20,7 @@ class compte : public QWidget
 public:
     compte(QWidget *parent = nullptr);
     QString getCurrentUsername();
+    void activateSelectedButton();
 
 private:
     QLineEdit* usernameEdit;
@@ -41,5 +42,6 @@ public slots:
 signals:
     void newUserDetected(QString username = "");
     void loginSig();
+    void annulerChangeUser();
 };
 #endif // COMPTE_H
