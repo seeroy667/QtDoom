@@ -427,3 +427,45 @@ std::vector<Vertex> BSP::collectValidSpawnPoints(const std::vector<Vertex>& vert
     qDebug() << "BSP:" << candidates.size() << "spawn points valides";
     return candidates;
 }
+
+bool BSP::segmentsIntersect(const Vertex& a, const Vertex& b, const Vertex& c, const Vertex& d)
+{
+    float dx1 = b.x - a.x;
+    float dy1 = b.y - a.y;
+    float dx2 = d.x - c.x;
+    float dy2 = d.y - c.y;
+
+    float denom = dx1 * dy2 - dy1 * dx2;
+    if (std::abs(denom) < 0.0001f) return false; // parallèles
+
+    float t = ((c.x - a.x) * dy2 - (c.y - a.y) * dx2) / denom;
+    float s = ((c.x - a.x) * dy1 - (c.y - a.y) * dx1) / denom;
+
+    return (t > 0.001f && t < 0.999f && s > 0.001f && s < 0.999f);
+}
+
+bool BSP::losCheck(Node* node, const Vertex& from, const Vertex& to, const std::vector<Vertex>& vertices)
+{
+    if (!node) return true; // pas de mur return true
+
+    const Vertex& wStart = vertices[node->partition.start];
+    const Vertex& wEnd   = vertices[node->partition.end];
+
+    // Si le mur est est twoSided il bloque pas
+    if (!node->partition.twoSided)
+    {
+        if (segmentsIntersect(from, to, wStart, wEnd))
+            return false; //un mur donc return false
+    }
+
+    // Parcourir le reste
+    if (!losCheck(node->front, from, to, vertices)) return false;
+    if (!losCheck(node->back,  from, to, vertices)) return false;
+
+    return true;
+}
+
+bool BSP::hasLineOfSight(const Vertex& from, const Vertex& to, const std::vector<Vertex>& vertices)
+{
+    return losCheck(root, from, to, vertices);
+}

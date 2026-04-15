@@ -310,27 +310,15 @@ bool GameManager::inRadius(Actor* p, Actor* e)
 
 bool GameManager::shoot(QPoint mousePos, QSize screenSize)
 {
-
     Weapon* weapon = p->getWeapon();
     if (!weapon) return false;
-
-
-    if (!weapon->canShoot())
-    {
-        qDebug() << "Cooldown pas écoulé";
-        return false;
-    }
+    if (!weapon->canShoot()) return false;
 
     weapon->shoot();
-
-    if (weapon->isEmpty())
-    {
-        weapon->reload();
-    }
+    if (weapon->isEmpty()) weapon->reload();
 
     float screenW    = screenSize.width();
     float focalLength = screenW / 2.0f;
-
 
     float camDirX = (mousePos.x() - screenW / 2.0f) / focalLength;
     float camDirY = 1.0f;
@@ -338,81 +326,94 @@ bool GameManager::shoot(QPoint mousePos, QSize screenSize)
     camDirX /= len;
     camDirY /= len;
 
-    // Convertit la direction caméra en direction monde
     float playerAngle = p->getAngle();
-    float cosA        = std::cos(playerAngle);
-    float sinA        = std::sin(playerAngle);
+    float cosA = std::cos(playerAngle);
+    float sinA = std::sin(playerAngle);
     float worldDirX = camDirX * cosA - camDirY * sinA;
     float worldDirY = camDirX * sinA + camDirY * cosA;
 
-    Vertex playerPos  = p->getPosition();
-
-
+    Vertex playerPos = p->getPosition();
     float maxDistance = weapon->getRange();
-    float step        = 0.05f;
+    float step = 0.05f;
 
-    for (float d = 0; d < maxDistance; d += step)
-    {
-        float rayX = playerPos.x + worldDirX * d;
-        float rayY = playerPos.y + worldDirY * d;
+    // Trouve la cible la plus proche dans la direction du tir
+    Actor* bestTarget = nullptr;
+    float bestDist = maxDistance;
 
-        for (Actor* enemy : creatures)
+    auto checkEnemyList = [&](std::vector<Actor*>& list, float scoreVal) {
+        for (Actor* enemy : list)
         {
             if (enemy->getHealth() <= 0) continue;
 
-            float dx = rayX - enemy->getPosition().x;
-            float dy = rayY - enemy->getPosition().y;
-
-            if ((dx*dx + dy*dy) < (1.5f * 1.5f))
+            // Vérifie si l'ennemi est dans la direction du tir
+            for (float d = 0; d < maxDistance; d += step)
             {
-                qDebug() << "Touché à distance:" << d;
-                enemy->takeDamage(weapon->getDamage());
+                float rayX = playerPos.x + worldDirX * d;
+                float rayY = playerPos.y + worldDirY * d;
 
-                if (enemy->getHealth() <= 0)
+                float dx = rayX - enemy->getPosition().x;
+                float dy = rayY - enemy->getPosition().y;
+
+                if ((dx*dx + dy*dy) < (1.5f * 1.5f))
                 {
-                    p->addScore(1);
-                    spawnHealIfNeeded();
+                    // Vérifie la ligne de vue
+                    if (bsp->hasLineOfSight(playerPos, enemy->getPosition(), verteces))
+                    {
+                        if (d < bestDist)
+                        {
+                            bestDist = d;
+                            bestTarget = enemy;
+                        }
+                    }
+                    break;
                 }
-                return true;
             }
         }
+    };
 
-        for (Actor* enemy : m_rangedEnemies)
+    checkEnemyList(creatures, 1.0f);
+    checkEnemyList(m_rangedEnemies, 1.0f);
+
+    // Vérifie le boss
+    if (m_bossAlive && m_boss && m_boss->getHealth() > 0)
+    {
+        for (float d = 0; d < maxDistance; d += step)
         {
-            if (enemy->getHealth() <= 0) continue;
-
-            float dx = rayX - enemy->getPosition().x;
-            float dy = rayY - enemy->getPosition().y;
-
-            if ((dx*dx + dy*dy) < (1.5f * 1.5f))
-            {
-                enemy->takeDamage(weapon->getDamage());
-                if (enemy->getHealth() <= 0)
-                    p->addScore(1);
-                return true;
-            }
-        }
-
-        if(m_bossAlive && m_boss && m_boss->getHealth() > 0)
-        {
+            float rayX = playerPos.x + worldDirX * d;
+            float rayY = playerPos.y + worldDirY * d;
             float dx = rayX - m_boss->getPosition().x;
             float dy = rayY - m_boss->getPosition().y;
-
-            if((dx*dx + dy*dy) < (2.0f * 2.0f))
+            if ((dx*dx + dy*dy) < (2.0f * 2.0f))
             {
-                m_boss->takeDamage(weapon->getDamage());
-                if(m_boss->getHealth() <=0)
+                if (bsp->hasLineOfSight(playerPos, m_boss->getPosition(), verteces))
                 {
-                    m_bossAlive = false;
-                    p->addScore(10);
+                    if (d < bestDist)
+                    {
+                        bestDist = d;
+                        bestTarget = m_boss;
+                    }
                 }
-                return true;
+                break;
             }
         }
     }
 
-    qDebug() << "Manqué";
-    return false;
+    if (!bestTarget) { qDebug() << "Manqué"; return false; }
+
+    bestTarget->takeDamage(weapon->getDamage());
+
+    if (bestTarget == m_boss && m_boss->getHealth() <= 0)
+    {
+        m_bossAlive = false;
+        p->addScore(10);
+    }
+    else if (bestTarget->getHealth() <= 0)
+    {
+        p->addScore(1);
+        spawnHealIfNeeded();
+    }
+
+    return true;
 }
 
 void GameManager::updateVie()
@@ -501,7 +502,7 @@ void GameManager::spawnHealIfNeeded()
 void GameManager::checkHealPickup()
 {
     Vertex playerPos = p->getPosition();
-    float pickUpRadius = 2.0f;
+    float pickUpRadius = 5.0f;
 
     for(int i = (int)m_healPickups.size() - 1; i>=0; i--)
     {
@@ -564,7 +565,7 @@ void GameManager::updateProjectiles(float deltaTime)
 {
     for(Projectile& proj : m_projectiles)
     {
-        if(!proj.active)continue;
+        if(!proj.active) continue;
 
         float speed = 15.0f;
         proj.position.x += proj.dirX * speed * deltaTime;
@@ -577,7 +578,43 @@ void GameManager::updateProjectiles(float deltaTime)
             continue;
         }
 
-        //collision avec le joueur
+        // --- NOUVEAU : collision projectile avec les murs ---
+        std::vector<Linedef> nearWalls;
+        bsp->actorToWallBroading(proj.position, nearWalls, verteces);
+
+        bool hitWall = false;
+        for (const Linedef& wall : nearWalls)
+        {
+            if (wall.twoSided) continue; // mur transparent
+
+            const Vertex& wStart = verteces[wall.start];
+            const Vertex& wEnd   = verteces[wall.end];
+
+            // Position précédente du projectile
+            Vertex prevPos;
+            prevPos.x = proj.position.x - proj.dirX * speed * deltaTime;
+            prevPos.y = proj.position.y - proj.dirY * speed * deltaTime;
+
+            // Vérifie si le segment [prevPos -> proj.position] croise le mur
+            float dx1 = proj.position.x - prevPos.x;
+            float dy1 = proj.position.y - prevPos.y;
+            float dx2 = wEnd.x - wStart.x;
+            float dy2 = wEnd.y - wStart.y;
+
+            float denom = dx1 * dy2 - dy1 * dx2;
+            if (std::abs(denom) < 0.0001f) continue; // parallèles
+
+            float t = ((wStart.x - prevPos.x) * dy2 - (wStart.y - prevPos.y) * dx2) / denom;
+            float s = ((wStart.x - prevPos.x) * dy1 - (wStart.y - prevPos.y) * dx1) / denom;
+
+            if (t >= 0.0f && t <= 1.0f && s >= 0.0f && s <= 1.0f)
+            {
+                proj.active = false;
+                hitWall = true;
+                break;
+            }
+        }
+        if (hitWall) continue;
 
         float dx = proj.position.x - p->getPosition().x;
         float dy = proj.position.y - p->getPosition().y;
@@ -604,6 +641,10 @@ void GameManager::updateProjectiles(float deltaTime)
 
         if (enemy->canShootProjectile())
         {
+
+            if (!bsp->hasLineOfSight(enemy->getPosition(), p->getPosition(), verteces))
+                continue;
+
             enemy->triggerShootAnim();
             Vertex ePos = enemy->getPosition();
             Vertex pPos = p->getPosition();
@@ -613,16 +654,11 @@ void GameManager::updateProjectiles(float deltaTime)
             float len = std::sqrt(dx*dx + dy*dy);
             if (len < 0.001f) continue;
 
-            float dirX = dx / len;
-            float dirY = dy / len;
-
-            float spawnOffset = 2.0f;
-
             Projectile proj;
-            proj.position.x = ePos.x + dirX * spawnOffset;
-            proj.position.y = ePos.y + dirY * spawnOffset;
-            proj.dirX = dirX;
-            proj.dirY = dirY;
+            proj.position.x = ePos.x + (dx/len) * 2.0f;
+            proj.position.y = ePos.y + (dy/len) * 2.0f;
+            proj.dirX = dx / len;
+            proj.dirY = dy / len;
             m_projectiles.push_back(proj);
         }
     }
@@ -688,7 +724,7 @@ void GameManager::checkWeaponPickup()
 {
     if (m_weaponPickups.empty()) return;
     Vertex playerPos = p->getPosition();
-    float pickupRadius = 2.0f;
+    float pickupRadius = 5.0f;
 
     for (int i = (int)m_weaponPickups.size() - 1; i >= 0; i--)
     {

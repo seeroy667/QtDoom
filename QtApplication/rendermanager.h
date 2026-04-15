@@ -75,7 +75,7 @@ private:
     int     m_gunFrame = 0;
     bool    m_gunAnimating = false;
     QElapsedTimer m_gunAnimTimer;
-    float   m_frameDuration = 0.15f;
+    float   m_frameDuration = 0.12f;
     QPixmap m_enemyFrames[4];
     int     m_enemyFrame = 0;
     bool    m_enemyAnimating = false;

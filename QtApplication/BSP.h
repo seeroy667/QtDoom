@@ -77,6 +77,9 @@ public:
                              const std::vector<Vertex>& vertices);
     std::vector<Vertex> collectValidSpawnPoints(const std::vector<Vertex>& vertices,
                                                 float minDistToWall);
+    bool hasLineOfSight(const Vertex& from, const Vertex& to, const std::vector<Vertex>& vertices);
+
+
 
     // Annexes
     Node* getRoot() const { return root; };
@@ -101,6 +104,9 @@ private:
                                  Node* node,
                                  const std::vector<Vertex>& vertices,
                                  float minDist);
+
+    bool losCheck(Node* node, const Vertex& from, const Vertex& to, const std::vector<Vertex>& vertices);
+    bool segmentsIntersect(const Vertex& a, const Vertex& b, const Vertex& c, const Vertex& d);
 };
 
 #endif
