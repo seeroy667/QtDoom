@@ -106,16 +106,16 @@ void RenderManager::render(Actor m_player,
     for (const Projectile& proj : projectiles)
     {
         Vertex camPos = coordPlayer(proj.position, m_player);
-        if (camPos.y < distanceMin) continue;
-
+        if (camPos.y < 0.5f) continue;
 
         float screenX = (camPos.x / camPos.y) * m_focalLength + m_screenWidth / 2.0f;
         float screenY = projectHeight(2.5f, camPos.y);
 
 
-        float size = (m_focalLength / camPos.y) * 1.4f;
-        size = std::max(8.0f, std::min(size, 120.0f));
+        if (screenX < -m_screenWidth || screenX > m_screenWidth * 2) continue;
 
+        float size = (m_focalLength / camPos.y) * 0.8f;
+        size = std::max(8.0f, std::min(size, 120.0f));
 
         if (screenX + size < 0 || screenX - size > m_screenWidth) continue;
 

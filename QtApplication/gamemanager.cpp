@@ -618,13 +618,16 @@ void GameManager::updateProjectiles(float deltaTime)
 
         float dx = proj.position.x - p->getPosition().x;
         float dy = proj.position.y - p->getPosition().y;
-        if((dx*dx + dy*dy) < (1.0f * 1.0f))
+        float distSq = dx*dx + dy*dy;
+
+        if(distSq < (2.5f * 2.5f))
         {
             p->takeDamage(1);
             updateVie();
             proj.active = false;
             if(p->getHealth() < 1)
                 emit playerDead();
+            continue;
         }
     }
     m_projectiles.erase(std::remove_if(m_projectiles.begin(), m_projectiles.end(),[](const Projectile& p) { return !p.active;}), m_projectiles.end());
