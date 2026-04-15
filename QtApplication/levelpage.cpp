@@ -257,6 +257,7 @@ void LevelPage::setupNextSelect()
 {
     //qDebug() << "setup Next";
     currentIndex=0;
+    updateHighlight();
 }
 
 void LevelPage::paintEvent(QPaintEvent *event)

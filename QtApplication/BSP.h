@@ -40,14 +40,13 @@ public:
             Author: Donavan Sirois
             Description: Added more readability to the class. Comments and function substitution
     */
+    void build(const std::vector<Linedef>& segments,
+               std::vector<Vertex>& vertices);
+
     Node* Builder(std::vector<Linedef> segments,
                   std::vector<Vertex>& vertices);
 
-    void traverseAndRender(Node* node,
-                           const Vertex& playerPos,
-                           const std::vector<Vertex>& verteces,
-                           std::function<bool(const Linedef&)> renderCallback);
-
+    // Not used anymore, orders walls into the renderedWalls vector
     void traverse(const Vertex& playerPosition,
                   std::vector<Linedef>& renderedWalls,
                   const std::vector<Vertex>& vertices);
@@ -55,8 +54,12 @@ public:
                       const Vertex& playerPos,
                       std::vector<Linedef>& walls,
                       const std::vector<Vertex>& vertices);
-    void build(const std::vector<Linedef>& segments,
-               std::vector<Vertex>& vertices);
+
+    // For rendering walls
+    void traverseAndRender(Node* node,
+                           const Vertex& playerPosition,
+                           const std::vector<Vertex>& vertices,
+                           std::function<bool(const Linedef&)> callback);
 
     // For collision on all actors
     void broadWall(Node* node,

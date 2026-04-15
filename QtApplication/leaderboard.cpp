@@ -50,7 +50,7 @@ leaderBoard::leaderBoard(QString filename, QWidget *parent)
 
     // Hauteur des rangées
     for (int i = 0; i < 10; i++)
-        m_table->setRowHeight(i, 38);
+        m_table->setRowHeight(i, 30);
 
     m_menuButton = new QPushButton(this); // ← ajoute 'this' et garde la référence
     m_menuButton->setMinimumSize(450, 120);
@@ -145,6 +145,7 @@ void leaderBoard::writeScoresInFile()
 void leaderBoard::menuButtonClicked()
 {
     emit goBackToMenu();
+    unselectQuitterButton();
 }
 
 void leaderBoard::paintEvent(QPaintEvent *event)
@@ -176,3 +177,24 @@ void leaderBoard::resizeEvent(QResizeEvent* event)
     m_menuButton->setGeometry(btnX, btnY, btnW, btnH);
 }
 
+void leaderBoard::selectQuitterButton()
+{
+    m_menuButton->setStyleSheet("QPushButton {border-image: url(:/ressources/quitter2.png) 0 0 0 0 stretch stretch;}");
+}
+
+void leaderBoard::activateSelectedButton()
+{
+    menuButtonClicked();
+}
+
+void leaderBoard::unselectQuitterButton()
+{
+    m_menuButton->setStyleSheet(
+        "QPushButton {"
+        "   border-image: url(:/ressources/quitter1.png) 0 0 0 0 stretch stretch;"
+        "}"
+        "QPushButton:hover {"
+        "   border-image: url(:/ressources/quitter2.png) 0 0 0 0 stretch stretch;"
+        "}"
+        );
+}

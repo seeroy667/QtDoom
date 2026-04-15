@@ -6,11 +6,22 @@ uint16_t LedState = 0b0011111111111;
 
 float x, y, z;
 
+unsigned long ledSignalTimer = 0;
+const unsigned long LED_SIGNAL_DURATION = 100; // ms
+
+const int SIGNAL_PIN = A5;
+const unsigned long Te_us = 50;
+const uint8_t THRESH = 50;
 
 uint8_t compteurBouton1 = 0;
 uint8_t compteurBouton2 = 0;
 uint8_t compteurBoutonEncodeur = 0;
 uint8_t compteurBoutonJoy = 0;
+
+uint8_t prevSignal = 0;
+bool armed = true;
+bool signalDetecte = false;
+unsigned long lastSample = 0;
 
 bool rechargementActif = false;
 
@@ -28,8 +39,8 @@ bool boutonEncodeur = 0;
 bool boutonJoy = 0;
 
 void setup() {
-  bitSet(LedState, 11);
-  Serial.begin(9600);
+  bitSet(LedState, 10);
+  Serial.begin(115200);
 
   SetupLed();
   joystick_setup();
@@ -42,7 +53,6 @@ void setup() {
   lcd.print("Munition: ");
   lcd.print(munition);
   lcd.print(" ");
-
   CalibrerAccelerometre(100);
 }
 
@@ -95,7 +105,7 @@ void loop() {
   getCursorPosition(cursorX, cursorY, 128, 64);
 
  
-  if (bouton1)
+  if (bouton1 && !rechargementActif)
   {
     if (munition > 0)
     {
@@ -107,13 +117,8 @@ void loop() {
       lcd.print(munition);
       lcd.print(" ");
     }
+}
 
-    bitSet(LedState, 11); // LED verte
-  }
-  else
-  {
-    bitClear(LedState, 11);
-  }
 
  
   if ((munition < 10) && bouton2 && !rechargementActif)
@@ -132,6 +137,7 @@ void loop() {
     CalibrerAccelerometre(100);
   }
 
+  UpdateSignalDetection();
   UpdateReloadAnimation();
   WriteTrame();
 
@@ -143,7 +149,7 @@ void loop() {
 void WriteTrame() {
 
   static unsigned long previousMillis = 0;
-  const unsigned long interval = 12;
+  const unsigned long interval = 8;
   unsigned long currentMillis = millis();
 
   if (currentMillis - previousMillis >= interval) {
@@ -180,6 +186,11 @@ void WriteTrame() {
       compteurBoutonJoy--;
     }
 
+    if (signalDetecte)
+    {
+      boutons |= (1 << 4);
+    }
+
     Serial.write('$');
     Serial.write(munition);
     Serial.write(getJoystickMappedX());
@@ -189,17 +200,6 @@ void WriteTrame() {
     Serial.write(uint8_t(cursorX));
     Serial.write(uint8_t(cursorY));
     Serial.write('#');
-  }
-}
-
-
-void ReadTrame() {
-  if (Serial.available() > 0) {
-    char startChar = Serial.read();
-    if (startChar == '$') {
-      String data = Serial.readStringUntil('#');
-      hp = data.toInt();
-    }
   }
 }
 
@@ -231,4 +231,37 @@ void UpdateReloadAnimation()
       rechargementActif = false;
     }
   }
+}
+
+void UpdateSignalDetection()
+{
+  if (micros() - lastSample < Te_us) return;
+  lastSample = micros();
+
+  
+  uint8_t savedADCSRA = ADCSRA;
+  ADCSRA = (ADCSRA & ~0x07) | 0x04;
+  uint8_t curr = analogRead(SIGNAL_PIN) >> 2;
+  ADCSRA = savedADCSRA; 
+
+  if (armed && prevSignal < THRESH && curr >= THRESH)
+  {
+    armed = false;
+    signalDetecte = true;
+    bitSet(LedState, 11);
+    ledSignalTimer = millis();
+  }
+
+  if (!armed && curr < THRESH)
+  {
+    armed = true;
+    signalDetecte = false;
+  }
+
+  if (millis() - ledSignalTimer >= LED_SIGNAL_DURATION)
+  {
+    bitClear(LedState, 11);
+  }
+
+  prevSignal = curr;
 }

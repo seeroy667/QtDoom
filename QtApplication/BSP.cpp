@@ -16,6 +16,21 @@ BSP::BSP()
     root = nullptr;
 }
 
+void BSP::build(const std::vector<Linedef>& segments, std::vector<Vertex>& vertices)
+{
+    // Safety verifications, although they should never happen within the scope of this software
+    if (segments.empty() || vertices.empty())
+    {
+        qDebug() << "ERROR: BSP cannot be built, segment or vertices list is empty";
+        qDebug() << segments.size();
+        qDebug() << vertices.size();
+        return;
+    }
+
+    delete root;
+    root = Builder(segments, vertices);
+}
+
 Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& vertices)
 {
     // Safety verifications, although they should never happen within the scope of this software
@@ -94,7 +109,7 @@ Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& vertices)
                 intersection.y = (slopeSeg*intersection.x) + bSeg;
             }
 
-            std::vector<Vertex>::iterator found = vertices.end(); // The iterator is a Vertex
+            std::vector<Vertex>::iterator found = vertices.end();
 
             for (std::vector<Vertex>::iterator i = vertices.begin(); i != vertices.end(); i++)
             {
@@ -146,38 +161,20 @@ Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& vertices)
     return node;
 }
 
-void BSP::traverseAndRender(Node* node,
-                            const Vertex& playerPos,
-                            const std::vector<Vertex>& verteces,
-                            std::function<bool(const Linedef&)> renderCallback)
-{
-    if (!node) return;
-
-    float dxPartition = verteces[node->partition.end].x - verteces[node->partition.start].x;
-    float dyPartition = verteces[node->partition.end].y - verteces[node->partition.start].y;
-    float dxPlayer = playerPos.x - verteces[node->partition.start].x;
-    float dyPlayer = playerPos.y - verteces[node->partition.start].y;
-    float cross = dxPartition * dyPlayer - dyPartition * dxPlayer;
-
-    // Front-to-back: near side first
-    Node* nearChild = (cross > 0) ? node->front : node->back;
-    Node* farChild  = (cross > 0) ? node->back  : node->front;
-
-    traverseAndRender(nearChild, playerPos, verteces, renderCallback);
-
-    if (!renderCallback(node->partition)) return; // screen full, stop
-
-    traverseAndRender(farChild, playerPos, verteces, renderCallback);
-}
-
-// These functions order the walls. THEY DO NOT ACCOUNT FOR VIEW CULLING YET! THIS MEANS EVERY WALL GETS RENDERED!
-void BSP::traverse(const Vertex& playerPosition, std::vector<Linedef>& renderedWalls, const std::vector<Vertex>& vertices)
+// These functions order the walls into the vector renderedWalls. THEY DO NOT ACCOUNT FOR VIEW CULLING.
+// As of the 13th of April 2026, this is not used anymore for the rendering. The method is still here just in case,
+// but is never used. It can be usefull to understand tree parsing, though.
+void BSP::traverse(const Vertex& playerPosition,
+                   std::vector<Linedef>& renderedWalls,
+                   const std::vector<Vertex>& vertices)
 {
     renderedWalls.clear();
     traverseNode(root, playerPosition, renderedWalls, vertices);
 }
 
-void BSP::traverseNode(Node* node, const Vertex& playerPosition, std::vector<Linedef>& walls, const std::vector<Vertex>& vertices)
+void BSP::traverseNode(Node* node, const Vertex& playerPosition,
+                       std::vector<Linedef>& walls,
+                       const std::vector<Vertex>& vertices)
 {
     if (!node) return;
 
@@ -188,7 +185,7 @@ void BSP::traverseNode(Node* node, const Vertex& playerPosition, std::vector<Lin
 
     float cross = dxPartition * dyPlayer - dyPartition * dxPlayer;
 
-    if (cross < 0)
+    if (cross < 0) // Front to back
     {
         traverseNode(node->back, playerPosition, walls, vertices);
         walls.push_back(node->partition);
@@ -202,12 +199,37 @@ void BSP::traverseNode(Node* node, const Vertex& playerPosition, std::vector<Lin
     }
 }
 
-void BSP::build(const std::vector<Linedef>& segments, std::vector<Vertex>& vertices)
+void BSP::traverseAndRender(Node* node,
+                            const Vertex& playerPosition,
+                            const std::vector<Vertex>& vertices,
+                            std::function<bool(const Linedef&)> callback)
 {
-    delete root;
-    root = Builder(segments, vertices);
+    if (!node) return;
+
+    float cross = crossProduct(vertices[node->partition.start], vertices[node->partition.end], playerPosition);
+
+    Node* nearChild;
+    Node* farChild;
+
+    if (cross < 0) // Front to back
+    {
+        nearChild = node->back;
+        farChild = node->front;
+    }
+    else
+    {
+        nearChild = node->front;
+        farChild = node->back;
+    }
+
+    traverseAndRender(nearChild, playerPosition, vertices, callback);
+
+    if (!callback(node->partition)) return; // screen full, stop
+
+    traverseAndRender(farChild, playerPosition, vertices, callback);
 }
 
+// This is used in collision detection
 void BSP::actorToWallBroading(const Vertex& actorPosition, std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& vertices)
 {
     broadedWalls.clear();
@@ -261,13 +283,19 @@ bool BSP::enemyRenderingCheck(Node* node, const Vertex& playerPosition, const Ve
 {
     if (!node) return true;
 
-    float rx = enemyPosition.x - playerPosition.x;
-    float ry = enemyPosition.y - playerPosition.y;
+    float rxCenter = enemyPosition.x - playerPosition.x;
+    float ryCenter = enemyPosition.y - playerPosition.y;
+
+    float rxRight = enemyPosition.x - playerPosition.x;
+    float ryRight = enemyPosition.y - playerPosition.y;
+
+    float rxLeft = enemyPosition.x - playerPosition.x;
+    float ryLeft = enemyPosition.y - playerPosition.y;
 
     float sx = vertices[node->partition.end].x - vertices[node->partition.start].x;
     float sy = vertices[node->partition.end].y - vertices[node->partition.start].y;
 
-    float cross = rx * sy - ry * sx;
+    float cross = rxCenter * sy - ryCenter * sx;
 
     if (std::abs(cross) > 0)
     {
@@ -275,7 +303,7 @@ bool BSP::enemyRenderingCheck(Node* node, const Vertex& playerPosition, const Ve
         float dy = vertices[node->partition.start].y - playerPosition.y;
 
         float t = (dx * sy - dy * sx) / cross;
-        float s = (dx * ry - dy * rx) / cross;
+        float s = (dx * ryCenter - dy * rxCenter) / cross;
 
         if (t >= 0.0f && t <= 1.0f && s >= 0.0f && s <= 1.0f) return false;
     }

@@ -57,7 +57,6 @@ compte::compte(QWidget *parent)
 
     m_background.load(":/ressources/backgroundUser.png");
 
-
 }
 
 void compte::resizeEvent(QResizeEvent* event)
@@ -103,6 +102,10 @@ void compte::resizeEvent(QResizeEvent* event)
 void compte::onCancel()
 {
     usernameEdit->clear();
+    if (username!="")
+    {
+        emit annulerChangeUser();
+    }
 }
 
 void compte::checkUsername()
@@ -125,4 +128,9 @@ void compte::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.drawPixmap(0, 0, width(), height(), m_background);
     QWidget::paintEvent(event);
+}
+
+void compte::activateSelectedButton()
+{
+    invisibleButton->click();
 }

@@ -91,7 +91,7 @@ private:
 
     bool potTurns=false;
     bool shootPress=false;
-    int menuCurrentIndex=0;
+    int menuCurrentIndex=2;
     int overCurrentIndex=0;
 
     QProgressBar* m_barPowerUp = nullptr;

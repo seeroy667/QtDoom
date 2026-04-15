@@ -33,6 +33,7 @@ UIManager::UIManager(QGraphicsView *view, QWidget *parent): QWidget(parent) {
         //qDebug() << "le jeu commence";
     });
 
+
     connect(menuPage, &MenuPage::menu_levelClickedSig, this, [this]() {
         stackedWidget->setCurrentWidget(levelPage);
     });
@@ -56,6 +57,12 @@ UIManager::UIManager(QGraphicsView *view, QWidget *parent): QWidget(parent) {
         qDebug() << score;
         leaderBoardPage->saveScore(username,score);
         emit newPlayer();
+    });
+
+    connect(comptePage, &compte::annulerChangeUser, this, [this]() {
+        stackedWidget->setCurrentWidget(menuPage);
+        QString username=comptePage->getCurrentUsername();
+        qDebug()<< username;
     });
 
     connect(levelPage, SIGNAL(chosenLevelPath(QString)), this, SLOT(saveLevelPath(QString)));
@@ -150,6 +157,10 @@ void UIManager::updateHighlight()
     {
         getLevelPage()->updateHighlight();
     }
+    if(stackedWidget->currentWidget()==leaderBoardPage)
+    {
+        leaderBoardPage->selectQuitterButton();
+    }
 }
 void UIManager::activateSelectedButton()
 {
@@ -169,6 +180,16 @@ void UIManager::activateSelectedButton()
     {
         //qDebug() << "selection ui level";
         getLevelPage()->activateSelectedButton();
+        return;
+    }
+    if(stackedWidget->currentWidget()==leaderBoardPage)
+    {
+        leaderBoardPage->activateSelectedButton();
+        return;
+    }
+    if(stackedWidget->currentWidget()==comptePage)
+    {
+        comptePage->activateSelectedButton();
         return;
     }
 }

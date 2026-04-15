@@ -1,8 +1,13 @@
+Le goat, 136
 test4, 3
 test, 0
 test2, 0
 test3, 0
 test5, 0
+seeroy, 0
+j, 0
+s, 0
+f, 0
 tset, 0
 est, 0
 esst, 0

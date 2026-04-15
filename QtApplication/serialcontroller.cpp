@@ -93,6 +93,7 @@ void SerialController::parseCommand(const QByteArray &data)
     quint8 bouton2 = static_cast<quint8>(data.at(4)&(1<<1));
     quint8 boutonEncodeur = static_cast<quint8>(data.at(4)&(1<<2));
     quint8 boutonJoy = static_cast<quint8>(data.at(4)&(1<<3));
+    quint8 muon = static_cast<quint8>(data.at(4)&(1<<4));
     quint8 encodeur = static_cast<quint8>(data.at(5));
     quint8 cursorX = static_cast<quint8>(data.at(6));
     quint8 cursorY = static_cast<quint8>(data.at(7));
