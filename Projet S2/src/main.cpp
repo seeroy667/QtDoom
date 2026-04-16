@@ -9,7 +9,7 @@ float x, y, z;
 unsigned long ledSignalTimer = 0;
 const unsigned long LED_SIGNAL_DURATION = 100; // ms
 
-const int SIGNAL_PIN = A5;
+const int SIGNAL_PIN = 18;
 const unsigned long Te_us = 50;
 const uint8_t THRESH = 50;
 
@@ -41,6 +41,17 @@ bool boutonJoy = 0;
 unsigned long dernierTir = 0;
 const unsigned long COOLDOWN_TIR = 350; // ms → ~2.8 Hz max
 
+void ISR_signal()
+{
+  if (armed)
+  {
+    armed = false;
+    signalDetecte = true;
+    bitSet(LedState, 11);
+    ledSignalTimer = millis();
+  }
+}
+
 void setup() {
   bitSet(LedState, 10);
   Serial.begin(115200);
@@ -51,6 +62,9 @@ void setup() {
   setup_encoder(2, 3);
   SetupAccelerometre();
   SetupLCD();
+
+  pinMode(SIGNAL_PIN, INPUT);
+  attachInterrupt(digitalPinToInterrupt(SIGNAL_PIN), ISR_signal, RISING);
 
   lcd.setCursor(0,0);
   lcd.print("Munition: ");
@@ -227,23 +241,8 @@ void UpdateReloadAnimation()
 
 void UpdateSignalDetection()
 {
-  if (micros() - lastSample < Te_us) return;
-  lastSample = micros();
-
-  uint8_t savedADCSRA = ADCSRA;
-  ADCSRA = (ADCSRA & ~0x07) | 0x04;
-  uint8_t curr = analogRead(SIGNAL_PIN) >> 2;
-  ADCSRA = savedADCSRA;
-
-  if (armed && prevSignal < THRESH && curr >= THRESH)
-  {
-    armed = false;
-    signalDetecte = true;
-    bitSet(LedState, 11);
-    ledSignalTimer = millis();
-  }
-
-  if (!armed && curr < THRESH)
+  
+  if (!digitalRead(SIGNAL_PIN))
   {
     armed = true;
     signalDetecte = false;
@@ -253,6 +252,4 @@ void UpdateSignalDetection()
   {
     bitClear(LedState, 11);
   }
-
-  prevSignal = curr;
 }
