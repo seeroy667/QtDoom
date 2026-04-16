@@ -28,3 +28,11 @@ float crossProduct(const Vertex& v1, const Vertex& v2, const Vertex& v3, const V
 
     return (dxSeg1 * dySeg2) - (dySeg1 * dxSeg2);
 }
+
+float vectorMagnitude(const Vertex& v1, const Vertex& v2)
+{
+    float dx = v2.x - v1.x;
+    float dy = v2.y - v1.y;
+
+    return sqrt(dx*dx + dy*dy);
+}
