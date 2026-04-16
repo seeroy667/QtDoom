@@ -112,6 +112,10 @@ void GameManager::spawnWave(int count)
 
         float dx = pos.x - p->getPosition().x;
         float dy = pos.y - p->getPosition().y;
+        if(m_currentWave ==1)
+        {
+             if (std::sqrt(dx*dx + dy*dy) < 60.0f) continue;
+        }
         if (std::sqrt(dx*dx + dy*dy) < 20.0f) continue;
 
         Actor* enemy = new Actor();
