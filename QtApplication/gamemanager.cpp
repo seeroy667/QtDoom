@@ -411,11 +411,11 @@ bool GameManager::shoot(QPoint mousePos, QSize screenSize)
     if (bestTarget == m_boss && m_boss->getHealth() <= 0)
     {
         m_bossAlive = false;
-        p->addScore(10);
+        p->addScore(1000);
     }
     else if (bestTarget->getHealth() <= 0)
     {
-        p->addScore(1);
+        p->addScore(100);
         spawnHealIfNeeded();
     }
 
@@ -498,7 +498,7 @@ bool GameManager::isBossRenderable()
 void GameManager::spawnHealIfNeeded()
 {
     int score = p->getScore();
-    if(score > 0 && score/5 > m_lastHealScore/5)
+    if(score > 0 && score/500 > m_lastHealScore/500)
     {
         m_lastHealScore = score;
         int index = rand() % m_spawnPoints.size();
