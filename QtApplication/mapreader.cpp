@@ -11,10 +11,6 @@ Modifications:
 
 #include "mapreader.h"
 
-MapReader::MapReader() {
-
-}
-
 bool MapReader::load(std::string fileName)
 {
     std::ifstream mapWad(fileName);

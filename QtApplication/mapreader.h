@@ -17,7 +17,7 @@ Modifications:
 class MapReader
 {
 public:
-    MapReader();
+    // Function to load map from txt file into private vector members
     bool load(std::string mapName);
 
     const std::vector<Vertex>& getVerteces() const {return verteces;};

@@ -70,8 +70,7 @@ void RenderManager::render(Actor m_player,
     columns.resize(m_screenWidth);
     for (int i = 0; i < m_screenWidth; i++)
     {
-        columns[i].topPosition = 0;
-        columns[i].bottomPosition = m_screenHeight;
+        columns[i] = false;
         columnDepths[i] = std::numeric_limits<float>::infinity();
         spriteDepths[i] = std::numeric_limits<float>::infinity();
     }
@@ -205,7 +204,7 @@ void RenderManager::renderWall(const Linedef& wall, const std::vector<Vertex>& v
 
     for (int i = x1; i <= x2; i++)
     {
-        if (columns[i].topPosition >= columns[i].bottomPosition) // Column is full
+        if (columns[i] == true) // Column is full
         {
             if (isInVector) // If a polygon was being built on the last iteration (last column wasn't full) we add it to be rendered
             {
@@ -229,26 +228,22 @@ void RenderManager::renderWall(const Linedef& wall, const std::vector<Vertex>& v
         float wallTop = projectHeight(sectors[wall.sideFront].ceilingHeight,  depth);
         float wallBottom = projectHeight(sectors[wall.sideFront].floorHeight, depth);
 
-        float drawTop = std::max(wallTop, (float)columns[i].topPosition);
-        float drawBot = std::min(wallBottom, (float)columns[i].bottomPosition);
-
         // Start a new polygon if needed (Last column saw itself add a polygon)
         if (!isInVector)
         {
             currentPolygon.columnStart = i;
-            currentPolygon.topLeft = drawTop;
-            currentPolygon.botLeft = drawBot;
+            currentPolygon.topLeft = wallTop;
+            currentPolygon.botLeft = wallBottom;
             isInVector = true;
         }
 
         // Extend the polygon to the new column
         currentPolygon.columnEnd = i;
-        currentPolygon.topRight = drawTop;
-        currentPolygon.botRight = drawBot;
+        currentPolygon.topRight = wallTop;
+        currentPolygon.botRight = wallBottom;
 
         // Update the new drawing heights for the current column, so that the next parse knows how much of the column is used
-        columns[i].topPosition = (int)drawTop;
-        columns[i].bottomPosition = (int)drawBot;
+        columns[i] = true;
     }
 
     if (isInVector) polygonsToRender.push_back(currentPolygon); // Added if was building a polygon and reached the end of the screen

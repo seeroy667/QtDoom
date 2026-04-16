@@ -32,11 +32,14 @@ unsigned long reloadInterval = 0;
 int cursorX;
 int cursorY;
 
-
-bool bouton1 = 0;  
+bool bouton1 = 0;
 bool bouton2 = 0;
-bool boutonEncodeur = 0;  
+bool boutonEncodeur = 0;
 bool boutonJoy = 0;
+
+// Cooldown tir
+unsigned long dernierTir = 0;
+const unsigned long COOLDOWN_TIR = 350; // ms → ~2.8 Hz max
 
 void setup() {
   bitSet(LedState, 10);
@@ -58,7 +61,6 @@ void setup() {
 
 void loop() {
 
-  
   if (bouton1_vient_detre_appuye())
   {
     bouton1 = 1;
@@ -79,7 +81,6 @@ void loop() {
     bouton2 = 0;
   }
 
-  
   if (bouton_encoder_vient_detre_appuye())
   {
     boutonEncodeur = 1;
@@ -90,7 +91,6 @@ void loop() {
     boutonEncodeur = 0;
   }
 
- 
   if (bouton_joystick_vient_detre_appuye())
   {
     boutonJoy = 1;
@@ -101,14 +101,13 @@ void loop() {
     boutonJoy = 0;
   }
 
-  
   getCursorPosition(cursorX, cursorY, 128, 64);
 
- 
-  if (bouton1 && !rechargementActif)
+  if (bouton1 && !rechargementActif && (millis() - dernierTir >= COOLDOWN_TIR))
   {
     if (munition > 0)
     {
+      dernierTir = millis();
       munition--;
       LedState = ShiftRight(LedState);
 
@@ -117,21 +116,18 @@ void loop() {
       lcd.print(munition);
       lcd.print(" ");
     }
-}
+  }
 
-
- 
   if ((munition < 10) && bouton2 && !rechargementActif)
   {
     rechargementActif = true;
 
     reloadStep = munition;
 
-    reloadInterval = 2750 / (10 - munition); 
+    reloadInterval = 2750 / (10 - munition);
     lastReloadStep = millis();
   }
 
-  
   if (boutonJoy)
   {
     CalibrerAccelerometre(100);
@@ -142,14 +138,14 @@ void loop() {
   WriteTrame();
 
   bouton_update();
-  UpdateLed(LedState); 
+  UpdateLed(LedState);
 }
 
 
 void WriteTrame() {
 
   static unsigned long previousMillis = 0;
-  const unsigned long interval = 8;
+  const unsigned long interval = 10;
   unsigned long currentMillis = millis();
 
   if (currentMillis - previousMillis >= interval) {
@@ -158,20 +154,17 @@ void WriteTrame() {
 
     uint8_t boutons = 0;
 
-    
     if (compteurBouton1 > 0)
     {
       boutons |= (1 << 0);
       compteurBouton1--;
     }
 
-    
     if (compteurBouton2 > 0)
     {
       boutons |= (1 << 1);
       compteurBouton2--;
     }
-
 
     if (compteurBoutonEncodeur > 0)
     {
@@ -179,7 +172,6 @@ void WriteTrame() {
       compteurBoutonEncodeur--;
     }
 
-    
     if (compteurBoutonJoy > 0)
     {
       boutons |= (1 << 3);
@@ -238,11 +230,10 @@ void UpdateSignalDetection()
   if (micros() - lastSample < Te_us) return;
   lastSample = micros();
 
-  
   uint8_t savedADCSRA = ADCSRA;
   ADCSRA = (ADCSRA & ~0x07) | 0x04;
   uint8_t curr = analogRead(SIGNAL_PIN) >> 2;
-  ADCSRA = savedADCSRA; 
+  ADCSRA = savedADCSRA;
 
   if (armed && prevSignal < THRESH && curr >= THRESH)
   {

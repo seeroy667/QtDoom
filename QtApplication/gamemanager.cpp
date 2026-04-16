@@ -241,9 +241,9 @@ void GameManager::update(float deltaTime, std::vector<Linedef> renderedWalls)
     }
 
     // --- Collision joueur ---
-    //std::vector<Linedef> broadedWalls;
-    //bsp->actorToWallBroading(p->getPosition(), broadedWalls, verteces);
-    //cManager->narrowingToCollide(broadedWalls, verteces, p);
+    std::vector<Linedef> broadedWalls;
+    bsp->actorToWallBroading(p->getPosition(), broadedWalls, verteces);
+    cManager->narrowingToCollide(broadedWalls, verteces, p);
 
     // --- Mise à jour creatures melee---
     for (Actor* enemy : creatures)
