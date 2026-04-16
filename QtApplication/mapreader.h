@@ -20,6 +20,7 @@ public:
     // Function to load map from txt file into private vector members
     bool load(std::string mapName);
 
+    // Member access
     const std::vector<Vertex>& getVerteces() const {return verteces;};
     const std::vector<Linedef>& getLinedefs() const {return linedefs;};
     const std::vector<Sector>& getSectors() const {return sectors;};

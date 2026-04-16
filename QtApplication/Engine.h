@@ -27,6 +27,7 @@ Modifications:
 class Engine : public QObject{
     Q_OBJECT
 private:
+    // Managers used to communicate
     ControllerManager *cManager;
     GameManager *gManager;
     RenderManager *rManager;
@@ -37,28 +38,24 @@ private:
     QElapsedTimer elapsedTimer;
     float deltaTime = 0.0f;
 
+    // What is that
     int m_width;
     int m_height;
     QWidget* m_widget;
+    QString oldMap = "";
 
+    // Used to render on screen
     QGraphicsScene* m_scene;
     QGraphicsView*  m_view;
 
-
+    // Used in for aiming and cursor to screen border rotation
     static constexpr int CURSOR_MIN = 0;
     static constexpr int CURSOR_MAX = 255;
-
     float m_smoothX = -1.0f;
     float m_smoothY = -1.0f;
-
     static constexpr float CURSOR_LERP_SPEED = 8.0f;
-
-
     static constexpr int   BORDER_ZONE       = 40;
-
     static constexpr float BORDER_ROT_SPEED  = 2.0f;
-
-    QString oldMap = "";
 
 public:
     Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QGraphicsView *view);

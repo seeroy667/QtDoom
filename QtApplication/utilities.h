@@ -17,4 +17,7 @@ float crossProduct(const Vertex& v1, const Vertex& v2, const Vertex& v3);
 // Used to compute a cross product between two already defined lines.
 float crossProduct(const Vertex& v1, const Vertex& v2, const Vertex& v3, const Vertex& v4);
 
+// Computes the magnitude of a given vector
+float vectorMagnitude(const Vertex& v1, const Vertex& v2);
+
 #endif // UTILITIES_H
