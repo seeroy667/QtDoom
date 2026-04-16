@@ -100,6 +100,7 @@ public slots:
     void updateCursor(int x, int y);
     void updateMunition(int value);
     void updateEncodeur(int value);
+    void onPowerUp(bool active);
 
 signals:
     void potTurnedSig();

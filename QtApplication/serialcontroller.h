@@ -29,9 +29,11 @@ signals:
     void updateMunition(int count);
     void updateEncodeur(int count);
     void boutonEncodeurPressed(bool active);
+    void powerUp(bool active);
 
 private slots:
     void readData();
+
 
 private:
     QSerialPort *serial;

@@ -111,4 +111,5 @@ void SerialController::parseCommand(const QByteArray &data)
     emit moveFront(joystickY < 100);
     emit moveLeft(joystickX > 150);
     emit moveRight(joystickX < 100);
+    emit powerUp(muon != 0);
 }

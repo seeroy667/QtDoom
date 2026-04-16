@@ -28,6 +28,7 @@ ControllerManager::ControllerManager(QObject *parent)
     connect(m_serial, &SerialController::boutonEncodeurPressed, this, [this](bool active) {
         if (active) emit confirmSig();
     });
+    connect(m_serial, &SerialController::powerUp, this, &ControllerManager::onPowerUp);
 }
 
 
@@ -166,4 +167,9 @@ void ControllerManager::shootReleasedEvent()
 {
     //qDebug() << "shoot released";
     emit shootReleasedSig();
+}
+void ControllerManager::onPowerUp(bool active)
+{
+    if (active)
+        m_powerUp = true;
 }
