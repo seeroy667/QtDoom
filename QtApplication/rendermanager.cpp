@@ -62,10 +62,9 @@ void RenderManager::render(Actor m_player,
                            const std::vector<Vertex>& verteces,
                            const std::vector<Sector>& sectors)
 {
-    m_scene->clear();
-    bsp->traverse(m_player.getPosition(), renderedWalls, verteces);
 
     // Initializing the columns on screen for clipping
+    m_scene->clear();
     columns.resize(m_screenWidth);
     for (int i = 0; i < m_screenWidth; i++)
     {
@@ -74,6 +73,7 @@ void RenderManager::render(Actor m_player,
     }
     m_closedColumns = 0;
     renderedWalls.clear();
+
 
     // This is an anonymous function callback within a method in a different class
     // Trying to find a solution to stop a function in its track under a certain
@@ -106,32 +106,36 @@ void RenderManager::render(Actor m_player,
     for (const Projectile& proj : projectiles)
     {
         Vertex camPos = coordPlayer(proj.position, m_player);
-        if (camPos.y < distanceMin) continue;
+        if (camPos.y < 0.5f) continue;
 
-
-        float angleToProj = std::atan2(camPos.x, camPos.y);
-
-
-        float halfFov = M_PI / 2.0f;
-        if (std::abs(angleToProj) > halfFov) continue;
-
-
-        float screenX = (angleToProj / halfFov) * (m_screenWidth / 2.0f) + m_screenWidth / 2.0f;
-
-        float distance = std::sqrt(camPos.x * camPos.x + camPos.y * camPos.y);
+        float screenX = (camPos.x / camPos.y) * m_focalLength + m_screenWidth / 2.0f;
         float screenY = projectHeight(2.5f, camPos.y);
 
-        float size = (m_focalLength / camPos.y) * 2.5f;
-        size = std::max(25.0f, std::min(size, 80.0f));
 
-        m_scene->addEllipse(screenX - size/2, screenY - size/2, size, size,
-                            QPen(QColor(180, 0, 255), 3),
-                            QBrush(QColor(100, 0, 255, 180)));
+        if (screenX < -m_screenWidth || screenX > m_screenWidth * 2) continue;
 
-        float haloSize = size * 1.4f;
-        m_scene->addEllipse(screenX - haloSize/2, screenY - haloSize/2, haloSize, haloSize,
-                            QPen(QColor(200, 100, 255, 120), 2),
-                            QBrush(Qt::NoBrush));
+        float size = (m_focalLength / camPos.y) * 0.8f;
+        size = std::max(8.0f, std::min(size, 120.0f));
+
+        if (screenX + size < 0 || screenX - size > m_screenWidth) continue;
+
+        QGraphicsEllipseItem* ball = m_scene->addEllipse(
+            screenX - size / 2.0f,
+            screenY - size / 2.0f,
+            size, size,
+            QPen(QColor(180, 0, 255), 3),
+            QBrush(QColor(100, 0, 255, 180)));
+        ball->setZValue(9999.0f);
+
+        // Halo extérieur
+        float haloSize = size * 2.0f;
+        QGraphicsEllipseItem* halo = m_scene->addEllipse(
+            screenX - haloSize / 2.0f,
+            screenY - haloSize / 2.0f,
+            haloSize, haloSize,
+            QPen(QColor(200, 100, 255, 120), 2),
+            QBrush(Qt::NoBrush));
+        halo->setZValue(9998.0f);
     }
     //heal
     renderHeals(heals, m_player);
@@ -486,6 +490,7 @@ void RenderManager::triggerGunAnim()
     m_gunAnimating = true;
     m_gunAnimTimer.restart();
 }
+
 
 void RenderManager::updateScreenSize(int width, int height)
 {
