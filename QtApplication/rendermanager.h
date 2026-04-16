@@ -112,6 +112,7 @@ private:
     QPixmap m_shotgunMapTexture;
     QPixmap m_shotgunIdleTexture;
     QPixmap m_shotgunFrames[4];
+    std::vector<float> columnDepths;
 
     // For occlusion
     std::vector<RenderingColumn> columns;

@@ -37,7 +37,7 @@ leaderBoard::leaderBoard(QString filename, QWidget *parent)
     m_table->setSelectionMode(QAbstractItemView::NoSelection);
     m_table->setFocusPolicy(Qt::NoFocus);
 
-    // Transparent pour voir l'image en dessous
+
     m_table->setStyleSheet(
         "QTableWidget { background: transparent; border: none; color: #c8a050; font-size: 16px; font-weight: bold; }"
         "QTableWidget::item { background: transparent; padding: 2px 10px; }"
@@ -48,11 +48,7 @@ leaderBoard::leaderBoard(QString filename, QWidget *parent)
     m_table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
     m_table->horizontalHeader()->resizeSection(1, 120);
 
-    // Hauteur des rangées
-    for (int i = 0; i < 10; i++)
-        m_table->setRowHeight(i, 30);
-
-    m_menuButton = new QPushButton(this); // ← ajoute 'this' et garde la référence
+    m_menuButton = new QPushButton(this);
     m_menuButton->setMinimumSize(450, 120);
     m_menuButton->setStyleSheet(
         "QPushButton {"
@@ -162,13 +158,27 @@ void leaderBoard::resizeEvent(QResizeEvent* event)
     float scaleX = (float)width()  / 1340.0f;
     float scaleY = (float)height() / 860.0f;
 
-    // Ces 4 valeurs définissent le rectangle du tableau dans l'image
     int tableX = (int)(430 * scaleX);
-    int tableY = (int)(345 * scaleY);
+    int tableY = (int)(340 * scaleY);
     int tableW = (int)(480 * scaleX);
     int tableH = (int)(500 * scaleY);
 
     m_table->setGeometry(tableX, tableY, tableW, tableH);
+
+
+    int rowHeight = (int)(35 * scaleY);
+    for (int i = 0; i < 10; i++)
+        m_table->setRowHeight(i, rowHeight);
+
+
+    m_table->horizontalHeader()->resizeSection(1, (int)(120 * scaleX));
+
+
+    int fontSize = std::max(8, (int)(16 * std::min(scaleX, scaleY)));
+    m_table->setStyleSheet(
+        QString("QTableWidget { background: transparent; border: none; color: #c8a050; font-size: %1px; font-weight: bold; }"
+                "QTableWidget::item { background: transparent; padding: 2px 10px; }").arg(fontSize)
+        );
 
     int btnW = (int)(450 * scaleX);
     int btnH = (int)(120 * scaleY);
@@ -176,7 +186,6 @@ void leaderBoard::resizeEvent(QResizeEvent* event)
     int btnY = (int)(730 * scaleY);
     m_menuButton->setGeometry(btnX, btnY, btnW, btnH);
 }
-
 void leaderBoard::selectQuitterButton()
 {
     m_menuButton->setStyleSheet("QPushButton {border-image: url(:/ressources/quitter2.png) 0 0 0 0 stretch stretch;}");

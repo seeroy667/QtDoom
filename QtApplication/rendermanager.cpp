@@ -46,6 +46,7 @@ RenderManager::RenderManager(QGraphicsScene* scene, int screenWidth, int screenH
     m_shotgunFrames[1]   = QPixmap(":/ressources/tir2.png");
     m_shotgunFrames[2]   = QPixmap(":/ressources/tir3.png");
     m_shotgunFrames[3]   = QPixmap(":/ressources/tir4.png");
+    columnDepths.resize(screenWidth, std::numeric_limits<float>::infinity());
     m_enemyAnimTimer.start();
 
     // For occlusion
@@ -70,6 +71,7 @@ void RenderManager::render(Actor m_player,
     {
         columns[i].topPosition = 0;
         columns[i].bottomPosition = m_screenHeight;
+        columnDepths[i] = std::numeric_limits<float>::infinity();
     }
     m_closedColumns = 0;
     renderedWalls.clear();
@@ -219,6 +221,7 @@ void RenderManager::renderWall(const Linedef& wall, const std::vector<Vertex>& v
         // Linear interpolation. We want the depth (Distance between the camera of the player to the new point of the wall)
         float invZ =  (1.0f / p1.y) + t * ((1.0f / p2.y) - (1.0f / p1.y));
         float depth = 1.0f / invZ;
+        columnDepths[i] = std::min(columnDepths[i], depth);
 
         // New wall coordinates computation
         float wallTop = projectHeight(sectors[wall.sideFront].ceilingHeight,  depth);
@@ -496,7 +499,9 @@ void RenderManager::updateScreenSize(int width, int height)
 {
     m_screenWidth = width;
     m_screenHeight = height;
-    m_focalLength = width/2.0f;
+    m_focalLength = width / 2.0f;
+    columns.resize(width);
+    columnDepths.resize(width, std::numeric_limits<float>::infinity());
 }
 
 
@@ -526,8 +531,27 @@ void RenderManager::renderHeals(const std::vector<Vertex>& heals, const Actor& p
 
         if (screenX + size < 0 || screenX - size > m_screenWidth) continue;
 
-        float centerY  = (spriteBottom + spriteTop) / 2.0f;
+
+        int colStart = std::max(0, (int)(screenX - size / 2.0f));
+        int colEnd   = std::min(m_screenWidth - 1, (int)(screenX + size / 2.0f));
+
+        bool fullyOccluded = true;
+        for (int col = colStart; col <= colEnd; col++)
+        {
+
+            if (columnDepths[col] >= camPos.y)
+            {
+                fullyOccluded = false;
+                break;
+            }
+        }
+        if (fullyOccluded) continue;
+
+        float centerY   = (spriteBottom + spriteTop) / 2.0f;
         float thickness = size * 0.25f;
+
+
+        float zVal = 10000.0f - camPos.y;
 
         QGraphicsRectItem* hBar = m_scene->addRect(
             screenX - size / 2.0f,
@@ -535,7 +559,7 @@ void RenderManager::renderHeals(const std::vector<Vertex>& heals, const Actor& p
             size, thickness);
         hBar->setBrush(QColor(0, 200, 0));
         hBar->setPen(Qt::NoPen);
-        hBar->setZValue(camPos.y);
+        hBar->setZValue(zVal);
 
         QGraphicsRectItem* vBar = m_scene->addRect(
             screenX - thickness / 2.0f,
@@ -543,7 +567,7 @@ void RenderManager::renderHeals(const std::vector<Vertex>& heals, const Actor& p
             thickness, size);
         vBar->setBrush(QColor(0, 200, 0));
         vBar->setPen(Qt::NoPen);
-        vBar->setZValue(camPos.y);
+        vBar->setZValue(zVal);
     }
 }
 void RenderManager::setShotgunMode(bool hasShotgun)
@@ -565,22 +589,35 @@ void RenderManager::renderWeaponPickups(const std::vector<Vertex>& pickups, cons
 
         if (screenX + baseSize < 0 || screenX - baseSize > m_screenWidth) continue;
 
-        float centerY = (spriteBottom + spriteTop) / 2.0f;
-
-
         float ratio  = m_shotgunMapTexture.isNull() ? 3.0f
                                                    : (float)m_shotgunMapTexture.width() / m_shotgunMapTexture.height();
         float height = baseSize;
         float width  = baseSize * ratio;
 
+
+        int colStart = std::max(0, (int)(screenX - width / 2.0f));
+        int colEnd   = std::min(m_screenWidth - 1, (int)(screenX + width / 2.0f));
+
+        bool fullyOccluded = true;
+        for (int col = colStart; col <= colEnd; col++)
+        {
+            if (columnDepths[col] >= camPos.y)
+            {
+                fullyOccluded = false;
+                break;
+            }
+        }
+        if (fullyOccluded) continue;
+
+        float centerY = (spriteBottom + spriteTop) / 2.0f;
+        float zVal = 10000.0f - camPos.y;
+
         QGraphicsRectItem* item = m_scene->addRect(
             screenX - width / 2.0f,
             centerY - height / 2.0f,
-            width,
-            height
-            );
+            width, height);
         item->setPen(Qt::NoPen);
-        item->setZValue(camPos.y);
+        item->setZValue(zVal);
 
         if (!m_shotgunMapTexture.isNull())
         {
