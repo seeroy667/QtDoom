@@ -21,7 +21,6 @@
 #define threshold 0.1
 
 void SetupAccelerometre(void);
-int detecterMouvement(float dx, float dy, float dz);
 void lireAxes(float &x, float &y, float &z);
 void CalibrerAccelerometre(int nbMesures);
 void getCursorPosition(int &xScreen, int &yScreen, int width, int height);

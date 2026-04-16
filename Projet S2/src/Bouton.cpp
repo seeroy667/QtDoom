@@ -129,6 +129,6 @@ int8_t boutons_vient_detre_appuye_octet(void)
     if (bouton2_vient_detre_appuye()) etat |= (1 << 1);
     if (bouton_encoder_vient_detre_appuye()) etat |= (1 << 2);
     if (bouton_joystick_vient_detre_appuye()) etat |= (1 << 3);
-    
+
     return etat;
 }

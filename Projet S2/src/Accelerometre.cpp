@@ -33,22 +33,7 @@ void lireAxes(float &x, float &y, float &z)
     z = analogRead(PIN_Z) * (3.3 / 1023.0) - zBase;
 }
 
-int detecterMouvement(float dx, float dy, float dz)
-{
-    float deltaX = fabs(dx) - threshold;
-    float deltaY = fabs(dy) - threshold;
-    float deltaZ = fabs(dz) - threshold;
 
-    if (deltaX <= 0 && deltaY <= 0 && deltaZ <= 0)
-        return HAUT;
-
-    if (deltaX >= deltaY && deltaX >= deltaZ)
-        return (dx > 0) ? GAUCHE : DROITE;
-    else if (deltaY >= deltaX && deltaY >= deltaZ)
-        return (dy < 0) ? AVANT : ARRIERE;
-    else
-        return BAS;
-}
 
 void getCursorPosition(int &xScreen, int &yScreen, int width, int height)
 {
