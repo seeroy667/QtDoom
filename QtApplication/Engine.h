@@ -58,13 +58,24 @@ private:
     static constexpr float BORDER_ROT_SPEED  = 2.0f;
 
 public:
+    // Constructor
     Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QGraphicsView *view);
-    ~Engine();
+    void slotsAndSignalsConnections();
+    void setView();
+
+    // gameLoop
     void gameLoop();
-    ControllerManager* getcManager() const;
-    UIManager* getuiManager() const;
+    void handleMovement(float deltaTime);
+    void handleCursorAndRotation(float deltaTime);
+    void handleShooting();
+    void handleRendering(float deltaTime);
+
+    // Member access
+    ControllerManager* getcManager() const {return cManager;};
+    UIManager* getuiManager() const {return uiManager;};
 
 public slots:
+    // Actions called on button press (name self explainatory)
     void start();
     void pauseGame();
     void resumeGame();
