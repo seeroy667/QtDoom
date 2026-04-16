@@ -276,7 +276,7 @@ void Engine::gameLoop()
     }
     gManager->getPlayer()->getWeapon()->updatePowerUp();
     // Synchroniser les balles avec la valeur recue de l'Arduino
-    if (weapon && cManager->getMunition() >= 0)
+    if (weapon && cManager->getMunition() >= 0 && !weapon->isPoweredUp())
         weapon->setCurrentAmmo(cManager->getMunition());
     if (weapon)
         gManager->getPlayer()->getWeapon()->updatePowerUp();
