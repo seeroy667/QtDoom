@@ -47,6 +47,7 @@ RenderManager::RenderManager(QGraphicsScene* scene, int screenWidth, int screenH
     m_shotgunFrames[2]   = QPixmap(":/ressources/tir3.png");
     m_shotgunFrames[3]   = QPixmap(":/ressources/tir4.png");
     columnDepths.resize(screenWidth, std::numeric_limits<float>::infinity());
+    spriteDepths.resize(screenWidth, std::numeric_limits<float>::infinity());
     m_enemyAnimTimer.start();
 
     // For occlusion
@@ -72,6 +73,7 @@ void RenderManager::render(Actor m_player,
         columns[i].topPosition = 0;
         columns[i].bottomPosition = m_screenHeight;
         columnDepths[i] = std::numeric_limits<float>::infinity();
+        spriteDepths[i] = std::numeric_limits<float>::infinity();
     }
     m_closedColumns = 0;
     renderedWalls.clear();
@@ -350,6 +352,11 @@ void RenderManager::renderActor(Actor* actor, const Actor player, QColor color, 
     float dy = player.getPosition().y - actor->getPosition().y;
     float depth = sqrt(dx*dx + dy*dy);
 
+    int colStart = std::max(0, (int)(screenX - squareSize / 2.0f));
+    int colEnd   = std::min(m_screenWidth - 1, (int)(screenX + squareSize / 2.0f));
+    for (int col = colStart; col <= colEnd; col++)
+        spriteDepths[col] = std::min(spriteDepths[col], depth);
+
     QRectF spriteRect(
         screenX - squareSize / 2.0f,
         spriteTopAdjusted,
@@ -473,8 +480,6 @@ void RenderManager::renderGun()
 
     int gunWidth  = 500;
     int gunHeight = 250;
-    float gunX = (m_screenWidth / 2.0f) - (gunWidth / 2.0f);
-    float gunY = (m_screenHeight - gunHeight);
 
     QPixmap toRender;
     if (m_gunAnimating)
@@ -482,7 +487,9 @@ void RenderManager::renderGun()
     else
         toRender = m_hasShotgun ? m_shotgunIdleTexture : m_gunFrames[0];
 
-    QPixmap scaled = toRender.scaled(gunWidth, gunHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+   QPixmap scaled = toRender.scaled(gunWidth, gunHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    float gunX = (m_screenWidth / 2.0f) - (scaled.width() / 2.0f);
+    float gunY = (m_screenHeight - scaled.height());
     QGraphicsPixmapItem* gunItem = m_scene->addPixmap(scaled);
     gunItem->setPos(gunX, gunY);
 }
@@ -502,6 +509,7 @@ void RenderManager::updateScreenSize(int width, int height)
     m_focalLength = width / 2.0f;
     columns.resize(width);
     columnDepths.resize(width, std::numeric_limits<float>::infinity());
+    spriteDepths.resize(width, std::numeric_limits<float>::infinity());
 }
 
 
@@ -538,8 +546,8 @@ void RenderManager::renderHeals(const std::vector<Vertex>& heals, const Actor& p
         bool fullyOccluded = true;
         for (int col = colStart; col <= colEnd; col++)
         {
-
-            if (columnDepths[col] >= camPos.y)
+            float nearest = std::min(columnDepths[col], spriteDepths[col]);
+            if (nearest >= camPos.y)
             {
                 fullyOccluded = false;
                 break;
@@ -601,7 +609,8 @@ void RenderManager::renderWeaponPickups(const std::vector<Vertex>& pickups, cons
         bool fullyOccluded = true;
         for (int col = colStart; col <= colEnd; col++)
         {
-            if (columnDepths[col] >= camPos.y)
+            float nearest = std::min(columnDepths[col], spriteDepths[col]);
+            if (nearest >= camPos.y)
             {
                 fullyOccluded = false;
                 break;

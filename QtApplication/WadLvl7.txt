@@ -1,0 +1,95 @@
+vertex 0 0.0 150.0
+vertex 1 40.0 142.0
+vertex 2 80.0 120.0
+vertex 3 112.0 90.0
+vertex 4 135.0 55.0
+vertex 5 150.0 0.0
+vertex 6 135.0 -55.0
+vertex 7 112.0 -90.0
+vertex 8 80.0 -120.0
+vertex 9 40.0 -142.0
+vertex 10 0.0 -150.0
+vertex 11 -40.0 -142.0
+vertex 12 -80.0 -120.0
+vertex 13 -112.0 -90.0
+vertex 14 -135.0 -55.0
+vertex 15 -150.0 0.0
+vertex 16 -135.0 55.0
+vertex 17 -112.0 90.0
+vertex 18 -80.0 120.0
+vertex 19 -40.0 142.0
+vertex 20 -100.0 70.0
+vertex 21 -100.0 -70.0
+vertex 22 -100.0 70.0
+vertex 23 -40.0 70.0
+vertex 24 -40.0 70.0
+vertex 25 -40.0 10.0
+vertex 26 -40.0 -10.0
+vertex 27 -40.0 -70.0
+vertex 28 -100.0 -70.0
+vertex 29 -40.0 -70.0
+vertex 30 100.0 70.0
+vertex 31 100.0 -70.0
+vertex 32 100.0 70.0
+vertex 33 40.0 70.0
+vertex 34 40.0 70.0
+vertex 35 40.0 10.0
+vertex 36 40.0 -10.0
+vertex 37 40.0 -70.0
+vertex 38 100.0 -70.0
+vertex 39 40.0 -70.0
+vertex 40 -70.0 100.0
+vertex 41 70.0 100.0
+vertex 42 -10.0 100.0
+vertex 43 10.0 100.0
+vertex 44 -70.0 -100.0
+vertex 45 70.0 -100.0
+vertex 46 -10.0 -100.0
+vertex 47 10.0 -100.0
+vertex 48 -70.0 100.0
+vertex 49 -70.0 40.0
+vertex 50 70.0 100.0
+vertex 51 70.0 40.0
+vertex 52 -70.0 -100.0
+vertex 53 -70.0 -40.0
+vertex 54 70.0 -100.0
+vertex 55 70.0 -40.0
+sector 0 0.0 20.0
+linedef 0 0 1 0 -1 false
+linedef 1 1 2 0 -1 false
+linedef 2 2 3 0 -1 false
+linedef 3 3 4 0 -1 false
+linedef 4 4 5 0 -1 false
+linedef 5 5 6 0 -1 false
+linedef 6 6 7 0 -1 false
+linedef 7 7 8 0 -1 false
+linedef 8 8 9 0 -1 false
+linedef 9 9 10 0 -1 false
+linedef 10 10 11 0 -1 false
+linedef 11 11 12 0 -1 false
+linedef 12 12 13 0 -1 false
+linedef 13 13 14 0 -1 false
+linedef 14 14 15 0 -1 false
+linedef 15 15 16 0 -1 false
+linedef 16 16 17 0 -1 false
+linedef 17 17 18 0 -1 false
+linedef 18 18 19 0 -1 false
+linedef 19 19 0 0 -1 false
+linedef 20 20 21 0 -1 false
+linedef 21 22 23 0 -1 false
+linedef 22 24 25 0 -1 false
+linedef 23 26 27 0 -1 false
+linedef 24 28 29 0 -1 false
+linedef 25 30 31 0 -1 false
+linedef 26 32 33 0 -1 false
+linedef 27 34 35 0 -1 false
+linedef 28 36 37 0 -1 false
+linedef 29 38 39 0 -1 false
+linedef 30 40 42 0 -1 false
+linedef 31 43 41 0 -1 false
+linedef 32 44 46 0 -1 false
+linedef 33 47 45 0 -1 false
+linedef 34 48 49 0 -1 false
+linedef 35 50 51 0 -1 false
+linedef 36 52 53 0 -1 false
+linedef 37 54 55 0 -1 false

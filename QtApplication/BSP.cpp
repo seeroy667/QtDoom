@@ -411,11 +411,6 @@ void BSP::collectSpawnCandidates(Node* node,
     const Vertex& wStart = vertices[node->partition.start];
     const Vertex& wEnd   = vertices[node->partition.end];
 
-    Vertex wallMid = {
-        (wStart.x + wEnd.x) / 2.0f,
-        (wStart.y + wEnd.y) / 2.0f
-    };
-
     float dx  = wEnd.x - wStart.x;
     float dy  = wEnd.y - wStart.y;
     float len = std::sqrt(dx*dx + dy*dy);
@@ -426,21 +421,59 @@ void BSP::collectSpawnCandidates(Node* node,
         float ny =  dx / len;
         float offset = minDistToWall * 2.0f;
 
-        Vertex frontCandidate = { wallMid.x + nx * offset,
-                                 wallMid.y + ny * offset };
-        Vertex backCandidate  = { wallMid.x - nx * offset,
-                                wallMid.y - ny * offset };
 
-        if (isPointInsideMap(frontCandidate, vertices) &&
-            isFarEnoughFromAllWalls(frontCandidate, root, vertices, minDistToWall))
-        {
-            candidates.push_back(frontCandidate);
-        }
+        std::vector<float> tValues = {0.25f, 0.5f, 0.75f};
 
-        if (isPointInsideMap(backCandidate, vertices) &&
-            isFarEnoughFromAllWalls(backCandidate, root, vertices, minDistToWall))
+        for (float t : tValues)
         {
-            candidates.push_back(backCandidate);
+            Vertex wallPoint = {
+                wStart.x + t * dx,
+                wStart.y + t * dy
+            };
+
+
+            Vertex frontCandidate = { wallPoint.x + nx * offset,
+                                     wallPoint.y + ny * offset };
+
+            Vertex backCandidate  = { wallPoint.x - nx * offset,
+                                    wallPoint.y - ny * offset };
+
+            if (isPointInsideMap(frontCandidate, vertices) &&
+                isFarEnoughFromAllWalls(frontCandidate, root, vertices, minDistToWall))
+            {
+
+                bool tooClose = false;
+                for (const Vertex& existing : candidates)
+                {
+                    float ex = existing.x - frontCandidate.x;
+                    float ey = existing.y - frontCandidate.y;
+                    if ((ex*ex + ey*ey) < (minDistToWall * minDistToWall))
+                    {
+                        tooClose = true;
+                        break;
+                    }
+                }
+                if (!tooClose)
+                    candidates.push_back(frontCandidate);
+            }
+
+            if (isPointInsideMap(backCandidate, vertices) &&
+                isFarEnoughFromAllWalls(backCandidate, root, vertices, minDistToWall))
+            {
+                bool tooClose = false;
+                for (const Vertex& existing : candidates)
+                {
+                    float ex = existing.x - backCandidate.x;
+                    float ey = existing.y - backCandidate.y;
+                    if ((ex*ex + ey*ey) < (minDistToWall * minDistToWall))
+                    {
+                        tooClose = true;
+                        break;
+                    }
+                }
+                if (!tooClose)
+                    candidates.push_back(backCandidate);
+            }
         }
     }
 

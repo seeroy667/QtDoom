@@ -112,7 +112,7 @@ void GameManager::spawnWave(int count)
 
         float dx = pos.x - p->getPosition().x;
         float dy = pos.y - p->getPosition().y;
-        if(std::sqrt(dx*dx + dy*dy) < 5.0f) continue;
+        if (std::sqrt(dx*dx + dy*dy) < 20.0f) continue;
 
         Actor* enemy = new Actor();
         enemy->setPosition(pos.x, pos.y);
@@ -237,9 +237,9 @@ void GameManager::update(float deltaTime, std::vector<Linedef> renderedWalls)
     }
 
     // --- Collision joueur ---
-    std::vector<Linedef> broadedWalls;
-    bsp->actorToWallBroading(p->getPosition(), broadedWalls, verteces);
-    cManager->narrowingToCollide(broadedWalls, verteces, p);
+    //std::vector<Linedef> broadedWalls;
+    //bsp->actorToWallBroading(p->getPosition(), broadedWalls, verteces);
+    //cManager->narrowingToCollide(broadedWalls, verteces, p);
 
     // --- Mise à jour creatures melee---
     for (Actor* enemy : creatures)
@@ -536,7 +536,7 @@ void GameManager::spawnRangedWave(int count, const std::vector<Vertex>& usedPosi
 
         float dx = pos.x - p->getPosition().x;
         float dy = pos.y - p->getPosition().y;
-        if (std::sqrt(dx*dx + dy*dy) < 5.0f) continue;
+        if (std::sqrt(dx*dx + dy*dy) < 20.0f) continue;
 
         // Vérifier que la position n'est pas déjà utilisée par un ennemi mêlée
         bool alreadyUsed = false;

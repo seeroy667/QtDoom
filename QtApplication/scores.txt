@@ -1,5 +1,5 @@
+test, 342
 Le goat, 136
-test, 43
 tset, 4
 test4, 3
 test2, 0
@@ -12,3 +12,4 @@ f, 0
 est, 0
 esst, 0
 gvxcvzx, 0
+ok, 0

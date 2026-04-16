@@ -112,11 +112,12 @@ private:
     QPixmap m_shotgunMapTexture;
     QPixmap m_shotgunIdleTexture;
     QPixmap m_shotgunFrames[4];
-    std::vector<float> columnDepths;
 
     // For occlusion
     std::vector<RenderingColumn> columns;
     int m_closedColumns;
+    std::vector<float> columnDepths;
+    std::vector<float> spriteDepths;
 
     bool clipWall(Vertex& p1, Vertex& p2);
     Vertex projectToScreen(const Vertex& cameraPoint);
