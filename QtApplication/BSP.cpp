@@ -16,7 +16,9 @@ BSP::BSP()
     root = nullptr;
 }
 
-void BSP::build(const std::vector<Linedef>& segments, std::vector<Vertex>& vertices)
+// Tree builder
+void BSP::build(const std::vector<Linedef>& segments,
+                std::vector<Vertex>& vertices)
 {
     // Safety verifications, although they should never happen within the scope of this software
     if (segments.empty() || vertices.empty())
@@ -31,14 +33,10 @@ void BSP::build(const std::vector<Linedef>& segments, std::vector<Vertex>& verti
     root = Builder(segments, vertices);
 }
 
-Node* BSP::Builder(std::vector<Linedef> segments, std::vector<Vertex>& vertices)
+Node* BSP::Builder(std::vector<Linedef> segments,
+                   std::vector<Vertex>& vertices)
 {
-    // Safety verifications, although they should never happen within the scope of this software
-    if (segments.empty() || vertices.empty())
-    {
-        qDebug() << "ERROR: BSP cannot be built, segment or vertices list is empty";
-        return nullptr;
-    }
+    if (segments.empty()) return nullptr; // If the last node was a leaf node
 
     // Exit statement of recursivity. When we reach the very last wall, it is added to this node, and the childs are nullptr
     if (segments.size() == 1)
@@ -178,12 +176,7 @@ void BSP::traverseNode(Node* node, const Vertex& playerPosition,
 {
     if (!node) return;
 
-    float dxPartition = vertices[node->partition.end].x - vertices[node->partition.start].x;
-    float dyPartition = vertices[node->partition.end].y - vertices[node->partition.start].y;
-    float dxPlayer = playerPosition.x - vertices[node->partition.start].x;
-    float dyPlayer = playerPosition.y - vertices[node->partition.start].y;
-
-    float cross = dxPartition * dyPlayer - dyPartition * dxPlayer;
+    float cross = crossProduct(vertices[node->partition.end], vertices[node->partition.start],  playerPosition);
 
     if (cross < 0) // Front to back
     {
@@ -199,6 +192,7 @@ void BSP::traverseNode(Node* node, const Vertex& playerPosition,
     }
 }
 
+// This function accounts for occlusion. See function description in header file.
 void BSP::traverseAndRender(Node* node,
                             const Vertex& playerPosition,
                             const std::vector<Vertex>& vertices,
@@ -229,30 +223,33 @@ void BSP::traverseAndRender(Node* node,
     traverseAndRender(farChild, playerPosition, vertices, callback);
 }
 
-// This is used in collision detection
-void BSP::actorToWallBroading(const Vertex& actorPosition, std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& vertices)
+// This is used in collision detection.
+void BSP::actorToWallBroading(const Vertex& actorPosition,
+                              std::vector<Linedef>& broadedWalls,
+                              const std::vector<Vertex>& vertices)
 {
     broadedWalls.clear();
     broadWall(root, actorPosition, broadedWalls, vertices);
 }
 
-void BSP::broadWall(Node* node, const Vertex& playerPosition, std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& vertices)
+void BSP::broadWall(Node* node,
+                    const Vertex& playerPosition,
+                    std::vector<Linedef>& broadedWalls,
+                    const std::vector<Vertex>& vertices)
 {
     if (!node) return;
 
     float radius = 2.0f;
 
-    float dxPartition = vertices[node->partition.end].x - vertices[node->partition.start].x;
-    float dyPartition = vertices[node->partition.end].y - vertices[node->partition.start].y;
-    float dxPlayer = playerPosition.x - vertices[node->partition.start].x;
-    float dyPlayer = playerPosition.y - vertices[node->partition.start].y;
-
-    float cross = dxPlayer * dyPartition - dyPlayer * dxPartition;
+    float cross = crossProduct(vertices[node->partition.end], vertices[node->partition.start], playerPosition);
 
     // Here, we decide to not only broad the wall, but to do some volume culling.
     // We check if the player is at a reasonable distance of the wall. If he is, we add it to the valid walls.
     // This is called bounding volume hierarchy (BVH).
-    // It is furthermore usefull with BSP, as it eliminates having to pass through the children of a given node.
+    // It is furthermore usefull with BSP, as it eliminates having to pass through some children of a given node.
+
+    float dxPartition = vertices[node->partition.end].x - vertices[node->partition.start].x;
+    float dyPartition = vertices[node->partition.end].y - vertices[node->partition.start].y;
 
     float wallLength = sqrt(dxPartition * dxPartition + dyPartition * dyPartition);
     float distance = cross / wallLength;
@@ -274,45 +271,81 @@ void BSP::broadWall(Node* node, const Vertex& playerPosition, std::vector<Linede
     }
 }
 
-bool BSP::enemyRendering(const Vertex& playerPosition, const Vertex& enemyPosition, const std::vector<Vertex>& vertices)
+// This is used to choose which enemies to render on screen.
+bool BSP::enemyRendering(const Vertex& playerPosition,
+                         const Vertex& enemyPosition,
+                         const std::vector<Vertex>& vertices)
 {
     return enemyRenderingCheck(root, playerPosition, enemyPosition, vertices);
 }
 
-bool BSP::enemyRenderingCheck(Node* node, const Vertex& playerPosition, const Vertex& enemyPosition, const std::vector<Vertex>& vertices)
+bool BSP::enemyRenderingCheck(Node* node,
+                              const Vertex& playerPosition,
+                              const Vertex& enemyPosition,
+                              const std::vector<Vertex>& vertices)
 {
     if (!node) return true;
 
-    float rxCenter = enemyPosition.x - playerPosition.x;
-    float ryCenter = enemyPosition.y - playerPosition.y;
+    // Test intersection between the raycast and the wall
+    float cross = crossProduct(enemyPosition,
+                               playerPosition,
+                               vertices[node->partition.end],
+                               vertices[node->partition.start]);
 
-    float rxRight = enemyPosition.x - playerPosition.x;
-    float ryRight = enemyPosition.y - playerPosition.y;
-
-    float rxLeft = enemyPosition.x - playerPosition.x;
-    float ryLeft = enemyPosition.y - playerPosition.y;
-
-    float sx = vertices[node->partition.end].x - vertices[node->partition.start].x;
-    float sy = vertices[node->partition.end].y - vertices[node->partition.start].y;
-
-    float cross = rxCenter * sy - ryCenter * sx;
-
-    if (std::abs(cross) > 0)
+    if (std::abs(cross) > 0) // Checking for parallel or colinear vectors
     {
-        float dx = vertices[node->partition.start].x - playerPosition.x;
-        float dy = vertices[node->partition.start].y - playerPosition.y;
+        float cross2 = crossProduct(vertices[node->partition.start],
+                                    playerPosition,
+                                    vertices[node->partition.end],
+                                    vertices[node->partition.start]);
 
-        float t = (dx * sy - dy * sx) / cross;
-        float s = (dx * ryCenter - dy * rxCenter) / cross;
+        float cross3 = crossProduct(vertices[node->partition.start],
+                                    playerPosition,
+                                    enemyPosition,
+                                    playerPosition);
 
+        // Parametric intersection
+        float t = cross2 / cross;
+        float s = cross3 / cross;
+
+        // If they do not intersect
         if (t >= 0.0f && t <= 1.0f && s >= 0.0f && s <= 1.0f) return false;
     }
 
-    cross = crossProduct(vertices[node->partition.start], vertices[node->partition.end], playerPosition);
+    // If there is no intersection, we check if the player and the enemy are on the same side. If they are, we can skip
+    // checking an entire subtree
+    float sidePlayer = crossProduct(vertices[node->partition.end],
+                                    vertices[node->partition.start],
+                                    playerPosition);
+
+    float sideEnemy  = crossProduct(vertices[node->partition.end],
+                                   vertices[node->partition.start],
+                                   enemyPosition);
+
+    if (sidePlayer > 0 && sideEnemy > 0)
+    {
+        return enemyRenderingCheck(node->back, playerPosition, enemyPosition, vertices);
+    }
+    if (sidePlayer < 0 && sideEnemy < 0)
+    {
+        return enemyRenderingCheck(node->front, playerPosition, enemyPosition, vertices);
+    }
+
     if (!enemyRenderingCheck(node->front, playerPosition, enemyPosition, vertices))
         return false;
 
     return enemyRenderingCheck(node->back, playerPosition, enemyPosition, vertices);
+}
+
+// Mathieu Vincent's code
+
+std::vector<Vertex> BSP::collectValidSpawnPoints(const std::vector<Vertex>& vertices,
+                                                 float minDistToWall)
+{
+    std::vector<Vertex> candidates;
+    collectSpawnCandidates(root, vertices, minDistToWall, candidates);
+    qDebug() << "BSP:" << candidates.size() << "spawn points valides";
+    return candidates;
 }
 
 float BSP::distancePointToSegment(const Vertex& point,const Vertex& segStart,const Vertex& segEnd)
@@ -401,6 +434,7 @@ void BSP::collectAllWalls(Node* node, std::vector<Linedef>& walls)
     collectAllWalls(node->front, walls);
     collectAllWalls(node->back, walls);
 }
+
 void BSP::collectSpawnCandidates(Node* node,
                                  const std::vector<Vertex>& vertices,
                                  float minDistToWall,

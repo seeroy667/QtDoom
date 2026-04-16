@@ -24,6 +24,8 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     resize(800, 600); //aggrandi un peu la page par défaut
+
+    // Scene and view used for in game rendering
     QGraphicsScene *scene = new QGraphicsScene(this);
     QGraphicsView  *view  = new QGraphicsView(scene);
     scene->setSceneRect(0, 0, view->width(), view->height());

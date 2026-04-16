@@ -8,9 +8,6 @@ Modifications:
         Author: Donavan Sirois
         Description: Added the paintEvent method which paints polygons to the screen. This
         method is no meant to be permanent and should be deleted eventually.
-    Date: Febuary 24, 2026
-        Author: Léanne Héroux
-        Description: Added the gamePage the menuPage and the levelPage to the mainWindow
 */
 
 #ifndef MAINWINDOW_H
@@ -30,7 +27,7 @@ public:
     ~MainWindow();
 
 private:
-    Engine *engine  = nullptr;
+    Engine *engine = nullptr;
 };
 
 #endif // MAINWINDOW_H
