@@ -410,7 +410,6 @@ void RenderManager::renderActor(Actor* actor, const Actor player, QColor color, 
     barBg->setPen(Qt::NoPen);
     barBg->setZValue(-depth + 1000.1f);
 
-
     QGraphicsRectItem* barFg = m_scene->addRect(barX, barY, barWidth * healthPercent, barHeight);
     barFg->setBrush(QColor(0, 200, 0));
     barFg->setPen(Qt::NoPen);

@@ -20,7 +20,7 @@ private:
     bool isAlive;
     float angle;
     float EnemyRange = 40.0f;
-    float EnemySpeed = 10.0f;
+    float EnemySpeed = 8.0f;
     float dx = 0;
     float dy = 0;
     bool canMove = true;
@@ -45,7 +45,7 @@ public:
 
     // Access to attributes
     int getHealth() {return health;}
-    void setHealth(int h) { health = h; }
+    void setHealth(int h) { health = h;}
     float getAngle() const {return angle;}
     Vertex getPosition() const {return position;}
     void setPosition(Vertex newPos);

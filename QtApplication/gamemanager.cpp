@@ -121,6 +121,8 @@ void GameManager::spawnWave(int count)
         Actor* enemy = new Actor();
         enemy->setPosition(pos.x, pos.y);
         enemy->setAngle(0.0f);
+        enemy->setHealth(3);
+        enemy->setMaxHealth(3);
         creatures.push_back(enemy);
         usedPositions.push_back(pos);
         spawned++;
@@ -564,6 +566,8 @@ void GameManager::spawnRangedWave(int count, const std::vector<Vertex>& usedPosi
         enemy->setPosition(pos.x, pos.y);
         enemy->setAngle(0.0f);
         enemy->setRanged(true);
+        enemy->setHealth(3);
+        enemy->setMaxHealth(3);
         m_rangedEnemies.push_back(enemy);
         spawned++;
     }
