@@ -107,6 +107,7 @@ public:
     */
     std::vector<Vertex> collectValidSpawnPoints(const std::vector<Vertex>& vertices,
                                                 float minDistToWall);
+    bool hasLineOfSight(const Vertex& from, const Vertex& to, const std::vector<Vertex>& vertices);
 
     // Member Accessibility
     Node* getRoot() const { return root; };
@@ -129,11 +130,6 @@ private:
                              const Vertex& playerPosition,
                              const Vertex& enemyPosition,
                              const std::vector<Vertex>& vertices);
-    std::vector<Vertex> collectValidSpawnPoints(const std::vector<Vertex>& vertices,
-                                                float minDistToWall);
-    bool hasLineOfSight(const Vertex& from, const Vertex& to, const std::vector<Vertex>& vertices);
-
-
 
     /*
     Author: Mathieu Vincent

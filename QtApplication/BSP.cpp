@@ -20,14 +20,8 @@ BSP::BSP()
 void BSP::build(const std::vector<Linedef>& segments,
                 std::vector<Vertex>& vertices)
 {
-    // Safety verifications, although they should never happen within the scope of this software
-    if (segments.empty() || vertices.empty())
-    {
-        qDebug() << "ERROR: BSP cannot be built, segment or vertices list is empty";
-        qDebug() << segments.size();
-        qDebug() << vertices.size();
+    if (segments.empty()) // If last node was a leaf node
         return;
-    }
 
     delete root;
     root = Builder(segments, vertices);
@@ -513,14 +507,6 @@ void BSP::collectSpawnCandidates(Node* node,
 
     collectSpawnCandidates(node->front, vertices, minDistToWall, candidates);
     collectSpawnCandidates(node->back,  vertices, minDistToWall, candidates);
-}
-std::vector<Vertex> BSP::collectValidSpawnPoints(const std::vector<Vertex>& vertices,
-                                                 float minDistToWall)
-{
-    std::vector<Vertex> candidates;
-    collectSpawnCandidates(root, vertices, minDistToWall, candidates);
-    qDebug() << "BSP:" << candidates.size() << "spawn points valides";
-    return candidates;
 }
 
 bool BSP::segmentsIntersect(const Vertex& a, const Vertex& b, const Vertex& c, const Vertex& d)
