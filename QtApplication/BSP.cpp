@@ -333,37 +333,49 @@ bool BSP::enemyRenderingCheck(Node* node,
 
 // Mathieu Vincent's code
 
+// Collect all valid spawn points in the map using BSP traversal
 std::vector<Vertex> BSP::collectValidSpawnPoints(const std::vector<Vertex>& vertices,
                                                  float minDistToWall)
 {
     std::vector<Vertex> candidates;
+
+    // Recursively collect possible spawn points
     collectSpawnCandidates(root, vertices, minDistToWall, candidates);
-    qDebug() << "BSP:" << candidates.size() << "spawn points valides";
+
+    qDebug() << "BSP:" << candidates.size() << "valid spawn points";
     return candidates;
 }
 
-float BSP::distancePointToSegment(const Vertex& point,const Vertex& segStart,const Vertex& segEnd)
+float BSP::distancePointToSegment(const Vertex& point,
+                                  const Vertex& segStart,
+                                  const Vertex& segEnd)
 {
     float dx = segEnd.x - segStart.x;
     float dy = segEnd.y - segStart.y;
     float lengthSq = dx*dx + dy*dy;
 
+    // If the segment is extremely small, treat it as a point
     if(lengthSq < 0.00001f)
     {
         float ex = point.x - segStart.x;
         float ey = point.y - segStart.y;
         return std::sqrt(ex*ex + ey*ey);
     }
+
+    // Project the point onto the segment (parametric t)
     float t = ((point.x - segStart.x)*dx + (point.y - segStart.y)*dy) / lengthSq;
 
+    // Compute closest point on the segment
     float closestX = segStart.x + t * dx;
     float closestY = segStart.y + t * dy;
 
+    // Distance between point and closest point
     float ex = point.x - closestX;
     float ey = point.y - closestY;
     return std::sqrt(ex*ex + ey*ey);
 }
 
+// Check if a point is far enough from all walls in the BSP tree
 bool BSP::isFarEnoughFromAllWalls(const Vertex& candidate,
                                   Node* node,
                                   const std::vector<Vertex>& vertices,
@@ -374,15 +386,17 @@ bool BSP::isFarEnoughFromAllWalls(const Vertex& candidate,
     const Vertex& wStart = vertices[node->partition.start];
     const Vertex& wEnd   = vertices[node->partition.end];
 
+    // Check distance from current wall
     float dist = distancePointToSegment(candidate, wStart, wEnd);
     if (dist < minDist)
         return false;
 
-
+    // Determine which side of the partition the point lies on
     float dx    = wEnd.x - wStart.x;
     float dy    = wEnd.y - wStart.y;
     float cross = (candidate.x - wStart.x) * dy - (candidate.y - wStart.y) * dx;
 
+    // Recursively check only the relevant side of the BSP
     if (cross <= 0)
         return isFarEnoughFromAllWalls(candidate, node->front, vertices, minDist);
     else
@@ -390,10 +404,14 @@ bool BSP::isFarEnoughFromAllWalls(const Vertex& candidate,
 }
 
 
+
+// Check if a point is inside the map using ray casting
 bool BSP::isPointInsideMap(const Vertex& point,
                            const std::vector<Vertex>& vertices)
 {
     std::vector<Linedef> allWalls;
+
+    // Gather all walls from BSP
     collectAllWalls(root, allWalls);
 
     int intersections = 0;
@@ -403,32 +421,38 @@ bool BSP::isPointInsideMap(const Vertex& point,
         const Vertex& v1 = vertices[wall.start];
         const Vertex& v2 = vertices[wall.end];
 
-        // Rayon vers +X depuis le point
-        // Le mur doit traverser la hauteur Y du point
+        // Check if the horizontal ray crosses the segment vertically
         if ((v1.y <= point.y && v2.y > point.y) ||
             (v2.y <= point.y && v1.y > point.y))
         {
-            // X d'intersection du mur avec le rayon horizontal
+            // Compute intersection X coordinate
             float t = (point.y - v1.y) / (v2.y - v1.y);
             float intersectX = v1.x + t * (v2.x - v1.x);
 
+            // Count intersections to the right of the point
             if (intersectX > point.x)
                 intersections++;
         }
     }
 
-    // Impair = intérieur, pair = extérieur
+    // Odd number = inside, even = outside
     return (intersections % 2) == 1;
 }
 
+
+// Recursively collect all walls from BSP tree
 void BSP::collectAllWalls(Node* node, std::vector<Linedef>& walls)
 {
     if (!node) return;
+
     walls.push_back(node->partition);
+
     collectAllWalls(node->front, walls);
     collectAllWalls(node->back, walls);
 }
 
+
+// Generate potential spawn points near walls
 void BSP::collectSpawnCandidates(Node* node,
                                  const std::vector<Vertex>& vertices,
                                  float minDistToWall,
@@ -443,34 +467,41 @@ void BSP::collectSpawnCandidates(Node* node,
     float dy  = wEnd.y - wStart.y;
     float len = std::sqrt(dx*dx + dy*dy);
 
+    // Ignore degenerate walls
     if (len > 0.0001f)
     {
+        // Compute normalized perpendicular (normal vector)
         float nx = -dy / len;
         float ny =  dx / len;
+
+        // Offset from wall to place spawn points
         float offset = minDistToWall * 2.0f;
 
-
+        // Sample positions along the wall
         std::vector<float> tValues = {0.25f, 0.5f, 0.75f};
 
         for (float t : tValues)
         {
+            // Point on the wall
             Vertex wallPoint = {
                 wStart.x + t * dx,
                 wStart.y + t * dy
             };
 
-
+            // Candidate positions on both sides of the wall
             Vertex frontCandidate = { wallPoint.x + nx * offset,
                                      wallPoint.y + ny * offset };
 
             Vertex backCandidate  = { wallPoint.x - nx * offset,
                                     wallPoint.y - ny * offset };
 
+            // Validate front candidate
             if (isPointInsideMap(frontCandidate, vertices) &&
                 isFarEnoughFromAllWalls(frontCandidate, root, vertices, minDistToWall))
             {
-
                 bool tooClose = false;
+
+                // Avoid clustering spawn points too close together
                 for (const Vertex& existing : candidates)
                 {
                     float ex = existing.x - frontCandidate.x;
@@ -481,14 +512,17 @@ void BSP::collectSpawnCandidates(Node* node,
                         break;
                     }
                 }
+
                 if (!tooClose)
                     candidates.push_back(frontCandidate);
             }
 
+            // Validate back candidate
             if (isPointInsideMap(backCandidate, vertices) &&
                 isFarEnoughFromAllWalls(backCandidate, root, vertices, minDistToWall))
             {
                 bool tooClose = false;
+
                 for (const Vertex& existing : candidates)
                 {
                     float ex = existing.x - backCandidate.x;
@@ -499,17 +533,22 @@ void BSP::collectSpawnCandidates(Node* node,
                         break;
                     }
                 }
+
                 if (!tooClose)
                     candidates.push_back(backCandidate);
             }
         }
     }
 
+    // Recurse into BSP tree
     collectSpawnCandidates(node->front, vertices, minDistToWall, candidates);
     collectSpawnCandidates(node->back,  vertices, minDistToWall, candidates);
 }
 
-bool BSP::segmentsIntersect(const Vertex& a, const Vertex& b, const Vertex& c, const Vertex& d)
+
+// Check if two line segments intersect
+bool BSP::segmentsIntersect(const Vertex& a, const Vertex& b,
+                            const Vertex& c, const Vertex& d)
 {
     float dx1 = b.x - a.x;
     float dy1 = b.y - a.y;
@@ -517,36 +556,48 @@ bool BSP::segmentsIntersect(const Vertex& a, const Vertex& b, const Vertex& c, c
     float dy2 = d.y - c.y;
 
     float denom = dx1 * dy2 - dy1 * dx2;
-    if (std::abs(denom) < 0.0001f) return false; // parallèles
 
+    // Parallel lines → no intersection
+    if (std::abs(denom) < 0.0001f) return false;
+
+    // Solve parametric intersection
     float t = ((c.x - a.x) * dy2 - (c.y - a.y) * dx2) / denom;
     float s = ((c.x - a.x) * dy1 - (c.y - a.y) * dx1) / denom;
 
+    // Check if intersection occurs within both segments
     return (t > 0.001f && t < 0.999f && s > 0.001f && s < 0.999f);
 }
 
-bool BSP::losCheck(Node* node, const Vertex& from, const Vertex& to, const std::vector<Vertex>& vertices)
+// Recursive Line Of Sight check through BSP
+bool BSP::losCheck(Node* node,
+                   const Vertex& from,
+                   const Vertex& to,
+                   const std::vector<Vertex>& vertices)
 {
-    if (!node) return true; // pas de mur return true
+    if (!node) return true; // No wall → visible
 
     const Vertex& wStart = vertices[node->partition.start];
     const Vertex& wEnd   = vertices[node->partition.end];
 
-    // Si le mur est est twoSided il bloque pas
+    // If wall is solid (not two-sided), it can block vision
     if (!node->partition.twoSided)
     {
         if (segmentsIntersect(from, to, wStart, wEnd))
-            return false; //un mur donc return false
+            return false; // blocked
     }
 
-    // Parcourir le reste
+    // Check both sides of the BSP
     if (!losCheck(node->front, from, to, vertices)) return false;
     if (!losCheck(node->back,  from, to, vertices)) return false;
 
     return true;
 }
 
-bool BSP::hasLineOfSight(const Vertex& from, const Vertex& to, const std::vector<Vertex>& vertices)
+
+// Public function to test line of sight between two points
+bool BSP::hasLineOfSight(const Vertex& from,
+                         const Vertex& to,
+                         const std::vector<Vertex>& vertices)
 {
     return losCheck(root, from, to, vertices);
 }
