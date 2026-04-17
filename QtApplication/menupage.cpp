@@ -26,7 +26,7 @@ MenuPage::MenuPage(QWidget *parent)
     menuButtons.append(scoreButton);
     connectButtons();
     updateHighlight();
-    m_background.load(":/ressources/background1.png");
+    m_background.load(":/ressources/background1.jpg");
 }
 
 void MenuPage::addDoomLabel()

@@ -1,13 +1,11 @@
 <RCC>
     <qresource prefix="/">
         <file>ressources/temp.jpg</file>
-        <file>ressources/background1.png</file>
         <file>ressources/DOOMLOGO.png</file>
         <file>ressources/bouton1.png</file>
         <file>ressources/bouton2.png</file>
         <file>ressources/niveau1.png</file>
         <file>ressources/niveau2.png</file>
-        <file>ressources/background2.png</file>
         <file>ressources/portelvl1.1.png</file>
         <file>ressources/portelvl1.2.png</file>
         <file>ressources/portelvl2.1.png</file>
@@ -24,7 +22,6 @@
         <file>ressources/Demon4.png</file>
         <file>ressources/retour1.png</file>
         <file>ressources/retour2.png</file>
-        <file>ressources/pause.png</file>
         <file>ressources/pauseLabel.png</file>
         <file>ressources/continuer1.png</file>
         <file>ressources/continuer2.png</file>
@@ -32,7 +29,6 @@
         <file>ressources/quitter2.png</file>
         <file>ressources/recommencer1.png</file>
         <file>ressources/recommencer2.png</file>
-        <file>ressources/backgroundMort.png</file>
         <file>ressources/gameover.png</file>
         <file>ressources/hud.png</file>
         <file>ressources/range1.png</file>
@@ -44,13 +40,17 @@
         <file>ressources/tir3.png</file>
         <file>ressources/tir4.png</file>
         <file>ressources/tir1.png</file>
-        <file>ressources/backgroundUser.png</file>
         <file>ressources/utilisateur1.png</file>
         <file>ressources/utilisateur2.png</file>
         <file>ressources/classement1.png</file>
         <file>ressources/classement2.png</file>
         <file>ressources/jouer1.png</file>
         <file>ressources/jouer2.png</file>
-        <file>ressources/backgroundClassement.png</file>
+        <file>ressources/background1.jpg</file>
+        <file>ressources/background2.jpg</file>
+        <file>ressources/backgroundUser.jpg</file>
+        <file>ressources/backgroundClassement.jpg</file>
+        <file>ressources/backgroundMort.jpg</file>
+        <file>ressources/pause.jpg</file>
     </qresource>
 </RCC>

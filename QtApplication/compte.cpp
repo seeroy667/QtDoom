@@ -55,7 +55,7 @@ compte::compte(QWidget *parent)
     connect(cancelButton, &QPushButton::clicked, this, &compte::onCancel);
     connect(startButton, &QPushButton::clicked, this, &compte::checkUsername);
 
-    m_background.load(":/ressources/backgroundUser.png");
+    m_background.load(":/ressources/backgroundUser.jpg");
 
 }
 

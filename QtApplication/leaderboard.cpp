@@ -59,7 +59,7 @@ leaderBoard::leaderBoard(QString filename, QWidget *parent)
         "}"
         );
     connect(m_menuButton, &QPushButton::clicked, this, &leaderBoard::menuButtonClicked);
-    m_background.load(":/ressources/backgroundClassement.png");
+    m_background.load(":/ressources/backgroundClassement.jpg");
 
 }
 
