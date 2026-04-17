@@ -281,14 +281,6 @@ void Engine::handleShooting()
 
 void Engine::handleRendering(float deltaTime)
 {
-    if(gManager->isBossRenderable())
-    {
-        if(gManager->getBSP()->enemyRendering(gManager->getPlayer()->getPosition(), gManager->getBoss()->getPosition(), gManager->getVerteces()))
-        {
-            rManager->renderActor(gManager->getBoss(),*gManager->getPlayer(),QColor(150,0,0), 2.5f);
-        }
-    }
-
     rManager->render(*gManager->getPlayer(),
                      gManager->getRenderedEnemy(),
                      gManager->getRenderedRangedEnemies(),
@@ -298,6 +290,14 @@ void Engine::handleRendering(float deltaTime)
                      gManager->getBSP(),
                      gManager->getVerteces(),
                      gManager->getSectors());
+
+    if(gManager->isBossRenderable())
+    {
+        if(gManager->getBSP()->enemyRendering(gManager->getPlayer()->getPosition(), gManager->getBoss()->getPosition(), gManager->getVerteces()))
+        {
+            rManager->renderActor(gManager->getBoss(),*gManager->getPlayer(),QColor(150,0,0), 2.5f);
+        }
+    }
 }
 
 /*
