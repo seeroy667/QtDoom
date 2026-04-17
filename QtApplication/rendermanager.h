@@ -34,6 +34,10 @@ struct PolygonCoordinates
     float botRight;
     float botLeft;
 };
+struct ColumnInfo {
+    int topPosition;
+    int bottomPosition;
+};
 
 class RenderManager
 {
@@ -93,6 +97,7 @@ public:
     void triggerGunAnim();
 
     void setShotgunMode(bool hasShotgun);
+    void renderFloorAndCeiling();
 
 private:
     // Screen
@@ -142,12 +147,15 @@ private:
     QPixmap m_gunTexture;
 
     // For occlusion
-    std::vector<bool> columns;
     int m_closedColumns;
     std::vector<float> columnDepths;
     std::vector<float> spriteDepths;
+    std::vector<ColumnInfo> columns;
+
+
     bool clipWall(Vertex& p1, Vertex& p2);
     Vertex projectToScreen(const Vertex& cameraPoint);
 };
 
 #endif // RENDERMANAGER_H
+

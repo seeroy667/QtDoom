@@ -63,6 +63,16 @@ void RenderManager::setTextures()
     m_shotgunFrames[1]   = QPixmap(":/ressources/tir2.png");
     m_shotgunFrames[2]   = QPixmap(":/ressources/tir3.png");
     m_shotgunFrames[3]   = QPixmap(":/ressources/tir4.png");
+    columnDepths.resize(m_screenWidth, std::numeric_limits<float>::infinity());
+    spriteDepths.resize(m_screenWidth, std::numeric_limits<float>::infinity());
+    m_enemyAnimTimer.start();
+
+    // For occlusion
+    columns.resize(m_screenWidth);
+    for (int i = 0; i < m_screenWidth; i++) {
+        columns[i].topPosition    = 0;
+        columns[i].bottomPosition = m_screenHeight;
+    }
 }
 
 /*
@@ -87,7 +97,8 @@ void RenderManager::render(Actor m_player,
     columns.resize(m_screenWidth);
     for (int i = 0; i < m_screenWidth; i++)
     {
-        columns[i] = false;
+        columns[i].topPosition    = 0;
+        columns[i].bottomPosition = m_screenHeight;
         columnDepths[i] = std::numeric_limits<float>::infinity();
         spriteDepths[i] = std::numeric_limits<float>::infinity();
     }
@@ -114,6 +125,8 @@ void RenderManager::render(Actor m_player,
             renderedWalls.push_back(wall);
             return m_closedColumns < m_screenWidth; // Check if all columns are full
         });
+    //plafond
+    renderFloorAndCeiling();
 
     //ennemis melee
     for (Actor* enemy : enemies)
@@ -224,7 +237,7 @@ void RenderManager::renderWall(const Linedef& wall,
 
     for (int i = x1; i <= x2; i++)
     {
-        if (columns[i] == true) // Column is full
+        if (columns[i].topPosition >= columns[i].bottomPosition)
         {
             if (isInVector) // If a polygon was being built on the last iteration (last column wasn't full) we add it to be rendered
             {
@@ -263,7 +276,8 @@ void RenderManager::renderWall(const Linedef& wall,
         currentPolygon.botRight = wallBottom;
 
         // Update the new drawing heights for the current column, so that the next parse knows how much of the column is used
-        columns[i] = true;
+        columns[i].topPosition    = (int)wallTop;
+        columns[i].bottomPosition = (int)wallBottom;
     }
 
     if (isInVector) polygonsToRender.push_back(currentPolygon); // Added if was building a polygon and reached the end of the screen
@@ -279,7 +293,10 @@ void RenderManager::renderWall(const Linedef& wall,
           << QPointF(polygon.columnStart, polygon.botLeft);
 
         QGraphicsPolygonItem* wallItem = m_scene->addPolygon(p);
-        wallItem->setBrush(QColor(60, 60, 60));
+        float avgDistance = 50 + (p1.y + p2.y) / 2.0f;
+        int brightness = std::max(0, std::min(255, (int)(255.0f / (1.0f + avgDistance / 10.0f))));
+
+        wallItem->setBrush(QColor(brightness, brightness, brightness)); // La fou couleur cramoisie sombre (pour ceux qui ont la ref)
     }
 }
 
@@ -576,6 +593,20 @@ void RenderManager::renderWeaponPickups(const std::vector<Vertex>& pickups, cons
     }
 }
 
+void RenderManager::renderFloorAndCeiling()
+{
+    QGraphicsRectItem* ceiling = m_scene->addRect(
+        0, 0, m_screenWidth, m_screenHeight / 2.0f);
+    ceiling->setBrush(QColor(18, 10, 10));
+    ceiling->setPen(Qt::NoPen);
+    ceiling->setZValue(-99999.0f);
+
+    QGraphicsRectItem* floor = m_scene->addRect(
+        0, m_screenHeight / 2.0f, m_screenWidth, m_screenHeight / 2.0f);
+    floor->setBrush(QColor(55, 20, 10));
+    floor->setPen(Qt::NoPen);
+    floor->setZValue(-99999.0f);
+}
 /*
  * --------------------------------------------------------------------------------
  * Utilities
