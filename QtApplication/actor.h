@@ -14,20 +14,25 @@ Modifications:
 
 class Actor{
 private:
+    // Geometry
     Vertex position;
+    float angle;
+
+    // Health
     int health;
     int maxHealth;
+
+    // Status
     bool isAlive;
-    float angle;
+    bool canMove = true;
+    int score = 0;
+
+    // Weapon
+    Weapon* m_weapon = nullptr;
     float EnemyRange = 40.0f;
     float EnemySpeed = 8.0f;
-    float dx = 0;
-    float dy = 0;
-    bool canMove = true;
-    Weapon* m_weapon = nullptr;
-      int score = 0;
 
-    //---Enemy Range---
+    //---Range Enemy Attack---
       bool m_isRanged = false;
       float m_shootCooldown = 3000.0f;
       QElapsedTimer m_shootTimer;
@@ -36,38 +41,47 @@ private:
       QElapsedTimer m_shootAnimTimer;
       float m_shootAnimDuration = 0.2f;
 
-
 public:
     Actor();
-    ~Actor();
-    void move(float deltaX, float deltaY);
-    void takeDamage(int amount);
 
-    // Access to attributes
+    /*
+    * --------------------------------------------------------------------------------
+    * Reading member functions
+    * --------------------------------------------------------------------------------
+    */
     int getHealth() {return health;}
     void setHealth(int h) { health = h;}
     float getAngle() const {return angle;}
     Vertex getPosition() const {return position;}
+    int getScore() const { return score; }
+    Weapon* getWeapon() const {return m_weapon;}
+    int getMaxHealth() const { return maxHealth; }
+
+    /*
+    * --------------------------------------------------------------------------------
+    * Setting member functions
+    * --------------------------------------------------------------------------------
+    */
     void setPosition(Vertex newPos);
     void setAngle(float newAngle);
-    void rotate(float deltaAngle);
     void setPosition(float x, float y);
     void setMovement(bool mouvement);
-    float distancePlayerEnemy(const Actor& E, const Actor& P);
-    void moveEnemy(const Actor& P, float deltaTime);
+    void takeDamage(int amount);
     void setWeapon(Weapon* w);
-    Weapon* getWeapon() const;
-    bool hasWeapon() const;
-    void resetPlayerHealth();
-    int getScore() const { return score; }
+    void setMaxHealth(int h) { maxHealth = h; }
     void addScore(int points) { score += points; }
     void resetScore() { score = 0; }
-    bool isMoving() const { return canMove; }
-    int getMaxHealth() const { return maxHealth; }
-    void setMaxHealth(int h) { maxHealth = h; }
+    void moveEnemy(const Actor& P, float deltaTime);
+    void resetPlayerHealth();
 
-    //---Enemy Range---
-    bool isRanged()const { return m_isRanged;}
+    /*
+    * --------------------------------------------------------------------------------
+    * Status functions
+    * --------------------------------------------------------------------------------
+    */
+    bool isMoving() const { return canMove; }
+
+    //---Range Enemy Attack---
     void setRanged(bool r) { m_isRanged = r;}
     bool canShootProjectile();
     void triggerShootAnim(){m_isShooting = true; m_shootAnimTimer.restart();}

@@ -19,17 +19,11 @@ Actor::Actor()
     isAlive = true;
 }
 
-Actor::~Actor()
-{
-
-}
-
-// Move the actor by a given offset
-void Actor::move(float deltaX, float deltaY)
-{
-    position.x += deltaX;
-    position.y += deltaY;
-}
+/*
+* --------------------------------------------------------------------------------
+* Setting member functions
+* --------------------------------------------------------------------------------
+*/
 
 // Apply damage to the actor
 void Actor::takeDamage(int amount)
@@ -50,33 +44,29 @@ void Actor::setAngle(float a)
     angle = a;
 }
 
-// Rotate the actor by adding to its current angle
-void Actor::rotate(float a)
-{
-    angle += a;
-}
-
-// Set position using x and y
 void Actor::setPosition(float x, float y)
 {
     position.x = x;
     position.y = y;
 }
 
-// --------------------------------------------------
-// Enemy-related functions
-// --------------------------------------------------
-
-// Compute distance between Enemy (E) and Player (P)
-float Actor::distancePlayerEnemy(const Actor& E, const Actor& P)
+void Actor::setMovement(bool movement)
 {
-    dx = P.getPosition().x - E.getPosition().x;
-    dy = P.getPosition().y - E.getPosition().y;
-
-    return std::sqrt(dx * dx + dy * dy);
+    canMove = movement;
 }
 
-// Move enemy toward the player
+void Actor::resetPlayerHealth()
+{
+    health = 5;
+    maxHealth = 5;
+}
+
+void Actor::setPosition(Vertex newPos)
+{
+    position = newPos;
+}
+
+//Enemy pathfinding
 void Actor::moveEnemy(const Actor& Player, float deltaTime)
 {
     // If movement is disabled, do nothing
@@ -112,37 +102,6 @@ void Actor::moveEnemy(const Actor& Player, float deltaTime)
 void Actor::setWeapon(Weapon *w)
 {
     m_weapon = w;
-}
-
-// Get the actor's weapon
-Weapon* Actor::getWeapon() const
-{
-    return m_weapon;
-}
-
-// Check if actor has a weapon
-bool Actor::hasWeapon() const
-{
-    return m_weapon != nullptr;
-}
-
-// Enable or disable movement
-void Actor::setMovement(bool movement)
-{
-    canMove = movement;
-}
-
-// Reset player health to default values
-void Actor::resetPlayerHealth()
-{
-    health = 5;
-    maxHealth = 5;
-}
-
-// Set position using a Vertex struct
-void Actor::setPosition(Vertex newPos)
-{
-    position = newPos;
 }
 
 // --------------------------------------------------

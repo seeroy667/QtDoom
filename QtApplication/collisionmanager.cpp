@@ -9,11 +9,6 @@ Modifications:
 #include "collisionmanager.h"
 #include<QDebug>
 
-void CollisionManager::handleCollisions(std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& verteces, Actor* a)
-{
-    narrowingToCollide(broadedWalls, verteces, a);
-}
-
 void CollisionManager::narrowingToCollide(std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& verteces, Actor* a)
 {
     // First, we check if the player is close enough to collide

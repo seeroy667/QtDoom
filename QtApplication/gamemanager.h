@@ -30,26 +30,27 @@ class GameManager: public QObject
 public:
     GameManager();
     ~GameManager();
-    Actor* getPlayer();
-    Actor* getEnemy();
-    BSP* getBSP();
-    void loadMap(const std::string& filename);
-    void update(float deltaTime, std::vector<Linedef> renderedWalls);
+
+    void restartGame(); // Rests all data
+
+    void loadMap(const std::string& filename); // Loads the map data into the members
+
+    // Update logic
+    void update(float deltaTime);
+
+    /*
+    * --------------------------------------------------------------------------------
+    * Utilities
+    * --------------------------------------------------------------------------------
+    */
+
+    // Enemies
     bool inRadius(Actor *p, Actor *e);
     bool shoot(QPoint mousePos, QSize screenSize);
-    const std::vector<Vertex>& getVerteces() const {return verteces;};
-    const std::vector<Linedef>& getLinedefs() const {return linedefs;};
-    const std::vector<Sector>& getSectors() const {return sectors;};
     void updateVie();
-    Weapon* getWeapon();
-    void restartGame();
-    std::vector<Actor*> getRenderedEnemy();
     void collectAllWalls(Node* node, std::vector<Linedef>& walls);
     void spawnWave(int count);
     bool isWaveClear() const;
-    int getCurrentWave() const {return m_currentWave;}
-    std::vector<Actor*>& getCreatures(){return creatures;}
-    Actor* getBoss();
     bool isBossRenderable();
 
     //Heal
@@ -58,30 +59,56 @@ public:
     void checkHealPickup();
 
     //Projectile
-    const std::vector<Projectile>& getProjectiles() const {return m_projectiles;}
-    const std::vector<Actor*>& getRangedEnemies() const { return m_rangedEnemies; }
-    std::vector<Actor*> getRenderedRangedEnemies();
-    const std::vector<Vertex>& getWeaponPickups() const { return m_weaponPickups; }
     bool playerHasShotgun() const { return m_playerHasShotgun; }
+
+    /*
+    * --------------------------------------------------------------------------------
+    * Member access
+    * --------------------------------------------------------------------------------
+    */
+
+    // Map data
+    const std::vector<Vertex>& getVerteces() const {return verteces;}
+    const std::vector<Linedef>& getLinedefs() const {return linedefs;}
+    const std::vector<Sector>& getSectors() const {return sectors;}
+    BSP* getBSP() {return bsp;}
+
+    // Actors
+    Actor* getPlayer() {return p;}
+    Actor* getEnemy() {return e;}
+    Actor* getBoss() {return m_boss;}
+    const std::vector<Actor*>& getRangedEnemies() const { return m_rangedEnemies; }
+    int getCurrentWave() const {return m_currentWave;}
+    std::vector<Actor*>& getCreatures(){return creatures;}
+    std::vector<Actor*> getRenderedRangedEnemies();
+    std::vector<Actor*> getRenderedEnemy();
+
+    // Shooting
+    const std::vector<Projectile>& getProjectiles() const {return m_projectiles;}
+    const std::vector<Vertex>& getWeaponPickups() const { return m_weaponPickups;}
+    Weapon* getWeapon(){return m_playerWeapon;};
 
 
 private:
+    // Actors
     Actor *p;
     Actor *e;
     std::vector<Actor*> creatures;
     Actor* m_boss = nullptr;
+
+    // Utilities
     void SpawnBoss();
     bool m_bossAlive = false;
     bool m_bossSpawn = false;
-    BSP* bsp = nullptr;
     Weapon* m_playerWeapon = nullptr;
-    MapReader* map;
     CollisionManager* cManager;
 
     // Map data
     std::vector<Vertex> verteces;
     std::vector<Linedef> linedefs;
     std::vector<Sector> sectors;
+    BSP* bsp = nullptr;
+    MapReader* map;
 
     QElapsedTimer m_enemyAttackTimer;
     float m_attackCooldown = 1000.0f;
@@ -98,7 +125,6 @@ private:
     std::vector<Actor*> m_rangedEnemies;
     std::vector<Projectile> m_projectiles;
     void spawnRangedWave(int count, const std::vector<Vertex>& usedPositions);
-    void updateProjectiles(float deltaTime);
     std::vector<Vertex> m_weaponPickups;
     bool m_playerHasShotgun = false;
     void spawnWeaponPickup();
@@ -106,6 +132,18 @@ private:
     int m_shotgunWave = -1;
 
     int bestScore = 0;
+
+    /*
+    * --------------------------------------------------------------------------------
+    * Member update logic
+    * --------------------------------------------------------------------------------
+    */
+    void handleWaveSpawn();
+    void handleEnemies(float deltaTime);
+    void handleCollisions();
+    void updateProjectiles(float deltaTime);
+    void handleRanged(float deltaTime);
+    void handleMelee(float deltaTime);
 
 signals:
     void sigUpdateVie(int value);

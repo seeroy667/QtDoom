@@ -75,12 +75,14 @@ leaderBoard::leaderBoard(QString filename, QWidget *parent)
         "   border-image: url(:/ressources/quitter2.png) 0 0 0 0 stretch stretch;"
         "}"
         );
+    connect(m_menuButton, &QPushButton::clicked, this, &leaderBoard::menuButtonClicked);
+    m_background.load(":/ressources/backgroundClassement.jpg");
 
     // Connect button click to signal
     connect(m_menuButton, &QPushButton::clicked, this, &leaderBoard::menuButtonClicked);
 
     // Load background image
-    m_background.load(":/ressources/backgroundClassement.png");
+    m_background.load(":/ressources/backgroundClassement.jpg");
 }
 
 

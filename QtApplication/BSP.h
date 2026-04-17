@@ -7,6 +7,9 @@ Modifications:
     Date: April 10, 2026
         Author: Donavan Sirois
         Description: Comments and readibility
+    Date: March 25, 2026
+    Author: Mathieu Vincent
+        Description: New methods to handle enemy spawn point search and validity
 */
 
 #ifndef BSP_H

@@ -28,8 +28,8 @@ GamePage::GamePage(QGraphicsView *view, QWidget *parent)
     overButtons.append(over_quitButton);
     connectButtons();
     //stackedWidget->setCurrentWidget(gameOverWidget);
-    m_pauseBackground.load(":/ressources/pause.png");
-    m_gameOverBackground.load(":/ressources/backgroundMort.png");
+    m_pauseBackground.load(":/ressources/pause.jpg");
+    m_gameOverBackground.load(":/ressources/backgroundMort.jpg");
 }
 
 void GamePage::addGameWidget(QGraphicsView *view)

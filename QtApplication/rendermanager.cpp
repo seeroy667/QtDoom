@@ -16,6 +16,11 @@ Modifications:
 #include <algorithm>
 #include <cmath>
 
+/*
+ * --------------------------------------------------------------------------------
+ * Constructer functions
+ * --------------------------------------------------------------------------------
+ */
 RenderManager::RenderManager(QGraphicsScene* scene, int screenWidth, int screenHeight)
 {
     m_focalLength = screenWidth / 2.0f;
@@ -26,6 +31,18 @@ RenderManager::RenderManager(QGraphicsScene* scene, int screenWidth, int screenH
     qDebug() << "Screenwidth" << screenWidth;
     m_screenHeight = screenHeight;
 
+    setTextures();
+
+    columnDepths.resize(screenWidth, std::numeric_limits<float>::infinity());
+    spriteDepths.resize(screenWidth, std::numeric_limits<float>::infinity());
+    m_enemyAnimTimer.start();
+
+    // For occlusion
+    columns.resize(screenWidth);
+}
+
+void RenderManager::setTextures()
+{
     m_wallTexture = QPixmap(":/ressources/temp.jpg");
     m_enemyTexture = QPixmap(":/ressources/Demon5.png");
     m_gunTexture = QPixmap(":/ressources/arme.png");
@@ -46,13 +63,13 @@ RenderManager::RenderManager(QGraphicsScene* scene, int screenWidth, int screenH
     m_shotgunFrames[1]   = QPixmap(":/ressources/tir2.png");
     m_shotgunFrames[2]   = QPixmap(":/ressources/tir3.png");
     m_shotgunFrames[3]   = QPixmap(":/ressources/tir4.png");
-    columnDepths.resize(screenWidth, std::numeric_limits<float>::infinity());
-    spriteDepths.resize(screenWidth, std::numeric_limits<float>::infinity());
-    m_enemyAnimTimer.start();
-
-    // For occlusion
-    columns.resize(screenWidth);
 }
+
+/*
+ * --------------------------------------------------------------------------------
+ * Render
+ * --------------------------------------------------------------------------------
+ */
 
 void RenderManager::render(Actor m_player,
                            const std::vector<Actor*>& enemies,
@@ -167,7 +184,10 @@ void RenderManager::render(Actor m_player,
     }
 }
 
-void RenderManager::renderWall(const Linedef& wall, const std::vector<Vertex>& verteces, const Actor& player, const std::vector<Sector>& sectors)
+void RenderManager::renderWall(const Linedef& wall,
+                               const std::vector<Vertex>& verteces,
+                               const Actor& player,
+                               const std::vector<Sector>& sectors)
 {
     Vertex p1 = coordPlayer(verteces[wall.start], player);
     Vertex p2 = coordPlayer(verteces[wall.end], player);
@@ -263,7 +283,8 @@ void RenderManager::renderWall(const Linedef& wall, const std::vector<Vertex>& v
     }
 }
 
-Vertex RenderManager::coordPlayer(const Vertex& point, const Actor& player)
+Vertex RenderManager::coordPlayer(const Vertex& point,
+                                  const Actor& player)
 {
     Vertex playerPos = player.getPosition();
     float anglePlayer = player.getAngle();
@@ -280,49 +301,6 @@ Vertex RenderManager::coordPlayer(const Vertex& point, const Actor& player)
 
     return camera;
 }
-
-bool RenderManager::clipWall(Vertex& p1, Vertex& p2)
-{
-    if (p1.y < distanceMin && p2.y < distanceMin)
-        return false;
-
-    if (p1.y < distanceMin)
-    {
-        float t = (distanceMin - p1.y) / (p2.y - p1.y);
-        p1.x = p1.x + t * (p2.x - p1.x);
-        p1.y = distanceMin;
-    }
-
-    if (p2.y < distanceMin)
-    {
-        float t = (distanceMin - p2.y) / (p1.y - p2.y);
-        p2.x = p2.x + t * (p1.x - p2.x);
-        p2.y = distanceMin;
-    }
-
-    return true;
-}
-
-
-Vertex RenderManager::projectToScreen(const Vertex& cameraPoint)
-{
-    Vertex screen;
-    screen.x = (cameraPoint.x / cameraPoint.y) * m_focalLength
-               + m_screenWidth / 2.0f;
-    screen.y = 0;
-    return screen;
-}
-
-
-float RenderManager::projectHeight(float worldHeight, float distance)
-{
-    float eyeHeight = 2.5f;
-    float relativeHeight = worldHeight - eyeHeight;
-    float screenHeight = (relativeHeight / distance) * m_focalLength;
-
-    return m_screenHeight / 2.0f - screenHeight;
-}
-
 
 void RenderManager::renderActor(Actor* actor, const Actor player, QColor color, float sizeMultiplier, bool isRanged)
 {
@@ -446,13 +424,6 @@ void RenderManager::renderActor(Actor* actor, const Actor player, QColor color, 
     }
 
 }
-void RenderManager::renderRay(float targetScreenX, float targetScreenY, int frames)
-{
-    m_rayFramesLeft = frames;
-    m_rayTargetX = targetScreenX;
-    m_rayTargetY = targetScreenY;
-
-}
 
 void RenderManager::renderGun()
 {
@@ -481,42 +452,11 @@ void RenderManager::renderGun()
     else
         toRender = m_hasShotgun ? m_shotgunIdleTexture : m_gunFrames[0];
 
-   QPixmap scaled = toRender.scaled(gunWidth, gunHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    QPixmap scaled = toRender.scaled(gunWidth, gunHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     float gunX = (m_screenWidth / 2.0f) - (scaled.width() / 2.0f);
     float gunY = (m_screenHeight - scaled.height());
     QGraphicsPixmapItem* gunItem = m_scene->addPixmap(scaled);
     gunItem->setPos(gunX, gunY);
-}
-
-void RenderManager::triggerGunAnim()
-{
-    m_gunFrame = 0;
-    m_gunAnimating = true;
-    m_gunAnimTimer.restart();
-}
-
-
-void RenderManager::updateScreenSize(int width, int height)
-{
-    m_screenWidth = width;
-    m_screenHeight = height;
-    m_focalLength = width / 2.0f;
-    columns.resize(width);
-    columnDepths.resize(width, std::numeric_limits<float>::infinity());
-    spriteDepths.resize(width, std::numeric_limits<float>::infinity());
-}
-
-
-std::vector<Linedef> RenderManager::getRenderedWalls()
-{
-    return renderedWalls;
-}
-
-QGraphicsView* RenderManager::getView() const
-{
-    if (m_scene && !m_scene->views().isEmpty())
-        return m_scene->views().first();
-    return nullptr;
 }
 
 void RenderManager::renderHeals(const std::vector<Vertex>& heals, const Actor& player)
@@ -571,10 +511,6 @@ void RenderManager::renderHeals(const std::vector<Vertex>& heals, const Actor& p
         vBar->setPen(Qt::NoPen);
         vBar->setZValue(zVal);
     }
-}
-void RenderManager::setShotgunMode(bool hasShotgun)
-{
-    m_hasShotgun = hasShotgun;
 }
 
 void RenderManager::renderWeaponPickups(const std::vector<Vertex>& pickups, const Actor& player)
@@ -638,4 +574,79 @@ void RenderManager::renderWeaponPickups(const std::vector<Vertex>& pickups, cons
             item->setBrush(QColor(200, 150, 50));
         }
     }
+}
+
+/*
+ * --------------------------------------------------------------------------------
+ * Utilities
+ * --------------------------------------------------------------------------------
+ */
+
+bool RenderManager::clipWall(Vertex& p1, Vertex& p2)
+{
+    if (p1.y < distanceMin && p2.y < distanceMin)
+        return false;
+
+    if (p1.y < distanceMin)
+    {
+        float t = (distanceMin - p1.y) / (p2.y - p1.y);
+        p1.x = p1.x + t * (p2.x - p1.x);
+        p1.y = distanceMin;
+    }
+
+    if (p2.y < distanceMin)
+    {
+        float t = (distanceMin - p2.y) / (p1.y - p2.y);
+        p2.x = p2.x + t * (p1.x - p2.x);
+        p2.y = distanceMin;
+    }
+
+    return true;
+}
+
+Vertex RenderManager::projectToScreen(const Vertex& cameraPoint)
+{
+    Vertex screen;
+    screen.x = (cameraPoint.x / cameraPoint.y) * m_focalLength
+               + m_screenWidth / 2.0f;
+    screen.y = 0;
+    return screen;
+}
+
+float RenderManager::projectHeight(float worldHeight, float distance)
+{
+    float eyeHeight = 2.5f;
+    float relativeHeight = worldHeight - eyeHeight;
+    float screenHeight = (relativeHeight / distance) * m_focalLength;
+
+    return m_screenHeight / 2.0f - screenHeight;
+}
+
+void RenderManager::triggerGunAnim()
+{
+    m_gunFrame = 0;
+    m_gunAnimating = true;
+    m_gunAnimTimer.restart();
+}
+
+void RenderManager::updateScreenSize(int width, int height)
+{
+    m_screenWidth = width;
+    m_screenHeight = height;
+    m_focalLength = width / 2.0f;
+    columns.resize(width);
+    columnDepths.resize(width, std::numeric_limits<float>::infinity());
+    spriteDepths.resize(width, std::numeric_limits<float>::infinity());
+}
+
+QGraphicsView* RenderManager::getView() const
+{
+    if (m_scene && !m_scene->views().isEmpty())
+        return m_scene->views().first();
+    return nullptr;
+}
+
+void RenderManager::setShotgunMode(bool hasShotgun)
+{
+    m_hasShotgun = hasShotgun;
 }

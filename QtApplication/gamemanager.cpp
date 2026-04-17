@@ -13,19 +13,47 @@ GameManager::GameManager() {
     map = new MapReader();
 
     cManager = nullptr;
-
 }
 
+GameManager::~GameManager()
+{
+    delete p;
+    delete e;
+    delete map;
+    delete bsp;
+    delete m_playerWeapon;
+    delete cManager;
+
+    if (m_boss)
+    {
+        delete m_boss;
+    }
+
+    for (Actor* a : m_rangedEnemies) delete a;
+    m_rangedEnemies.clear();
+    m_projectiles.clear();
+
+
+    for (Actor* a : creatures) delete a;
+    creatures.clear();
+}
+
+// Resets all data to its initial value
 void GameManager::restartGame()
 {
+    // Reset player
     p->setPosition(0.0f, 0.0f);
     p->setAngle(0.0f);
     p->getWeapon()->resetGameAmmo();
     p->resetPlayerHealth();
     p->resetScore();
     updateVie();
+
+    // Reset heal packs
     m_healPickups.clear();
     m_lastHealScore = 0;
+
+    // Reset waves and enemies
     m_currentWave = 0;
     m_waveActive = false;
     for (Actor* a : m_rangedEnemies) delete a;
@@ -40,26 +68,18 @@ void GameManager::restartGame()
     }
     m_bossAlive = false;
     m_bossSpawn = false;
+
+    // Reset weapons
     m_weaponPickups.clear();
     m_playerHasShotgun = false;
     m_shotgunWave = -1;
-
     delete m_playerWeapon;
     m_playerWeapon = new Weapon(1, 1000.0f, 10.0f, 10, 2.0f);
     p->setWeapon(m_playerWeapon);
     emit sigWeaponChanged();
 }
 
-Actor* GameManager::getPlayer()
-{
-    return p;
-}
-
-Actor* GameManager::getEnemy()
-{
-    return e;
-}
-
+// Loads a map data into the class's members. Also builds the BSP tree.
 void GameManager::loadMap(const std::string& filename)
 {
     if (!map->load(filename))
@@ -72,6 +92,7 @@ void GameManager::loadMap(const std::string& filename)
     linedefs = map->getLinedefs();
     sectors = map->getSectors();
 
+    // When loading map, we will build the BSP tree
     bsp = new BSP();
 
     m_playerWeapon = new Weapon(1, 1000.0f, 10.0f, 10, 2.0f);
@@ -83,87 +104,24 @@ void GameManager::loadMap(const std::string& filename)
     m_spawnPoints = bsp->collectValidSpawnPoints(verteces, 5.0f);
 }
 
-BSP* GameManager::getBSP()
+/*
+ * --------------------------------------------------------------------------------
+ * Code for updating the game data
+ * --------------------------------------------------------------------------------
+ */
+void GameManager::update(float deltaTime)
 {
-    return bsp;
+    handleWaveSpawn();
+
+    // Loot spawn
+    checkHealPickup();
+    checkWeaponPickup();
+
+    handleEnemies(deltaTime);
+    handleCollisions();
 }
 
-void GameManager::spawnWave(int count)
-{
-    if(m_spawnPoints.empty())
-    {
-        qDebug() << "Aucun spawn point sur la map";
-        return;
-    }
-
-    std::vector<Vertex> shuffled = m_spawnPoints;
-    for(int i = (int)shuffled.size() - 1; i > 0; i--)
-    {
-        int j = rand() % (i+1);
-        std::swap(shuffled[i], shuffled[j]);
-    }
-
-    int spawned = 0;
-    std::vector<Vertex> usedPositions;
-
-    for(const Vertex& pos : shuffled)
-    {
-        if(spawned >= count) break;
-
-        float dx = pos.x - p->getPosition().x;
-        float dy = pos.y - p->getPosition().y;
-        if(m_currentWave ==1)
-        {
-             if (std::sqrt(dx*dx + dy*dy) < 60.0f) continue;
-        }
-        if (std::sqrt(dx*dx + dy*dy) < 20.0f) continue;
-
-        Actor* enemy = new Actor();
-        enemy->setPosition(pos.x, pos.y);
-        enemy->setAngle(0.0f);
-        enemy->setHealth(3);
-        enemy->setMaxHealth(3);
-        creatures.push_back(enemy);
-        usedPositions.push_back(pos);
-        spawned++;
-    }
-
-
-    if(spawned < count && !usedPositions.empty())
-    {
-        int i = 0;
-        while(spawned < count)
-        {
-            Vertex pos = usedPositions[i % usedPositions.size()];
-            Actor* enemy = new Actor();
-            enemy->setPosition(pos.x, pos.y);
-            enemy->setAngle(0.0f);
-            creatures.push_back(enemy);
-            spawned++;
-            i++;
-        }
-    }
-    for (Actor* a : m_rangedEnemies) delete a;
-    m_rangedEnemies.clear();
-    m_projectiles.clear();
-
-    if (m_currentWave == 2 || m_currentWave == 5 || m_currentWave == 9 && !m_playerHasShotgun)
-        spawnWeaponPickup();
-
-    spawnRangedWave(1 + m_currentWave, usedPositions);
-
-}
-
-bool GameManager::isWaveClear() const
-{
-    for(Actor* e : creatures)
-        if(e->getHealth() > 0) return false;
-    for (Actor* e : m_rangedEnemies)
-        if (e->getHealth() > 0) return false;
-    return true;
-}
-
-void GameManager::update(float deltaTime, std::vector<Linedef> renderedWalls)
+void GameManager::handleWaveSpawn()
 {
     // --- Vagues ---
     if (!m_waveActive)
@@ -207,15 +165,123 @@ void GameManager::update(float deltaTime, std::vector<Linedef> renderedWalls)
             m_waveActive = false;
         }
     }
-    //---Spawn de Vie---
-    checkHealPickup();
+}
 
-    //---ShotGun---
-    checkWeaponPickup();
-
-    //---mise a jour creature distance---
+void GameManager::handleEnemies(float deltaTime)
+{
     updateProjectiles(deltaTime);
+    handleRanged(deltaTime);
+    handleMelee(deltaTime);
+}
 
+void GameManager::updateProjectiles(float deltaTime)
+{
+    for(Projectile& proj : m_projectiles)
+    {
+        if(!proj.active) continue;
+
+        float speed = 15.0f;
+        proj.position.x += proj.dirX * speed * deltaTime;
+        proj.position.y += proj.dirY * speed * deltaTime;
+        proj.distanceTraveled += speed * deltaTime;
+
+        if(proj.distanceTraveled >= proj.maxDistance)
+        {
+            proj.active = false;
+            continue;
+        }
+
+        // --- NOUVEAU : collision projectile avec les murs ---
+        std::vector<Linedef> nearWalls;
+        bsp->actorToWallBroading(proj.position, nearWalls, verteces);
+
+        bool hitWall = false;
+        for (const Linedef& wall : nearWalls)
+        {
+            if (wall.twoSided) continue; // mur transparent
+
+            const Vertex& wStart = verteces[wall.start];
+            const Vertex& wEnd   = verteces[wall.end];
+
+            // Position précédente du projectile
+            Vertex prevPos;
+            prevPos.x = proj.position.x - proj.dirX * speed * deltaTime;
+            prevPos.y = proj.position.y - proj.dirY * speed * deltaTime;
+
+            // Vérifie si le segment [prevPos -> proj.position] croise le mur
+            float dx1 = proj.position.x - prevPos.x;
+            float dy1 = proj.position.y - prevPos.y;
+            float dx2 = wEnd.x - wStart.x;
+            float dy2 = wEnd.y - wStart.y;
+
+            float denom = dx1 * dy2 - dy1 * dx2;
+            if (std::abs(denom) < 0.0001f) continue; // parallèles
+
+            float t = ((wStart.x - prevPos.x) * dy2 - (wStart.y - prevPos.y) * dx2) / denom;
+            float s = ((wStart.x - prevPos.x) * dy1 - (wStart.y - prevPos.y) * dx1) / denom;
+
+            if (t >= 0.0f && t <= 1.0f && s >= 0.0f && s <= 1.0f)
+            {
+                proj.active = false;
+                hitWall = true;
+                break;
+            }
+        }
+        if (hitWall) continue;
+
+        float dx = proj.position.x - p->getPosition().x;
+        float dy = proj.position.y - p->getPosition().y;
+        float distSq = dx*dx + dy*dy;
+
+        if(distSq < (2.5f * 2.5f))
+        {
+            p->takeDamage(1);
+            updateVie();
+            proj.active = false;
+            if(p->getHealth() < 1)
+                emit playerDead();
+            continue;
+        }
+    }
+    m_projectiles.erase(std::remove_if(m_projectiles.begin(), m_projectiles.end(),[](const Projectile& p) { return !p.active;}), m_projectiles.end());
+
+    for(Actor* enemy : m_rangedEnemies)
+    {
+        if(enemy->getHealth() <= 0) continue;
+
+        float dx = p->getPosition().x - enemy->getPosition().x;
+        float dy = p->getPosition().y - enemy->getPosition().y;
+        float dist = std::sqrt(dx*dx + dy*dy);
+
+        if (dist > 30.0f) continue;
+
+        if (enemy->canShootProjectile())
+        {
+
+            if (!bsp->hasLineOfSight(enemy->getPosition(), p->getPosition(), verteces))
+                continue;
+
+            enemy->triggerShootAnim();
+            Vertex ePos = enemy->getPosition();
+            Vertex pPos = p->getPosition();
+
+            float dx = pPos.x - ePos.x;
+            float dy = pPos.y - ePos.y;
+            float len = std::sqrt(dx*dx + dy*dy);
+            if (len < 0.001f) continue;
+
+            Projectile proj;
+            proj.position.x = ePos.x + (dx/len) * 2.0f;
+            proj.position.y = ePos.y + (dy/len) * 2.0f;
+            proj.dirX = dx / len;
+            proj.dirY = dy / len;
+            m_projectiles.push_back(proj);
+        }
+    }
+}
+
+void GameManager::handleRanged(float deltaTime)
+{
     for (Actor* enemy : m_rangedEnemies)
     {
         if (enemy->getHealth() <= 0) continue;
@@ -241,12 +307,10 @@ void GameManager::update(float deltaTime, std::vector<Linedef> renderedWalls)
         bsp->actorToWallBroading(enemy->getPosition(), enemyWalls, verteces);
         cManager->narrowingToCollide(enemyWalls, verteces, enemy);
     }
+}
 
-    // --- Collision joueur ---
-    std::vector<Linedef> broadedWalls;
-    bsp->actorToWallBroading(p->getPosition(), broadedWalls, verteces);
-    cManager->narrowingToCollide(broadedWalls, verteces, p);
-
+void GameManager::handleMelee(float deltaTime)
+{
     // --- Mise à jour creatures melee---
     for (Actor* enemy : creatures)
     {
@@ -301,7 +365,94 @@ void GameManager::update(float deltaTime, std::vector<Linedef> renderedWalls)
     }
 }
 
+void GameManager::handleCollisions()
+{
+    std::vector<Linedef> broadedWalls;
+    bsp->actorToWallBroading(p->getPosition(), broadedWalls, verteces);
+    cManager->narrowingToCollide(broadedWalls, verteces, p);
+}
 
+
+/*
+ * --------------------------------------------------------------------------------
+ * Utilities
+ * --------------------------------------------------------------------------------
+ */
+
+void GameManager::spawnWave(int count)
+{
+    if(m_spawnPoints.empty())
+    {
+        qDebug() << "Aucun spawn point sur la map";
+        return;
+    }
+
+    std::vector<Vertex> shuffled = m_spawnPoints;
+    for(int i = (int)shuffled.size() - 1; i > 0; i--)
+    {
+        int j = rand() % (i+1);
+        std::swap(shuffled[i], shuffled[j]);
+    }
+
+    int spawned = 0;
+    std::vector<Vertex> usedPositions;
+
+    for(const Vertex& pos : shuffled)
+    {
+        if(spawned >= count) break;
+
+        float dx = pos.x - p->getPosition().x;
+        float dy = pos.y - p->getPosition().y;
+        if(m_currentWave ==1)
+        {
+            if (std::sqrt(dx*dx + dy*dy) < 60.0f) continue;
+        }
+        if (std::sqrt(dx*dx + dy*dy) < 20.0f) continue;
+
+        Actor* enemy = new Actor();
+        enemy->setPosition(pos.x, pos.y);
+        enemy->setAngle(0.0f);
+        enemy->setHealth(3);
+        enemy->setMaxHealth(3);
+        creatures.push_back(enemy);
+        usedPositions.push_back(pos);
+        spawned++;
+    }
+
+
+    if(spawned < count && !usedPositions.empty())
+    {
+        int i = 0;
+        while(spawned < count)
+        {
+            Vertex pos = usedPositions[i % usedPositions.size()];
+            Actor* enemy = new Actor();
+            enemy->setPosition(pos.x, pos.y);
+            enemy->setAngle(0.0f);
+            creatures.push_back(enemy);
+            spawned++;
+            i++;
+        }
+    }
+    for (Actor* a : m_rangedEnemies) delete a;
+    m_rangedEnemies.clear();
+    m_projectiles.clear();
+
+    if (m_currentWave == 2 || m_currentWave == 5 || m_currentWave == 9 && !m_playerHasShotgun)
+        spawnWeaponPickup();
+
+    spawnRangedWave(1 + m_currentWave, usedPositions);
+
+}
+
+bool GameManager::isWaveClear() const
+{
+    for(Actor* e : creatures)
+        if(e->getHealth() > 0) return false;
+    for (Actor* e : m_rangedEnemies)
+        if (e->getHealth() > 0) return false;
+    return true;
+}
 
 bool GameManager::inRadius(Actor* p, Actor* e)
 {
@@ -312,6 +463,160 @@ bool GameManager::inRadius(Actor* p, Actor* e)
     float distance = (dx * dx) + (dy * dy);
     if (distance < (radius * radius)) return true;
     return false;
+}
+
+void GameManager::collectAllWalls(Node* node, std::vector<Linedef>& walls)
+{
+    if (!node) return;
+
+    walls.push_back(node->partition);
+    collectAllWalls(node->front, walls);
+    collectAllWalls(node->back, walls);
+}
+
+void GameManager::SpawnBoss()
+{
+    if(m_spawnPoints.empty())
+    {
+        qDebug() << "Aucun spawn point pour le boss";
+        return;
+    }
+    Vertex bossSpawn = m_spawnPoints[0];
+    for(const Vertex& pos : m_spawnPoints)
+    {
+        float dx = pos.x - p->getPosition().x;
+        float dy = pos.y - p->getPosition().y;
+        if(std::sqrt(dx*dx + dy*dy) > 8.0f)
+        {
+            bossSpawn = pos;
+            break;
+        }
+    }
+    m_boss = new Actor();
+    m_boss->setHealth(20);
+    m_boss->setMaxHealth(20);
+    m_boss->setAngle(0.0f);
+    m_boss->setPosition(bossSpawn.x, bossSpawn.y);
+    m_bossAlive = true;
+    m_bossSpawn = true;
+}
+
+void GameManager::spawnWeaponPickup()
+{
+    if (m_spawnPoints.empty()) return;
+    // Spawn à un point aléatoire loin du joueur
+    for (const Vertex& pos : m_spawnPoints)
+    {
+        float dx = pos.x - p->getPosition().x;
+        float dy = pos.y - p->getPosition().y;
+        if (std::sqrt(dx*dx + dy*dy) > 8.0f)
+        {
+            m_weaponPickups.push_back(pos);
+            break;
+        }
+    }
+}
+
+void GameManager::checkWeaponPickup()
+{
+    if (m_weaponPickups.empty()) return;
+    Vertex playerPos = p->getPosition();
+    float pickupRadius = 5.0f;
+
+    for (int i = (int)m_weaponPickups.size() - 1; i >= 0; i--)
+    {
+        float dx = playerPos.x - m_weaponPickups[i].x;
+        float dy = playerPos.y - m_weaponPickups[i].y;
+        if ((dx*dx + dy*dy) < (pickupRadius * pickupRadius))
+        {
+            delete m_playerWeapon;
+            m_playerWeapon = new Weapon(5, 1000.0f, 2.0f, 10, 2.0f);
+            p->setWeapon(m_playerWeapon);
+            m_playerHasShotgun = true;
+            m_shotgunWave = m_currentWave;
+            m_weaponPickups.erase(m_weaponPickups.begin() + i);
+            emit sigWeaponChanged();
+        }
+    }
+}
+
+void GameManager::spawnHealIfNeeded()
+{
+    int score = p->getScore();
+    if(score > 0 && score/500 > m_lastHealScore/500)
+    {
+        m_lastHealScore = score;
+        int index = rand() % m_spawnPoints.size();
+        m_healPickups.push_back(m_spawnPoints[index]);
+    }
+}
+
+void GameManager::checkHealPickup()
+{
+    Vertex playerPos = p->getPosition();
+    float pickUpRadius = 5.0f;
+
+    for(int i = (int)m_healPickups.size() - 1; i>=0; i--)
+    {
+        float dx = playerPos.x - m_healPickups[i].x;
+        float dy = playerPos.y - m_healPickups[i].y;
+        if((dx*dx + dy*dy) < (pickUpRadius * pickUpRadius))
+        {
+            p->setHealth(p->getHealth()+1);
+            updateVie();
+            m_healPickups.erase(m_healPickups.begin() + i);
+        }
+    }
+}
+
+void GameManager::spawnRangedWave(int count, const std::vector<Vertex>& usedPositions)
+{
+    if (m_spawnPoints.empty()) return;
+
+    std::vector<Vertex> shuffled = m_spawnPoints;
+    for (int i = (int)shuffled.size()-1; i > 0; i--)
+    {
+        int j = rand() % (i + 1);
+        std::swap(shuffled[i], shuffled[j]);
+    }
+
+    int spawned = 0;
+    for (const Vertex& pos : shuffled)
+    {
+        if (spawned >= count) break;
+
+
+        float dx = pos.x - p->getPosition().x;
+        float dy = pos.y - p->getPosition().y;
+        if(m_currentWave == 1)
+        {
+            if (std::sqrt(dx*dx + dy*dy) < 60.0f) continue;
+        }
+        if (std::sqrt(dx*dx + dy*dy) < 20.0f) continue;
+
+        // Vérifier que la position n'est pas déjà utilisée par un ennemi mêlée
+        bool alreadyUsed = false;
+        for (const Vertex& used : usedPositions)
+        {
+            float ux = pos.x - used.x;
+            float uy = pos.y - used.y;
+            if ((ux*ux + uy*uy) < 1.0f)
+            {
+                alreadyUsed = true;
+                break;
+            }
+        }
+        if (alreadyUsed) continue;
+
+        Actor* enemy = new Actor();
+        enemy->setPosition(pos.x, pos.y);
+        enemy->setAngle(0.0f);
+        enemy->setRanged(true);
+        enemy->setHealth(3);
+        enemy->setMaxHealth(3);
+        m_rangedEnemies.push_back(enemy);
+        spawned++;
+    }
 }
 
 bool GameManager::shoot(QPoint mousePos, QSize screenSize)
@@ -422,27 +727,33 @@ bool GameManager::shoot(QPoint mousePos, QSize screenSize)
     return true;
 }
 
+bool GameManager::isBossRenderable()
+{
+    return m_bossAlive && m_boss && m_boss->getHealth() > 0;
+}
+
+std::vector<Actor*> GameManager::getRenderedRangedEnemies()
+{
+    std::vector<Actor*> result;
+    for (Actor* enemy : m_rangedEnemies)
+    {
+        if (enemy->getHealth() <= 0) continue;
+        if (bsp->enemyRendering(p->getPosition(), enemy->getPosition(), verteces))
+            result.push_back(enemy);
+    }
+    return result;
+}
+
+/*
+ * --------------------------------------------------------------------------------
+ * Member access
+ * --------------------------------------------------------------------------------
+ */
 void GameManager::updateVie()
 {
     int vie=p->getHealth();
     emit sigUpdateVie(vie);
 }
-
-Weapon* GameManager::getWeapon()
-{
-    return m_playerWeapon;
-}
-
-
-void GameManager::collectAllWalls(Node* node, std::vector<Linedef>& walls)
-{
-    if (!node) return;
-
-    walls.push_back(node->partition);
-    collectAllWalls(node->front, walls);
-    collectAllWalls(node->back, walls);
-}
-
 
 std::vector<Actor*> GameManager::getRenderedEnemy()
 {
@@ -458,304 +769,15 @@ std::vector<Actor*> GameManager::getRenderedEnemy()
     return enemies;
 }
 
-
-void GameManager::SpawnBoss()
-{
-    if(m_spawnPoints.empty())
-    {
-        qDebug() << "Aucun spawn point pour le boss";
-        return;
-    }
-    Vertex bossSpawn = m_spawnPoints[0];
-    for(const Vertex& pos : m_spawnPoints)
-    {
-        float dx = pos.x - p->getPosition().x;
-        float dy = pos.y - p->getPosition().y;
-        if(std::sqrt(dx*dx + dy*dy) > 8.0f)
-        {
-            bossSpawn = pos;
-            break;
-        }
-    }
-    m_boss = new Actor();
-    m_boss->setHealth(20);
-    m_boss->setMaxHealth(20);
-    m_boss->setAngle(0.0f);
-    m_boss->setPosition(bossSpawn.x, bossSpawn.y);
-    m_bossAlive = true;
-    m_bossSpawn = true;
-}
-Actor* GameManager::getBoss()
-{
-    return m_boss;
-}
-
-bool GameManager::isBossRenderable()
-{
-    return m_bossAlive && m_boss && m_boss->getHealth() > 0;
-}
-
-void GameManager::spawnHealIfNeeded()
-{
-    int score = p->getScore();
-    if(score > 0 && score/500 > m_lastHealScore/500)
-    {
-        m_lastHealScore = score;
-        int index = rand() % m_spawnPoints.size();
-        m_healPickups.push_back(m_spawnPoints[index]);
-    }
-}
-void GameManager::checkHealPickup()
-{
-    Vertex playerPos = p->getPosition();
-    float pickUpRadius = 5.0f;
-
-    for(int i = (int)m_healPickups.size() - 1; i>=0; i--)
-    {
-        float dx = playerPos.x - m_healPickups[i].x;
-        float dy = playerPos.y - m_healPickups[i].y;
-        if((dx*dx + dy*dy) < (pickUpRadius * pickUpRadius))
-        {
-            p->setHealth(p->getHealth()+1);
-            updateVie();
-            m_healPickups.erase(m_healPickups.begin() + i);
-        }
-    }
-}
-
-void GameManager::spawnRangedWave(int count, const std::vector<Vertex>& usedPositions)
-{
-    if (m_spawnPoints.empty()) return;
-
-    std::vector<Vertex> shuffled = m_spawnPoints;
-    for (int i = (int)shuffled.size()-1; i > 0; i--)
-    {
-        int j = rand() % (i + 1);
-        std::swap(shuffled[i], shuffled[j]);
-    }
-
-    int spawned = 0;
-    for (const Vertex& pos : shuffled)
-    {
-        if (spawned >= count) break;
-
-
-        float dx = pos.x - p->getPosition().x;
-        float dy = pos.y - p->getPosition().y;
-        if(m_currentWave == 1)
-        {
-            if (std::sqrt(dx*dx + dy*dy) < 60.0f) continue;
-        }
-        if (std::sqrt(dx*dx + dy*dy) < 20.0f) continue;
-
-        // Vérifier que la position n'est pas déjà utilisée par un ennemi mêlée
-        bool alreadyUsed = false;
-        for (const Vertex& used : usedPositions)
-        {
-            float ux = pos.x - used.x;
-            float uy = pos.y - used.y;
-            if ((ux*ux + uy*uy) < 1.0f)
-            {
-                alreadyUsed = true;
-                break;
-            }
-        }
-        if (alreadyUsed) continue;
-
-        Actor* enemy = new Actor();
-        enemy->setPosition(pos.x, pos.y);
-        enemy->setAngle(0.0f);
-        enemy->setRanged(true);
-        enemy->setHealth(3);
-        enemy->setMaxHealth(3);
-        m_rangedEnemies.push_back(enemy);
-        spawned++;
-    }
-}
-
-void GameManager::updateProjectiles(float deltaTime)
-{
-    for(Projectile& proj : m_projectiles)
-    {
-        if(!proj.active) continue;
-
-        float speed = 15.0f;
-        proj.position.x += proj.dirX * speed * deltaTime;
-        proj.position.y += proj.dirY * speed * deltaTime;
-        proj.distanceTraveled += speed * deltaTime;
-
-        if(proj.distanceTraveled >= proj.maxDistance)
-        {
-            proj.active = false;
-            continue;
-        }
-
-        // --- NOUVEAU : collision projectile avec les murs ---
-        std::vector<Linedef> nearWalls;
-        bsp->actorToWallBroading(proj.position, nearWalls, verteces);
-
-        bool hitWall = false;
-        for (const Linedef& wall : nearWalls)
-        {
-            if (wall.twoSided) continue; // mur transparent
-
-            const Vertex& wStart = verteces[wall.start];
-            const Vertex& wEnd   = verteces[wall.end];
-
-            // Position précédente du projectile
-            Vertex prevPos;
-            prevPos.x = proj.position.x - proj.dirX * speed * deltaTime;
-            prevPos.y = proj.position.y - proj.dirY * speed * deltaTime;
-
-            // Vérifie si le segment [prevPos -> proj.position] croise le mur
-            float dx1 = proj.position.x - prevPos.x;
-            float dy1 = proj.position.y - prevPos.y;
-            float dx2 = wEnd.x - wStart.x;
-            float dy2 = wEnd.y - wStart.y;
-
-            float denom = dx1 * dy2 - dy1 * dx2;
-            if (std::abs(denom) < 0.0001f) continue; // parallèles
-
-            float t = ((wStart.x - prevPos.x) * dy2 - (wStart.y - prevPos.y) * dx2) / denom;
-            float s = ((wStart.x - prevPos.x) * dy1 - (wStart.y - prevPos.y) * dx1) / denom;
-
-            if (t >= 0.0f && t <= 1.0f && s >= 0.0f && s <= 1.0f)
-            {
-                proj.active = false;
-                hitWall = true;
-                break;
-            }
-        }
-        if (hitWall) continue;
-
-        float dx = proj.position.x - p->getPosition().x;
-        float dy = proj.position.y - p->getPosition().y;
-        float distSq = dx*dx + dy*dy;
-
-        if(distSq < (2.5f * 2.5f))
-        {
-            p->takeDamage(1);
-            updateVie();
-            proj.active = false;
-            if(p->getHealth() < 1)
-                emit playerDead();
-            continue;
-        }
-    }
-    m_projectiles.erase(std::remove_if(m_projectiles.begin(), m_projectiles.end(),[](const Projectile& p) { return !p.active;}), m_projectiles.end());
-
-    for(Actor* enemy : m_rangedEnemies)
-    {
-        if(enemy->getHealth() <= 0) continue;
-
-        float dx = p->getPosition().x - enemy->getPosition().x;
-        float dy = p->getPosition().y - enemy->getPosition().y;
-        float dist = std::sqrt(dx*dx + dy*dy);
-
-        if (dist > 30.0f) continue;
-
-        if (enemy->canShootProjectile())
-        {
-
-            if (!bsp->hasLineOfSight(enemy->getPosition(), p->getPosition(), verteces))
-                continue;
-
-            enemy->triggerShootAnim();
-            Vertex ePos = enemy->getPosition();
-            Vertex pPos = p->getPosition();
-
-            float dx = pPos.x - ePos.x;
-            float dy = pPos.y - ePos.y;
-            float len = std::sqrt(dx*dx + dy*dy);
-            if (len < 0.001f) continue;
-
-            Projectile proj;
-            proj.position.x = ePos.x + (dx/len) * 2.0f;
-            proj.position.y = ePos.y + (dy/len) * 2.0f;
-            proj.dirX = dx / len;
-            proj.dirY = dy / len;
-            m_projectiles.push_back(proj);
-        }
-    }
-}
-std::vector<Actor*> GameManager::getRenderedRangedEnemies()
-{
-    std::vector<Actor*> result;
-    for (Actor* enemy : m_rangedEnemies)
-    {
-        if (enemy->getHealth() <= 0) continue;
-        if (bsp->enemyRendering(p->getPosition(), enemy->getPosition(), verteces))
-            result.push_back(enemy);
-    }
-    return result;
-}
-
+/*
+* --------------------------------------------------------------------------------
+* Slots
+* --------------------------------------------------------------------------------
+*/
 
 void GameManager::giveScore()
 {
     emit scoreResult(bestScore);
-}
-
-GameManager::~GameManager()
-{
-    delete p;
-    delete e;
-    delete map;
-    delete bsp;
-    delete m_playerWeapon;
-    delete cManager;
-
-    if (m_boss)
-    {
-        delete m_boss;
-    }
-
-    for (Actor* a : m_rangedEnemies) delete a;
-    m_rangedEnemies.clear();
-    m_projectiles.clear();
-
-
-    for (Actor* a : creatures) delete a;
-    creatures.clear();
-}
-
-void GameManager::spawnWeaponPickup()
-{
-    if (m_spawnPoints.empty()) return;
-    // Spawn à un point aléatoire loin du joueur
-    for (const Vertex& pos : m_spawnPoints)
-    {
-        float dx = pos.x - p->getPosition().x;
-        float dy = pos.y - p->getPosition().y;
-        if (std::sqrt(dx*dx + dy*dy) > 8.0f)
-        {
-            m_weaponPickups.push_back(pos);
-            break;
-        }
-    }
-}
-
-void GameManager::checkWeaponPickup()
-{
-    if (m_weaponPickups.empty()) return;
-    Vertex playerPos = p->getPosition();
-    float pickupRadius = 5.0f;
-
-    for (int i = (int)m_weaponPickups.size() - 1; i >= 0; i--)
-    {
-        float dx = playerPos.x - m_weaponPickups[i].x;
-        float dy = playerPos.y - m_weaponPickups[i].y;
-        if ((dx*dx + dy*dy) < (pickupRadius * pickupRadius))
-        {
-            delete m_playerWeapon;
-            m_playerWeapon = new Weapon(5, 1000.0f, 2.0f, 10, 2.0f);
-            p->setWeapon(m_playerWeapon);
-            m_playerHasShotgun = true;
-            m_shotgunWave = m_currentWave;
-            m_weaponPickups.erase(m_weaponPickups.begin() + i);
-            emit sigWeaponChanged();
-        }
-    }
 }
 
 void GameManager::saveBestScore()

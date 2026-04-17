@@ -24,7 +24,7 @@ LevelPage::LevelPage(QWidget *parent)
     menuButtons.append(m_niveau3Button);
     connectButtons();
     updateHighlight();
-    m_background.load(":/ressources/background2.png");
+    m_background.load(":/ressources/background2.jpg");
 }
 
 void LevelPage::addTitleLevel()
@@ -56,7 +56,7 @@ void LevelPage::addLevelButtons()
     m_niveau3Button = new QPushButton();
     //style des boutons
 
-    m_niveau1Button->setMinimumSize(450, 450);
+    m_niveau1Button->setMinimumSize(350, 350);
     m_niveau1Button->setAttribute(Qt::WA_Hover);
 
      m_niveau1Button->setStyleSheet(        "QPushButton {"
@@ -66,7 +66,7 @@ void LevelPage::addLevelButtons()
                                     "   border-image: url(:/ressources/portelvl1.2.png) 0 0 0 0 stretch stretch;"
                                     "}"
                                     );
-    m_niveau2Button->setMinimumSize(450, 450);
+    m_niveau2Button->setMinimumSize(350, 350);
     m_niveau2Button->setAttribute(Qt::WA_Hover);
 
     m_niveau2Button->setStyleSheet(        "QPushButton {"
@@ -76,7 +76,7 @@ void LevelPage::addLevelButtons()
                                    "   border-image: url(:/ressources/portelvl2.2.png) 0 0 0 0 stretch stretch;"
                                    "}"
                                    );
-    m_niveau3Button->setMinimumSize(450, 450);
+    m_niveau3Button->setMinimumSize(350, 350);
     m_niveau3Button->setAttribute(Qt::WA_Hover);
 
     m_niveau3Button->setStyleSheet(        "QPushButton {"
