@@ -9,10 +9,14 @@ Modifications:
 #include"engine.h"
 #include <cmath>
 
+/*
+ * --------------------------------------------------------------------------------
+ * Constructor
+ * --------------------------------------------------------------------------------
+ */
 Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QGraphicsView *view)
     : QObject(parent)
 {
-
     uiManager = new UIManager(view);
 
     cManager = new ControllerManager();
@@ -25,12 +29,21 @@ Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QG
     m_scene = scene;
     m_view = view;
 
-    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view->setFrameShape(QFrame::NoFrame);
-    view->setStyleSheet("border: none; margin: 0px; padding: 0px; background: transparent;");
-    view->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setView();
+    slotsAndSignalsConnections();
+}
 
+void Engine::setView()
+{
+    m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_view->setFrameShape(QFrame::NoFrame);
+    m_view->setStyleSheet("border: none; margin: 0px; padding: 0px; background: transparent;");
+    m_view->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+}
+
+void Engine::slotsAndSignalsConnections()
+{
     connect(uiManager, SIGNAL(loadMap(QString)), this, SLOT(loadMapIntoGame(QString)));
     connect(uiManager, SIGNAL(startGame()), this, SLOT(start()));
     connect(uiManager, SIGNAL(keyPressSig(QKeyEvent*)), cManager, SLOT(keyPressedEvent(QKeyEvent*)));
@@ -62,59 +75,20 @@ Engine::Engine(QGraphicsScene *scene, int width, int height, QObject *parent, QG
     connect(uiManager, SIGNAL(newPlayer()), gManager, SLOT(resetBestScore()));
 }
 
-Engine::~Engine()
-{
-}
-
-void Engine::start()
-{
-    elapsedTimer.start();
-    timer.start(1000 / TARGET_FPS);
-}
-
-void Engine::pauseGame()
-{
-    qDebug("pauseGame");
-    timer.stop();
-}
-
-void Engine::resumeGame()
-{
-    qDebug("resumeGame");
-    timer.start(1000 / TARGET_FPS);
-}
-
-void Engine::restartGame()
-{
-    gManager->saveBestScore();
-    qDebug("restartGame");
-    elapsedTimer.restart();
-    gManager->restartGame();
-    uiManager->updateScore(gManager->getPlayer()->getScore());
-    resumeGame();
-}
-
-void Engine::quitGame()
-{
-    gManager->saveBestScore();
-    qDebug("quitGame");
-    elapsedTimer.restart();
-    gManager->restartGame();
-    uiManager->updateScore(gManager->getPlayer()->getScore());
-}
-
-void Engine::gameOver()
-{
-    pauseGame();
-    uiManager->getGamePage()->gameOver();
-}
-
+/*
+ * --------------------------------------------------------------------------------
+ * These methods handle the game loop
+ * --------------------------------------------------------------------------------
+ */
 void Engine::gameLoop()
 {
+    // DeltaTime component to make precise geometric adjustments
+    float deltaTime = elapsedTimer.restart() / 1000.0f;
+    if (deltaTime > 0.1f) deltaTime = 0.1f;
+
+    // Rendering
     int currentWidth = m_view->width();
     int currentHeight = m_view->height();
-    Weapon* weapon = gManager->getPlayer()->getWeapon();
-
     if(currentWidth!=m_width || currentHeight!=m_height)
     {
         m_width=currentWidth;
@@ -123,13 +97,46 @@ void Engine::gameLoop()
         rManager->updateScreenSize(currentWidth, currentHeight);
     }
 
-    float deltaTime = elapsedTimer.restart() / 1000.0f;
-    if (deltaTime > 0.1f) deltaTime = 0.1f;
+    handleMovement(deltaTime);
+    handleCursorAndRotation(deltaTime);
+    handleShooting();
+    handleRendering(deltaTime);
+}
 
-    if(cManager->movingBack()) gManager->getPlayer()->setPosition(gManager->getPlayer()->getPosition().x+(0.5f*cos(gManager->getPlayer()->getAngle() - M_PI/2)), gManager->getPlayer()->getPosition().y+(0.5f*sin(gManager->getPlayer()->getAngle() - M_PI/2)));
-    if(cManager->movingLeft()) gManager->getPlayer()->setPosition(gManager->getPlayer()->getPosition().x-(0.5f*cos(gManager->getPlayer()->getAngle())), gManager->getPlayer()->getPosition().y-(0.5f*sin(gManager->getPlayer()->getAngle())));
-    if(cManager->movingRight()) gManager->getPlayer()->setPosition(gManager->getPlayer()->getPosition().x+(0.5f*cos(gManager->getPlayer()->getAngle())), gManager->getPlayer()->getPosition().y+(0.5f*sin(gManager->getPlayer()->getAngle())));
-    if(cManager->movingFront()) gManager->getPlayer()->setPosition(gManager->getPlayer()->getPosition().x+(0.5f*cos(gManager->getPlayer()->getAngle() + M_PI/2)), gManager->getPlayer()->getPosition().y+(0.5f*sin(gManager->getPlayer()->getAngle() + M_PI/2)));
+void Engine::handleMovement(float deltaTime)
+{
+    float dx = 0.0f;
+    float dy = 0.0f;
+    float speed = 30.0f;
+
+    if(cManager->movingBack())
+    {
+        dx = gManager->getPlayer()->getPosition().x+(speed*cos(gManager->getPlayer()->getAngle() - M_PI/2))*deltaTime;
+        dy = gManager->getPlayer()->getPosition().y+(speed*sin(gManager->getPlayer()->getAngle() - M_PI/2))*deltaTime;
+        gManager->getPlayer()->setPosition(dx, dy);
+    }
+    if(cManager->movingLeft())
+    {
+        dx = gManager->getPlayer()->getPosition().x-(speed*cos(gManager->getPlayer()->getAngle()))*deltaTime;
+        dy = gManager->getPlayer()->getPosition().y-(speed*sin(gManager->getPlayer()->getAngle()))*deltaTime;
+        gManager->getPlayer()->setPosition(dx, dy);
+    }
+    if(cManager->movingRight())
+    {
+        dx = gManager->getPlayer()->getPosition().x+(speed*cos(gManager->getPlayer()->getAngle()))*deltaTime;
+        dy = gManager->getPlayer()->getPosition().y+(speed*sin(gManager->getPlayer()->getAngle()))*deltaTime;
+        gManager->getPlayer()->setPosition(dx, dy);
+    }
+    if(cManager->movingFront())
+    {
+        dx = gManager->getPlayer()->getPosition().x+(speed*cos(gManager->getPlayer()->getAngle() + M_PI/2))*deltaTime;
+        dy = gManager->getPlayer()->getPosition().y+(speed*sin(gManager->getPlayer()->getAngle() + M_PI/2))*deltaTime;
+        gManager->getPlayer()->setPosition(dx, dy);
+    }
+}
+
+void Engine::handleCursorAndRotation(float deltaTime)
+{
     // ---------------------------------------------------------------
     // Détection de bordure : toujours active (mode curseur ON ou OFF).
     // Mode curseur ON  -> on utilise m_smoothX (position Arduino lissée).
@@ -203,7 +210,12 @@ void Engine::gameLoop()
     {
         cManager->resetCursorUpdate();
     }
-    // ---------------------------------------------------------------
+}
+
+void Engine::handleShooting()
+{
+    Weapon* weapon = gManager->getPlayer()->getWeapon();
+
     if (cManager->justShot())
     {
         rManager->setHit(false);
@@ -217,11 +229,9 @@ void Engine::gameLoop()
 
                 bool hit = gManager->shoot(viewMousePos, m_view->size());
                 rManager->setHit(hit);
-                float endX   = viewMousePos.x();
-                float endY   = viewMousePos.y();
 
                 //rManager->renderRay(endX, endY, 5);
-                 rManager->triggerGunAnim();
+                rManager->triggerGunAnim();
             }
             else
             {
@@ -237,33 +247,9 @@ void Engine::gameLoop()
 
     if(cManager->isReloading())
     {
-
-        if(weapon!=nullptr)
-        {
-            weapon->reload();
-        }
+        if(weapon!=nullptr) weapon->reload();
         cManager->resetReload();
     }
-
-    rManager->render(*gManager->getPlayer(),
-                     gManager->getRenderedEnemy(),
-                     gManager->getRenderedRangedEnemies(),
-                     gManager->getProjectiles(),
-                     gManager->getHeals(),
-                     gManager->getWeaponPickups(),
-                     gManager->getBSP(),
-                     gManager->getVerteces(),
-                     gManager->getSectors()
-                     );
-
-    if(gManager->isBossRenderable())
-    {
-        if(gManager->getBSP()->enemyRendering(gManager->getPlayer()->getPosition(), gManager->getBoss()->getPosition(), gManager->getVerteces()))
-        {
-            rManager->renderActor(gManager->getBoss(),*gManager->getPlayer(),QColor(150,0,0), 2.5f);
-        }
-    }
-    gManager->update(deltaTime, rManager->getRenderedWalls());
 
     if(cManager->isPowerUp())
     {
@@ -292,14 +278,74 @@ void Engine::gameLoop()
     }
 }
 
-ControllerManager* Engine::getcManager() const
+void Engine::handleRendering(float deltaTime)
 {
-    return cManager;
+    if(gManager->isBossRenderable())
+    {
+        if(gManager->getBSP()->enemyRendering(gManager->getPlayer()->getPosition(), gManager->getBoss()->getPosition(), gManager->getVerteces()))
+        {
+            rManager->renderActor(gManager->getBoss(),*gManager->getPlayer(),QColor(150,0,0), 2.5f);
+        }
+    }
+    gManager->update(deltaTime, rManager->getRenderedWalls());
+
+    rManager->render(*gManager->getPlayer(),
+                     gManager->getRenderedEnemy(),
+                     gManager->getRenderedRangedEnemies(),
+                     gManager->getProjectiles(),
+                     gManager->getHeals(),
+                     gManager->getWeaponPickups(),
+                     gManager->getBSP(),
+                     gManager->getVerteces(),
+                     gManager->getSectors());
 }
 
-UIManager* Engine::getuiManager() const
+/*
+ * --------------------------------------------------------------------------------
+ * Slots used for connections and game actions on button press
+ * --------------------------------------------------------------------------------
+ */
+void Engine::start()
 {
-    return uiManager;
+    elapsedTimer.start();
+    timer.start(1000 / TARGET_FPS);
+}
+
+void Engine::pauseGame()
+{
+    qDebug("pauseGame");
+    timer.stop();
+}
+
+void Engine::resumeGame()
+{
+    qDebug("resumeGame");
+    timer.start(1000 / TARGET_FPS);
+}
+
+void Engine::restartGame()
+{
+    gManager->saveBestScore();
+    qDebug("restartGame");
+    elapsedTimer.restart();
+    gManager->restartGame();
+    uiManager->updateScore(gManager->getPlayer()->getScore());
+    resumeGame();
+}
+
+void Engine::quitGame()
+{
+    gManager->saveBestScore();
+    qDebug("quitGame");
+    elapsedTimer.restart();
+    gManager->restartGame();
+    uiManager->updateScore(gManager->getPlayer()->getScore());
+}
+
+void Engine::gameOver()
+{
+    pauseGame();
+    uiManager->getGamePage()->gameOver();
 }
 
 void Engine::loadMapIntoGame(QString path)
@@ -323,6 +369,7 @@ void Engine::loadMapIntoGame(QString path)
     }
     oldMap = path;
 }
+
 void Engine::onWeaponChanged()
 {
     rManager->setShotgunMode(gManager->playerHasShotgun());

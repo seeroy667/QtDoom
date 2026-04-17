@@ -27,7 +27,9 @@ vertex 25 40.0 10.0
 vertex 26 45.0 -5.0
 vertex 27 30.0 -25.0
 vertex 28 20.0 -25.0
+
 sector 0 0.0 20.0
+
 linedef 0 0 1 0 -1 false
 linedef 1 1 2 0 -1 false
 linedef 2 2 3 0 -1 false
@@ -55,4 +57,3 @@ linedef 23 24 25 0 -1 false
 linedef 24 25 26 0 -1 false
 linedef 25 26 27 0 -1 false
 linedef 26 27 28 0 -1 false
-

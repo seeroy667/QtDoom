@@ -21,6 +21,8 @@ bool MapReader::load(std::string fileName)
     sectors.clear();
 
     std::string word;
+
+    // Read the data in the files. This data is ordered for out own purposes, and is not usable with real Doom WAD files.
     while (mapWad >> word)
     {
         if (word == "vertex")

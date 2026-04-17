@@ -239,13 +239,9 @@ void BSP::broadWall(Node* node,
 
     // Here, we decide to not only broad the wall, but to do some volume culling.
     // We check if the player is at a reasonable distance of the wall. If he is, we add it to the valid walls.
-    // This is called bounding volume hierarchy (BVH).
     // It is furthermore usefull with BSP, as it eliminates having to pass through some children of a given node.
 
-    float dxPartition = vertices[node->partition.end].x - vertices[node->partition.start].x;
-    float dyPartition = vertices[node->partition.end].y - vertices[node->partition.start].y;
-
-    float wallLength = sqrt(dxPartition * dxPartition + dyPartition * dyPartition);
+    float wallLength = vectorMagnitude(vertices[node->partition.end], vertices[node->partition.start]);
     float distance = cross / wallLength;
 
     broadedWalls.push_back(node->partition);
