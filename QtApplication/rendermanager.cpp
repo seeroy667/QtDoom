@@ -16,6 +16,11 @@ Modifications:
 #include <algorithm>
 #include <cmath>
 
+/*
+ * --------------------------------------------------------------------------------
+ * Constructer functions
+ * --------------------------------------------------------------------------------
+ */
 RenderManager::RenderManager(QGraphicsScene* scene, int screenWidth, int screenHeight)
 {
     m_focalLength = screenWidth / 2.0f;
@@ -26,6 +31,18 @@ RenderManager::RenderManager(QGraphicsScene* scene, int screenWidth, int screenH
     qDebug() << "Screenwidth" << screenWidth;
     m_screenHeight = screenHeight;
 
+    setTextures();
+
+    columnDepths.resize(screenWidth, std::numeric_limits<float>::infinity());
+    spriteDepths.resize(screenWidth, std::numeric_limits<float>::infinity());
+    m_enemyAnimTimer.start();
+
+    // For occlusion
+    columns.resize(screenWidth);
+}
+
+void RenderManager::setTextures()
+{
     m_wallTexture = QPixmap(":/ressources/temp.jpg");
     m_enemyTexture = QPixmap(":/ressources/Demon5.png");
     m_gunTexture = QPixmap(":/ressources/arme.png");
@@ -46,13 +63,13 @@ RenderManager::RenderManager(QGraphicsScene* scene, int screenWidth, int screenH
     m_shotgunFrames[1]   = QPixmap(":/ressources/tir2.png");
     m_shotgunFrames[2]   = QPixmap(":/ressources/tir3.png");
     m_shotgunFrames[3]   = QPixmap(":/ressources/tir4.png");
-    columnDepths.resize(screenWidth, std::numeric_limits<float>::infinity());
-    spriteDepths.resize(screenWidth, std::numeric_limits<float>::infinity());
-    m_enemyAnimTimer.start();
-
-    // For occlusion
-    columns.resize(screenWidth);
 }
+
+/*
+ * --------------------------------------------------------------------------------
+ * Render
+ * --------------------------------------------------------------------------------
+ */
 
 void RenderManager::render(Actor m_player,
                            const std::vector<Actor*>& enemies,
@@ -167,7 +184,10 @@ void RenderManager::render(Actor m_player,
     }
 }
 
-void RenderManager::renderWall(const Linedef& wall, const std::vector<Vertex>& verteces, const Actor& player, const std::vector<Sector>& sectors)
+void RenderManager::renderWall(const Linedef& wall,
+                               const std::vector<Vertex>& verteces,
+                               const Actor& player,
+                               const std::vector<Sector>& sectors)
 {
     Vertex p1 = coordPlayer(verteces[wall.start], player);
     Vertex p2 = coordPlayer(verteces[wall.end], player);
@@ -263,7 +283,8 @@ void RenderManager::renderWall(const Linedef& wall, const std::vector<Vertex>& v
     }
 }
 
-Vertex RenderManager::coordPlayer(const Vertex& point, const Actor& player)
+Vertex RenderManager::coordPlayer(const Vertex& point,
+                                  const Actor& player)
 {
     Vertex playerPos = player.getPosition();
     float anglePlayer = player.getAngle();

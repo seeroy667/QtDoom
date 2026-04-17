@@ -13,3 +13,4 @@ est, 0
 esst, 0
 gvxcvzx, 0
 ok, 0
+c, 0

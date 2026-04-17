@@ -18,26 +18,33 @@ class ControllerManager : public QObject{
     Q_OBJECT
 public:
     ControllerManager(QObject *parent = nullptr);
-    ~ControllerManager();
     SerialController* m_serial;
+
+    /*
+    * --------------------------------------------------------------------------------
+    * Member accessibility functions
+    * --------------------------------------------------------------------------------
+    */
+    // Checks for inputs
     bool movingFront(){return kFront || aFront;}
-    bool movingBack(){return kBack  || aBack;}
-    bool movingLeft(){return kLeft  || aLeft;}
+    bool movingBack(){return kBack || aBack;}
+    bool movingLeft(){return kLeft || aLeft;}
     bool movingRight(){return kRight || aRight;}
     bool rotatingLeft(){return rLeft;}
     bool rotatingRight(){return rRight;}
     bool isShooting() {return shoot;}
 
+    // Access to shooting and reload
     bool justShot()    { return m_pendingShots > 0; }
     void resetShot()   { if (m_pendingShots > 0) m_pendingShots--; }
-
     bool isReloading() {return m_justReload; }
     void resetReload() {m_justReload = false;}
-
-    bool isPowerUp()   {return m_powerUp;}
-    void resetPowerUp(){m_powerUp = false;}
     int getMunition() const { return m_munitionCount; }
     int getEncodeurAmmo() const { return m_munitionCount; }
+
+    // Access to powerups
+    bool isPowerUp()   {return m_powerUp;}
+    void resetPowerUp(){m_powerUp = false;}
 
     // Curseur Arduino (valeurs brutes 0-255)
     int getCursorRawX() const { return m_cursorRawX; }
@@ -61,6 +68,7 @@ private:
     bool kBack  = false;
     bool kLeft  = false;
     bool kRight = false;
+
     // États Arduino (mis à jour à chaque trame série)
     bool aFront = false;
     bool aBack  = false;
@@ -84,8 +92,10 @@ private:
     bool m_borderRotRight = false;    // rotation droite déclenchée par bordure
 
 public slots:
+    // Handles controls playing on a keyboard
     void keyPressedEvent(QKeyEvent * event);
     void keyReleasedEvent(QKeyEvent * event);
+
     void potTurnedEvent();
     void potStopedEvent();
     void shootPressedEvent();

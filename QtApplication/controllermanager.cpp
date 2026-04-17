@@ -14,6 +14,7 @@ ControllerManager::ControllerManager(QObject *parent)
     m_serial = new SerialController(this);
     m_serial->openPort();
 
+    // Connections
     connect(m_serial, &SerialController::moveFront, this, &ControllerManager::moveFront);
     connect(m_serial, &SerialController::moveBack, this, &ControllerManager::moveBack);
     connect(m_serial, &SerialController::moveLeft, this, &ControllerManager::moveLeft);
@@ -31,61 +32,13 @@ ControllerManager::ControllerManager(QObject *parent)
     connect(m_serial, &SerialController::powerUp, this, &ControllerManager::onPowerUp);
 }
 
-
-
-ControllerManager::~ControllerManager()
-{
-
-}
-
-void ControllerManager::moveFront(bool active) { aFront = active; }
-void ControllerManager::moveBack(bool active)  { aBack  = active; }
-void ControllerManager::moveLeft(bool active)  { aLeft  = active; }
-void ControllerManager::moveRight(bool active) { aRight = active; }
-
-void ControllerManager::shooting(bool active) {
-    shoot = active;
-    if (active)
-    {
-        shoot = true;
-        if (m_munitionCount > 0)
-        {
-            m_pendingShots++;
-            //qDebug() << "shoot" << m_pendingShots;
-        }
-    }
-}
-void ControllerManager::reload(bool active) {
-    m_justReload = true;
-}
-
-void ControllerManager::updateCursor(int x, int y) {
-    m_cursorRawX = x;
-    m_cursorRawY = y;
-    m_cursorUpdated = true;
-}
-void ControllerManager::updateMunition(int value) {
-    m_munitionCount = value;
-}
-void ControllerManager::updateEncodeur(int value) {
-    if (m_lastEncodeur == -1) {
-        m_lastEncodeur = value;
-        return;
-    }
-    if (value != m_lastEncodeur) {
-        m_lastEncodeur = value;
-        emit potTurnedSig();
-        emit potStopedSig();
-    }
-}
-
-
-
-
+/*
+ * --------------------------------------------------------------------------------
+ * These methods handle playing on keyboard. They are also slots.
+ * --------------------------------------------------------------------------------
+ */
 void ControllerManager::keyPressedEvent(QKeyEvent * event)
 {
-
-
     if (event->key() == Qt::Key_W) kFront = true;
     if (event->key() == Qt::Key_S) kBack = true;
     if (event->key() == Qt::Key_A) kLeft = true;
@@ -95,18 +48,10 @@ void ControllerManager::keyPressedEvent(QKeyEvent * event)
     if (event->key() == Qt::Key_F)
     {
         shoot = true;
-
-        if (m_munitionCount > 0 || m_munitionCount == -1)
-            m_pendingShots++;
+        if (m_munitionCount > 0 || m_munitionCount == -1) m_pendingShots++;
     }
-    if(event->key() == Qt::Key_R)
-    {
-        m_justReload = true;
-    }
-    if(event->key() == Qt::Key_P)
-    {
-        m_powerUp = true;
-    }
+    if(event->key() == Qt::Key_R) m_justReload = true;
+    if(event->key() == Qt::Key_P) m_powerUp = true;
     if (event->key() == Qt::Key_Escape)
     {
         potTurns = true;
@@ -117,10 +62,7 @@ void ControllerManager::keyPressedEvent(QKeyEvent * event)
         mReturn = true;
         shootPressedEvent();
     }
-    if(event->key() == Qt::Key_L)
-    {
-        toggleCursorMode();
-    }
+    if(event->key() == Qt::Key_L) toggleCursorMode();
 }
 
 void ControllerManager::keyReleasedEvent(QKeyEvent * event)
@@ -146,30 +88,79 @@ void ControllerManager::keyReleasedEvent(QKeyEvent * event)
     }
 }
 
+/*
+ * --------------------------------------------------------------------------------
+ * Slots
+ * --------------------------------------------------------------------------------
+ */
 void ControllerManager::potTurnedEvent()
 {
-    //qDebug() << "pot turned";
     emit potTurnedSig();
 }
 
 void ControllerManager::potStopedEvent()
 {
-    //qDebug() << "pot stoped";
     emit potStopedSig();
 }
 
 void ControllerManager::shootPressedEvent()
 {
-    //qDebug() << "shoot pressed";
     emit shootPressedSig();
 }
+
 void ControllerManager::shootReleasedEvent()
 {
-    //qDebug() << "shoot released";
     emit shootReleasedSig();
 }
+
+void ControllerManager::moveFront(bool active) { aFront = active; }
+
+void ControllerManager::moveBack(bool active)  { aBack  = active; }
+
+void ControllerManager::moveLeft(bool active)  { aLeft  = active; }
+
+void ControllerManager::moveRight(bool active) { aRight = active; }
+
+void ControllerManager::shooting(bool active) {
+    shoot = active;
+    if (active)
+    {
+        shoot = true;
+        if (m_munitionCount > 0)
+        {
+            m_pendingShots++;
+            //qDebug() << "shoot" << m_pendingShots;
+        }
+    }
+}
+
+void ControllerManager::reload(bool active) {
+    m_justReload = true;
+}
+
+void ControllerManager::updateCursor(int x, int y) {
+    m_cursorRawX = x;
+    m_cursorRawY = y;
+    m_cursorUpdated = true;
+}
+
+void ControllerManager::updateMunition(int value) {
+    m_munitionCount = value;
+}
+
+void ControllerManager::updateEncodeur(int value) {
+    if (m_lastEncodeur == -1) {
+        m_lastEncodeur = value;
+        return;
+    }
+    if (value != m_lastEncodeur) {
+        m_lastEncodeur = value;
+        emit potTurnedSig();
+        emit potStopedSig();
+    }
+}
+
 void ControllerManager::onPowerUp(bool active)
 {
-    if (active)
-        m_powerUp = true;
+    if (active) m_powerUp = true;
 }

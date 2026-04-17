@@ -18,16 +18,11 @@ Actor::Actor()
     isAlive = true;
 }
 
-Actor::~Actor()
-{
-
-}
-
-void Actor::move(float deltaX, float deltaY)
-{
-    position.x += deltaX;
-    position.y += deltaY;
-}
+/*
+* --------------------------------------------------------------------------------
+* Setting member functions
+* --------------------------------------------------------------------------------
+*/
 
 void Actor::takeDamage(int amount)
 {
@@ -45,27 +40,29 @@ void Actor::setAngle(float a)
     angle = a;
 }
 
-void Actor::rotate(float a)
-{
-    angle += a;
-}
-
 void Actor::setPosition(float x, float y)
 {
     position.x = x;
     position.y = y;
 }
 
-//Enemy
-
-float Actor::distancePlayerEnemy(const Actor& E,const Actor& P)
+void Actor::setMovement(bool movement)
 {
-    dx= P.getPosition().x-E.getPosition().x;
-    dy = P.getPosition().y-E.getPosition().y;
-
-    return std::sqrt(dx*dx + dy*dy);
+    canMove = movement;
 }
 
+void Actor::resetPlayerHealth()
+{
+    health = 5;
+    maxHealth = 5;
+}
+
+void Actor::setPosition(Vertex newPos)
+{
+    position = newPos;
+}
+
+//Enemy pathfinding
 void Actor::moveEnemy(const Actor& Player, float deltaTime)
 {
     if (!canMove) return;
@@ -91,34 +88,11 @@ void Actor::setWeapon(Weapon *w)
     m_weapon = w;
 }
 
-Weapon* Actor::getWeapon() const
-{
-    return m_weapon;
-}
-
-bool Actor::hasWeapon() const
-{
-    if(m_weapon!=nullptr)
-    {
-        return true;
-    }
-    return false;
-}
-
-void Actor::setMovement(bool movement)
-{
-    canMove = movement;
-}
-
-void Actor::resetPlayerHealth()
-{
-    health = 5;
-    maxHealth = 5;
-}
-void Actor::setPosition(Vertex newPos)
-{
-    position = newPos;
-}
+/*
+* --------------------------------------------------------------------------------
+* Status functions
+* --------------------------------------------------------------------------------
+*/
 
 bool Actor::canShootProjectile()
 {

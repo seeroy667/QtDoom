@@ -100,6 +100,7 @@ void Engine::gameLoop()
     handleMovement(deltaTime);
     handleCursorAndRotation(deltaTime);
     handleShooting();
+    gManager->update(deltaTime);
     handleRendering(deltaTime);
 }
 
@@ -287,7 +288,6 @@ void Engine::handleRendering(float deltaTime)
             rManager->renderActor(gManager->getBoss(),*gManager->getPlayer(),QColor(150,0,0), 2.5f);
         }
     }
-    gManager->update(deltaTime, rManager->getRenderedWalls());
 
     rManager->render(*gManager->getPlayer(),
                      gManager->getRenderedEnemy(),

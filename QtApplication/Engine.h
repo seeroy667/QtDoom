@@ -38,7 +38,7 @@ private:
     QElapsedTimer elapsedTimer;
     float deltaTime = 0.0f;
 
-    // What is that
+    // Members used for screen
     int m_width;
     int m_height;
     QWidget* m_widget;

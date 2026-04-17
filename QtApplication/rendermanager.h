@@ -39,9 +39,13 @@ class RenderManager
 {
 
 public:
+    /*
+     * --------------------------------------------------------------------------------
+     * Constructer functions
+     * --------------------------------------------------------------------------------
+     */
     RenderManager(QGraphicsScene* scene, int screenWidth, int screenHeight);
-
-    void renderWall(const Linedef& wall, const std::vector<Vertex>& verteces, const Actor& player, const std::vector<Sector>& sectors);
+    void setTextures();
 
     void render(Actor m_player,
                 const std::vector<Actor*>& enemies,
@@ -52,6 +56,10 @@ public:
                 BSP* bsp,
                 const std::vector<Vertex>& verteces,
                 const std::vector<Sector>& sectors);
+    void renderWall(const Linedef& wall,
+                    const std::vector<Vertex>& verteces,
+                    const Actor& player,
+                    const std::vector<Sector>& sectors);
     void renderActor(Actor* actor, const Actor player, QColor color, float sizeMultiplier = 1.0f, bool isRanged = false);
     std::vector<Linedef> getRenderedWalls();
     void renderRay(float targetScreenX, float targetScreenY, int frames);

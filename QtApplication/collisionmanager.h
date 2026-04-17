@@ -24,7 +24,6 @@ public:
                 with the walls. Then, we handle the collision, drawing a normal vector to the wall and
                 adjusting the player's position according to its depth of prenetration into the wall.
     */
-    void handleCollisions(std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& verteces, Actor* a);
     void narrowingToCollide(std::vector<Linedef>& broadedWalls, const std::vector<Vertex>& verteces, Actor* a);
 private:
     void collide(Vertex closestPoint, Actor* a);
